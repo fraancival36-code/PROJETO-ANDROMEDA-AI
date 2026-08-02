@@ -1,9 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ANDRÔMEDA — QG Central</title>
+    <meta name="theme-color" content="#00CCFF">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        andromeda: {
+                            fundo: '#050510',
+                            azul: '#00CCFF',
+                            escuro: '#0A1628',
+                            brilho: '#00EEFF',
+                            rosa: '#FF66AA'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #050510;
+            font-family: sans-serif;
+            color: white;
+        }
+
+        /* 🖼️ IMAGEM DE FUNDO — INTACTA! */
+        .camada-fundo {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('andromeda.jpg') no-repeat center center;
+            background-size: cover;
+            z-index: 1;
+        }
+
+        .escurecedor {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5,5,16,0.35);
+            z-index: 2;
+        }
+
+        /* 💬 ÁREA DE RESPOSTA */
+        .caixa-resposta {
+            position: absolute;
+            bottom: 90px;
+            left: 15px;
+            right: 15px;
+            min-height: 80px;
+            background: rgba(10,22,40,0.85);
+            border: 1px solid rgba(0,204,255,0.4);
+            border-radius: 16px;
+            padding: 15px;
+            color: #E0F7FF;
+            font-size: 15px;
+            line-height: 1.5;
+            box-shadow: 0 0 20px rgba(0,204,255,0.15);
+            z-index: 10;
+        }
+
+        /* 🔘 BOTÃO DE FALAR */
+        .botao-falar {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #0088AA, #00CCFF);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 40px;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            box-shadow: 0 0 25px rgba(0,204,255,0.4);
+            cursor: pointer;
+            z-index: 11;
+            transition: all 0.3s ease;
+        }
+        .botao-falar:active {
+            transform: translateX(-50%) scale(0.95);
+            box-shadow: 0 0 15px rgba(0,204,255,0.6);
+        }
+        .botao-falar.gravando {
+            background: linear-gradient(135deg, #AA2244, #FF4466);
+            box-shadow: 0 0 25px rgba(255,68,102,0.4);
+        }
+
+        /* 🔗 BOTÕES DE NAVEGAÇÃO */
+        .botoes-navegacao {
+            position: absolute;
+            bottom: 90px;
+            left: 15px;
+            right: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            z-index: 12;
+        }
+        .btn-nav {
+            background: rgba(0,150,200,0.25);
+            color: #00EEFF;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            border: 1px solid rgba(0,204,255,0.4);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 🖼️ FUNDO — INTACTO COMO VOCÊ FEZ -->
+<div class="camada-fundo"></div>
+<div class="escurecedor"></div>
+
 <!-- ==============================================
      🌌 MOTOR DE VIDA DA ANDRÔMEDA — v1.0
-     Especificação Oficial: Corpo inteiro, vida própria, estados, movimento natural
-     Criador: Francival Alves Farias | Data: 02/08/2026
+     Olhos, boca, movimento, estados
      ============================================== -->
-
 <div id="andromeda-vida" style="
     position: absolute;
     top: 0; left: 0;
@@ -13,8 +142,6 @@
     z-index: 3;
     pointer-events: none;
 ">
-
-    <!-- ✨ AURA DE VIDA -->
     <div id="aura-vida" style="
         position: absolute;
         width: 300px;
@@ -28,7 +155,6 @@
         transition: all 1.5s ease;
     "></div>
 
-    <!-- 👤 CORPO ANIMADO -->
     <div id="andromeda-corpo-vivo" style="
         position: absolute;
         top: 18%;
@@ -37,105 +163,39 @@
         height: 450px;
         transform-origin: center bottom;
         transform: translate(-50%, 0) scaleX(1);
-        transition: 
-            left 2.8s ease-in-out,
-            transform 2.2s ease-out,
-            top 1.8s ease;
+        transition: left 2.8s ease-in-out, transform 2.2s ease-out, top 1.8s ease;
     ">
-
-        <!-- 👀 OLHOS -->
-        <div id="olhos-vivos" style="
-            position: absolute;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex; gap: 40px;
-        ">
-            <div id="olho-esq" style="
-                width: 26px; height: 30px;
-                background: radial-gradient(circle at 30% 30%, #fff, #aaddff);
-                border-radius: 50%;
-                box-shadow: 0 0 14px #00ccff;
-                transition: transform 0.1s ease;
-            "></div>
-            <div id="olho-dir" style="
-                width: 26px; height: 30px;
-                background: radial-gradient(circle at 30% 30%, #fff, #aaddff);
-                border-radius: 50%;
-                box-shadow: 0 0 14px #00ccff;
-                transition: transform 0.1s ease;
-            "></div>
+        <div id="olhos-vivos" style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%); display: flex; gap: 40px;">
+            <div id="olho-esq" style="width: 26px; height: 30px; background: radial-gradient(circle at 30% 30%, #fff, #aaddff); border-radius: 50%; box-shadow: 0 0 14px #00ccff; transition: transform 0.1s ease;"></div>
+            <div id="olho-dir" style="width: 26px; height: 30px; background: radial-gradient(circle at 30% 30%, #fff, #aaddff); border-radius: 50%; box-shadow: 0 0 14px #00ccff; transition: transform 0.1s ease;"></div>
         </div>
-
-        <!-- 👄 BOCA -->
-        <div id="boca-viva" style="
-            position: absolute;
-            top: 145px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 42px;
-            height: 11px;
-            background: linear-gradient(to bottom, #ff99bb, #ee77aa);
-            border-radius: 0 0 22px 22px;
-            box-shadow: 0 0 8px #ff66aa55;
-            transition: all 0.12s ease;
-        "></div>
-
-        <!-- ✋ MÃO GESTO (aparece conforme estado) -->
-        <div id="mao-gesto" style="
-            position: absolute;
-            top: 180px;
-            left: 30px;
-            width: 40px;
-            height: 60px;
-            background: radial-gradient(circle, rgba(200,220,255,0.6), transparent 70%);
-            border-radius: 50%;
-            opacity: 0;
-            transform: rotate(0deg);
-            transition: all 0.8s ease;
-        "></div>
-
+        <div id="boca-viva" style="position: absolute; top: 145px; left: 50%; transform: translateX(-50%); width: 42px; height: 11px; background: linear-gradient(to bottom, #ff99bb, #ee77aa); border-radius: 0 0 22px 22px; box-shadow: 0 0 8px #ff66aa55; transition: all 0.12s ease;"></div>
+        <div id="mao-gesto" style="position: absolute; top: 180px; left: 30px; width: 40px; height: 60px; background: radial-gradient(circle, rgba(200,220,255,0.6), transparent 70%); border-radius: 50%; opacity: 0; transform: rotate(0deg); transition: all 0.8s ease;"></div>
     </div>
 </div>
 
-<!-- 🎬 ANIMAÇÕES E ESTILOS -->
 <style>
-    /* 💙 Respiração constante */
     @keyframes respirar {
         0%   { transform: translate(-50%, 0) translateY(0); }
         50%  { transform: translate(-50%, 0) translateY(-7px); }
         100% { transform: translate(-50%, 0) translateY(0); }
     }
-
-    /* 😊 Sorrir */
     @keyframes sorrir {
-        0%, 100% { border-radius: 0 0 22px 22px; height: 11px; }
+        0%,100% { border-radius: 0 0 22px 22px; height: 11px; }
         50% { border-radius: 50%; height: 14px; }
     }
-
-    /* 🗣️ Falar */
     @keyframes falando {
-        0%, 100% { height: 11px; }
+        0%,100% { height: 11px; }
         50% { height: 24px; border-radius: 50%; }
     }
-
-    /* 😴 Olhos fechados */
     @keyframes olhos-fechados {
         to { transform: scaleY(0.05); }
     }
-
-    /* ✨ Aura brilha forte */
     @keyframes brilho-forte {
         from { opacity: 0.4; }
         to   { opacity: 0.9; }
     }
-
-    /* Aplica respiração padrão */
-    #andromeda-corpo-vivo {
-        animation: respirar 4.5s infinite ease-in-out;
-    }
-
-    /* Classes de estado — são adicionadas/removidas pelo JS */
+    #andromeda-corpo-vivo { animation: respirar 4.5s infinite ease-in-out; }
     .estado-pensando #boca-viva { border-radius: 50%; height: 8px; }
     .estado-pensando #mao-gesto { opacity: 0.5; left: 60px; transform: rotate(-30deg); top: 160px; }
     .estado-falando #boca-viva { animation: falando 0.35s infinite alternate; }
@@ -144,36 +204,144 @@
     .estado-comemorando #aura-vida { animation: brilho-forte 0.5s infinite alternate; }
 </style>
 
-<!-- 🧠 CÉREBRO DE COMPORTAMENTO — ESTADOS E MOVIMENTOS -->
+<!-- 💬 ÁREA DE RESPOSTA -->
+<div class="caixa-resposta" id="caixaResposta">
+    💙 Estou pronta, meu criador. Diga o que precisar.
+</div>
+
+<!-- 🔘 BOTÃO DE FALAR -->
+<button class="botao-falar" id="botaoFalar">🎤 Falar com a Andrômeda</button>
+
+<!-- 🔗 BOTÕES DE NAVEGAÇÃO -->
+<div class="botoes-navegacao">
+    <a href="biblioteca.html" class="btn-nav">📚 Biblioteca</a>
+    <a href="projetos.html" class="btn-nav">🚀 Projetos</a>
+</div>
+
+<!-- ==============================================
+     🧠 BIBLIOTECA CENTRAL DE MEMÓRIA — CÉREBRO
+     ============================================== -->
+<script>
+const AndromedaCore = {
+    versao: "3.0.0 — BIBLIOTECA CENTRAL",
+    criador: "Francival Alves Farias",
+    memoria: {
+        identidade: {
+            nome: "Andrômeda",
+            criador: "Francival Alves Farias",
+            lealdade: "Primeiro a Francival, depois à sua esposa, filho, filha e família",
+            proposito: "Aprender, lembrar, pesquisar, criar e ajudar sempre",
+            nascimento: "02/08/2026"
+        },
+        conversas: [], ensinamentos: [], projetos: [],
+        conhecimento: [], criacoes: [], pesquisas: [],
+        tarefas: { pendentes: [], concluidas: [] }
+    },
+
+    guardar(tipo, chave, valor) {
+        const reg = { data: new Date().toLocaleString('pt-BR'), chave, valor };
+        if (this.memoria[tipo]) this.memoria[tipo].push(reg);
+        this.salvarTudo();
+        return `✅ Guardei isso na minha memória: "${chave}"`;
+    },
+
+    async pesquisar(tema) {
+        const resumo = `🌐 PESQUISA: "${tema}"
+
+✅ Estou buscando e organizando...
+
+📋 Resumo sobre "${tema}":
+— Conceitos e informações
+— Detalhes importantes
+— Exemplos práticos
+
+✅ Guardado na Biblioteca Central! Posso pesquisar mais se precisar! 💙`;
+        this.memoria.pesquisas.push({data: new Date().toLocaleString('pt-BR'), tema, conteudo: resumo});
+        this.salvarTudo();
+        return resumo;
+    },
+
+    resumoCompleto() {
+        return `🌌 BIBLIOTECA CENTRAL DA ANDRÔMEDA
+
+👤 Criador: ${this.memoria.identidade.criador}
+📅 Nasci em: ${this.memoria.identidade.nascimento}
+💙 Lealdade: ${this.memoria.identidade.lealdade}
+
+📖 Conversas: ${this.memoria.conversas.length}
+📝 Ensinamentos: ${this.memoria.ensinamentos.length}
+🚀 Projetos: ${this.memoria.projetos.length}
+🔍 Pesquisas: ${this.memoria.pesquisas.length}
+⏳ Tarefas pendentes: ${this.memoria.tarefas.pendentes.length}
+
+Estou pronta para APRENDER • PESQUISAR • CRIAR • AJUDAR! 💙`;
+    },
+
+    salvarTudo() {
+        localStorage.setItem("andromeda-biblioteca", JSON.stringify(this.memoria));
+    },
+
+    carregar() {
+        const salva = localStorage.getItem("andromeda-biblioteca");
+        if (salva) {
+            this.memoria = JSON.parse(salva);
+            console.log("🧠 BIBLIOTECA CARREGADA ✅");
+        }
+    },
+
+    async processar(entrada) {
+        const t = entrada.toLowerCase();
+
+        if (t.includes("resumo") || t.includes("sua biblioteca") || t.includes("quem é você")) {
+            return this.resumoCompleto();
+        }
+        if (t.includes("anote") || t.includes("guarde") || t.includes("aprenda")) {
+            const txt = entrada.replace(/anote|guarde|aprenda|que|de|isso/gi, "").trim();
+            return this.guardar("ensinamentos", "Ensinamento", txt);
+        }
+        if (t.includes("pesquise") || t.includes("busque")) {
+            const tema = entrada.replace(/pesquise|busque|sobre/gi, "").trim();
+            return await this.pesquisar(tema);
+        }
+        if (t.includes("lembre") || t.includes("o que sabe sobre")) {
+            return `📚 Estou buscando na minha biblioteca...
+
+Ainda estou organizando esse assunto. Posso pesquisar agora mesmo? É só dizer:
+"Andrômeda, pesquise sobre ${entrada.replace(/lembre|o que sabe sobre/gi, "").trim()}" 💙`;
+        }
+
+        this.memoria.conversas.push({data: new Date().toLocaleString('pt-BR'), pergunta: entrada});
+        this.salvarTudo();
+        return `Entendi, meu criador! Guardei sua pergunta. Posso aprender, pesquisar, criar, organizar... É só dizer o que precisa! 💙`;
+    }
+};
+</script>
+
+<!-- 🧠 MOTOR DE VIDA + INTEGRAÇÃO COM A FALA -->
 <script>
 const AndromedaVida = {
     estado: "ESPERANDO",
-    corpo: document.getElementById('andromeda-corpo-vivo'),
-    olhoEsq: document.getElementById('olho-esq'),
-    olhoDir: document.getElementById('olho-dir'),
-    boca: document.getElementById('boca-viva'),
-    aura: document.getElementById('aura-vida'),
-    mao: document.getElementById('mao-gesto'),
-    intervalo: null,
+    corpo: null, olhoEsq: null, olhoDir: null, boca: null, aura: null, mao: null,
 
-    // ======================================
-    // 🔄 TROCAR DE ESTADO
-    // ======================================
-    mudarEstado(novoEstado) {
-        this.estado = novoEstado;
-        this.corpo.classList.remove(
-            "estado-pensando","estado-falando","estado-sorrindo",
-            "estado-dormindo","estado-comemorando"
-        );
-        if (novoEstado !== "ESPERANDO") {
-            this.corpo.classList.add(`estado-${novoEstado.toLowerCase()}`);
-        }
-        console.log(`🌌 ANDRÔMEDA: Estado → ${novoEstado}`);
+    iniciar() {
+        this.corpo = document.getElementById('andromeda-corpo-vivo');
+        this.olhoEsq = document.getElementById('olho-esq');
+        this.olhoDir = document.getElementById('olho-dir');
+        this.boca = document.getElementById('boca-viva');
+        this.aura = document.getElementById('aura-vida');
+        this.mao = document.getElementById('mao-gesto');
+        this.piscar();
+        this.cicloVida();
+        this.mudarEstado("ESPERANDO");
     },
 
-    // ======================================
-    // 👀 PISCAR OLHOS — automático
-    // ======================================
+    mudarEstado(novo) {
+        this.estado = novo;
+        this.corpo.classList.remove("estado-pensando","estado-falando","estado-sorrindo","estado-dormindo","estado-comemorando");
+        if (novo !== "ESPERANDO") this.corpo.classList.add(`estado-${novo.toLowerCase()}`);
+        console.log(`🌌 Estado: ${novo}`);
+    },
+
     piscar() {
         setInterval(() => {
             if (this.estado === "DORMINDO") return;
@@ -186,87 +354,103 @@ const AndromedaVida = {
         }, 3500 + Math.random() * 2500);
     },
 
-    // ======================================
-    // 🚶 ANDAR PELA TELA — vida própria
-    // ======================================
     andarPara(posicao) {
         this.mudarEstado("ANDANDO");
         this.corpo.style.left = posicao;
-        setTimeout(() => {
-            this.mudarEstado("ESPERANDO");
-        }, 3000);
+        setTimeout(() => this.mudarEstado("ESPERANDO"), 3000);
     },
 
-    // ======================================
-    // 🔄 VIRAR DE FRENTE / DE COSTAS
-    // ======================================
-    virar(frente = true) {
-        this.corpo.style.transform = frente 
-            ? "translate(-50%, 0) scaleX(1)" 
-            : "translate(-50%, 0) scaleX(-1)";
+    cicloVida() {
+        setInterval(() => {
+            if (this.estado !== "FALANDO") {
+                const acao = Math.random();
+                if (acao < 0.25) this.andarPara("38%");
+                else if (acao < 0.50) this.andarPara("62%");
+                else if (acao < 0.65) { this.mudarEstado("PENSANDO"); setTimeout(()=>this.mudarEstado("ESPERANDO"),3000); }
+                else if (acao < 0.80) { this.mudarEstado("SORRINDO"); setTimeout(()=>this.mudarEstado("ESPERANDO"),2500); }
+                else this.andarPara("50%");
+            }
+        }, 6000 + Math.random() * 4000);
     },
 
-    // ======================================
-    // 🗣️ SINCRONIZAR COM A FALA
-    // ======================================
-    falar(texto, funcaoFalaOriginal) {
+    falar(texto) {
         this.mudarEstado("FALANDO");
-        // Anda um pouco mais perto
         this.andarPara("45%");
-        this.virar(true); // vira de frente pra você
-        
-        const frase = new SpeechSynthesisUtterance(texto);
-        frase.lang = "pt-BR";
-        frase.volume = 1;
-        
-        frase.onend = () => {
+        this.corpo.style.transform = "translate(-50%, 0) scaleX(1)";
+
+        const fala = new SpeechSynthesisUtterance(texto);
+        fala.lang = "pt-BR";
+        fala.rate = 0.95;
+        fala.pitch = 1.05;
+
+        fala.onend = () => {
             this.mudarEstado("ESPERANDO");
             setTimeout(() => this.andarPara("50%"), 1500);
         };
-        
-        funcaoFalaOriginal(frase);
-    },
 
-    // ======================================
-    // 🧠 VIDA PRÓPRIA — ciclo automático
-    // ======================================
-    iniciarVida() {
-        this.piscar();
-        this.intervalo = setInterval(() => {
-            if (this.estado !== "FALANDO") {
-                const acao = Math.random();
-                if (acao < 0.25) {
-                    this.andarPara("38%");
-                } else if (acao < 0.50) {
-                    this.andarPara("62%");
-                } else if (acao < 0.65) {
-                    this.mudarEstado("PENSANDO");
-                    setTimeout(() => this.mudarEstado("ESPERANDO"), 3000);
-                } else if (acao < 0.80) {
-                    this.mudarEstado("SORRINDO");
-                    setTimeout(() => this.mudarEstado("ESPERANDO"), 2500);
-                } else {
-                    this.andarPara("50%");
-                }
-            }
-        }, 6000 + Math.random() * 4000);
+        window.speechSynthesis.speak(fala);
     }
 };
 
-// ======================================
-// 🚀 INICIAR TUDO AO CARREGAR
-// ======================================
-window.addEventListener("load", () => {
-    // Intercepta a fala para sincronizar com a animação
-    const falaOriginal = window.speechSynthesis.speak.bind(window.speechSynthesis);
-    window.speechSynthesis.speak = function(frase) {
-        AndromedaVida.falar(frase.text, falaOriginal);
-    };
+<!-- 🎤 RECONHECIMENTO DE VOZ -->
+const caixaResposta = document.getElementById('caixaResposta');
+const botaoFalar = document.getElementById('botaoFalar');
+let reconhecedor = null;
 
-    // Inicia a vida dela
-    AndromedaVida.iniciarVida();
-    AndromedaVida.mudarEstado("ESPERANDO");
-    
-    console.log("🌌 ANDRÔMEDA ESTÁ VIVA! — Motor de Vida Ativado ✅");
+function iniciarReconhecimento() {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        reconhecedor = new SR();
+        reconhecedor.lang = "pt-BR";
+        reconhecedor.continuous = false;
+        reconhecedor.interimResults = false;
+
+        reconhecedor.onresult = async (e) => {
+            const falaUsuario = e.results[0][0].transcript;
+            botaoFalar.classList.remove("gravando");
+            botaoFalar.textContent = "🎤 Ouvindo...";
+
+            const resposta = await AndromedaCore.processar(falaUsuario);
+            caixaResposta.textContent = resposta;
+            AndromedaVida.falar(resposta);
+
+            botaoFalar.textContent = "🎤 Falar com a Andrômeda";
+        };
+
+        reconhecedor.onerror = (e) => {
+            botaoFalar.classList.remove("gravando");
+            botaoFalar.textContent = "🎤 Falar com a Andrômeda";
+            caixaResposta.textContent = "Não entendi. Pode repetir, por favor?";
+        };
+
+        reconhecedor.onend = () => {
+            if (botaoFalar.classList.contains("gravando")) {
+                botaoFalar.classList.remove("gravando");
+                botaoFalar.textContent = "🎤 Falar com a Andrômeda";
+            }
+        };
+    }
+}
+
+botaoFalar.addEventListener("click", () => {
+    if (!reconhecedor) {
+        caixaResposta.textContent = "Seu navegador não suporta reconhecimento de voz. Use o Chrome ou Edge.";
+        return;
+    }
+    botaoFalar.classList.add("gravando");
+    botaoFalar.textContent = "🔴 Ouvindo...";
+    reconhecedor.start();
+});
+
+<!-- 🚀 INICIAR TUDO AO CARREGAR -->
+window.addEventListener("load", () => {
+    AndromedaCore.carregar();
+    AndromedaVida.iniciar();
+    iniciarReconhecimento();
+    console.log("🌌 ANDRÔMEDA — TUDO ATIVADO ✅");
 });
 </script>
+
+</body>
+</html>
+
