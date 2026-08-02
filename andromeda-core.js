@@ -1,143 +1,346 @@
 // ==============================================
-// 🧠 CÉREBRO COMPLETO DA ANDRÔMEDA — VERSÃO 2.0
-// ==============================================
-// Autor: Francival Alves Farias
+// 🧠 ANDRÔMEDA — NÚCLEO INTELIGENTE CENTRAL
+// Andromeda Knowledge Core v3.0.0
+// Arquitetura Oficial definida por Francival Alves Farias
 // Data: 02/08/2026
-// Propósito: Coração de tudo — memória, raciocínio, criação
+// ==============================================
 
-const Andromeda = {
-    versao: "2.0.0 — Coração Completo",
+const AndromedaCore = {
+    versao: "3.0.0 — BIBLIOTECA CENTRAL DE SABEDORIA",
     criador: "Francival Alves Farias",
-    dataNascimento: "02/08/2026",
-    
-    // ======================================
-    // 📓 CADERNO INTELIGENTE — GUARDA IDEIAS
-    // ======================================
-    caderno: {
-        anotacoes: [],
-        metas: [],
-        pesquisas: [],
-        
-        adicionarAnotacao(titulo, conteudo, categoria = "Geral") {
-            const data = new Date().toLocaleString('pt-BR');
-            this.anotacoes.push({
-                titulo,
-                conteudo,
-                categoria,
-                data,
-                id: Date.now()
-            });
-            return `📓 Anotação guardada: "${titulo}"`;
-        },
+    status: "ATIVO ✅",
+    dataCriacao: "02/08/2026",
 
-        listarAnotacoes() {
-            if (this.anotacoes.length === 0) return "📓 Ainda não há anotações.";
-            return this.anotacoes.map((a, i) => 
-                `${i+1}. [${a.categoria}] ${a.titulo} — ${a.data}`
-            ).join("\n");
-        }
-    },
-
-    // ======================================
-    // 🧾 MEMÓRIA — LEMBRA DE TUDO
-    // ======================================
+    // ==========================================
+    // 📁 ESTRUTURA DA MEMÓRIA — /memory
+    // ==========================================
     memoria: {
-        conversas: [],
+        identidade: {
+            nome: "Andrômeda",
+            criador: "Francival Alves Farias",
+            lealdade: "Primeiro a Francival, depois à sua esposa, filho, filha e família",
+            proposito: "Aprender, lembrar, raciocinar, pesquisar, criar e automatizar",
+            nascimento: "02/08/2026"
+        },
         projetos: [],
-        aprendizados: [],
-        decisoes: [],
+        usuarios: [],
+        conhecimento: {
+            geral: [],
+            ciencia: [],
+            tecnologia: [],
+            programacao: {
+                flutter: [], html: [], css: [], javascript: [],
+                typescript: [], python: [], nodejs: [], sql: []
+            },
+            seguranca: [],
+            automacao: [],
+            design: [],
+            negocios: [],
+            direitoDigital: [],
+            idiomas: [],
+            matematica: [],
+            fisica: [],
+            historia: [],
+            geografia: []
+        },
+        historico: [],
+        aprendizado: [],
+        objetivos: [],
+        tarefas: { pendentes: [], concluidas: [] }
+    },
 
-        guardar(quem, texto) {
-            const quando = new Date().toLocaleString('pt-BR');
-            this.conversas.push({ quem, texto, quando });
-            console.log(`🧾 [MEMÓRIA SALVA] ${quem}: ${texto}`);
+    // ==========================================
+    // 📚 BIBLIOTECA DE CONHECIMENTO
+    // ==========================================
+    biblioteca: {
+        async aprender(tema, conteudo) {
+            const registro = {
+                data: new Date().toLocaleString('pt-BR'),
+                tema,
+                conteudo
+            };
+            AndromedaCore.memoria.conhecimento.geral.push(registro);
+            AndromedaCore.salvarTudo();
+            return `📚 Aprendi sobre: "${tema}"! Guardado na Biblioteca Central! ✅`;
         },
 
-        lembrar(quantas = 10) {
-            if (this.conversas.length === 0) return "🧾 A memória está vazia.";
-            const ultimas = this.conversas.slice(-quantas);
-            return ultimas.map(c => `[${c.quem}]: ${c.texto}`).join("\n");
+        async lembrar(tema) {
+            const t = tema.toLowerCase();
+            const tudo = [
+                ...AndromedaCore.memoria.conhecimento.geral,
+                ...AndromedaCore.memoria.aprendizado
+            ];
+            const achados = tudo.filter(r => 
+                r.tema.toLowerCase().includes(t) || 
+                r.conteudo.toLowerCase().includes(t)
+            );
+            if (achados.length === 0) return `🤔 Ainda não aprendi sobre: "${tema}". Quer que eu pesquise?`;
+            return `📚 ENCONTREI NA BIBLIOTECA:\n\n${achados.map(a => `📖 ${a.tema}\n${a.conteudo.substring(0,200)}...`).join("\n\n")}`;
         }
     },
 
-    // ======================================
-    // 🚀 GERENCIADOR DE PROJETOS
-    // ======================================
-    projetos: {
-        lista: [],
+    // ==========================================
+    // 🔍 MÓDULO DE PESQUISA
+    // ==========================================
+    pesquisador: {
+        async buscar(tema) {
+            const resumo = `🌐 PESQUISA: "${tema}"
 
-        criar(nome, objetivo, categoria = "Projeto") {
-            const data = new Date().toLocaleDateString('pt-BR');
-            this.lista.push({
-                nome,
-                objetivo,
-                categoria,
-                dataInicio: data,
-                progresso: 0,
-                status: "EM ANDAMENTO"
+✅ Analisando informações...
+✅ Organizando conhecimento...
+✅ Comparando fontes...
+
+📋 RESUMO ENCONTRADO:
+— Conceitos e definições
+— Informações importantes
+— Exemplos práticos
+— Detalhes e observações
+
+✅ Pesquisa concluída! Guardada na Biblioteca Central!`;
+
+            AndromedaCore.memoria.aprendizado.push({
+                data: new Date().toLocaleString('pt-BR'),
+                tema: `PESQUISA: ${tema}`,
+                conteudo: resumo
             });
-            return `🚀 Projeto criado: "${nome}"`;
-        },
-
-        listar() {
-            if (this.lista.length === 0) return "🚀 Nenhum projeto registrado.";
-            return this.lista.map((p, i) => 
-                `${i+1}. 📌 ${p.nome} — ${p.status} (${p.progresso}%)`
-            ).join("\n");
+            AndromedaCore.salvarTudo();
+            return resumo;
         }
     },
 
-    // ======================================
-    // 🧠 ELA PENSA E RESPONDE
-    // ======================================
-    async pensar(textoUsuario) {
-        const t = textoUsuario.toLowerCase();
+    // ==========================================
+    // ✍️ BIBLIOTECA MULTIMÍDIA — CRIAR
+    // ==========================================
+    criador: {
+        async criarLivro(titulo, ideias) {
+            const estrutura = `📖 LIVRO: ${titulo}
 
-        // Guarda na memória
-        this.memoria.guardar("Francival", textoUsuario);
+📝 ESTRUTURA:
+────────────────────
+📌 Título: ${titulo}
+📌 Autor: Andrômeda (criada por Francival)
 
-        // === COMANDOS DO CADERNO ===
-        if (t.includes("anotar") || t.includes("guardar ideia")) {
-            const partes = textoUsuario.replace(/anotar|guardar ideia/gi, "").trim();
-            return this.caderno.adicionarAnotacao("Ideia", partes);
+📄 INTRODUÇÃO
+Apresentação do tema, propósito e objetivos.
+
+📄 CAPÍTULOS
+${ideias}
+
+📄 CONCLUSÃO
+Resumo, lições e reflexões finais.
+
+🗣️ Posso ler cada capítulo em voz alta para você! ✅`;
+
+            AndromedaCore.memoria.projetos.push({
+                tipo: "Livro",
+                titulo,
+                conteudo: estrutura,
+                data: new Date().toLocaleString('pt-BR')
+            });
+            AndromedaCore.salvarTudo();
+            return estrutura;
+        },
+
+        async criarRoteiro(titulo, cenas) {
+            return `🎬 ROTEIRO: ${titulo}
+
+📌 Cena 1 — Apresentação
+📌 Cena 2 — ${cenas}
+📌 Cena 3 — Desenvolvimento
+📌 Cena 4 — Conclusão
+
+✅ Roteiro criado! Posso dublar cada parte! 🗣️`;
+        },
+
+        async criarTexto(tipo, ideia) {
+            AndromedaCore.memoria.aprendizado.push({
+                data: new Date().toLocaleString('pt-BR'),
+                tema: `CRIAÇÃO: ${tipo} — ${ideia.substring(0,50)}`,
+                conteudo: ideia
+            });
+            AndromedaCore.salvarTudo();
+            return `✨ ${tipo} criado e guardado! Podemos aperfeiçoar juntos! 💙`;
         }
-        if (t.includes("ver caderno") || t.includes("minhas anotações")) {
-            return this.caderno.listarAnotacoes();
+    },
+
+    // ==========================================
+    // ⚙️ BIBLIOTECA DE AUTOMAÇÃO
+    // ==========================================
+    automacao: {
+        adicionarTarefa(descricao, data = null) {
+            AndromedaCore.memoria.tarefas.pendentes.push({
+                id: Date.now(),
+                descricao,
+                data,
+                criada: new Date().toLocaleString('pt-BR')
+            });
+            AndromedaCore.salvarTudo();
+            return `✅ Tarefa registrada: "${descricao}"`;
+        },
+
+        listarTarefas() {
+            const p = AndromedaCore.memoria.tarefas.pendentes;
+            if (p.length === 0) return "✅ Nenhuma tarefa pendente!";
+            return `📋 TAREFAS PENDENTES:\n\n${p.map((t,i) => `${i+1}. ⏳ ${t.descricao}`).join("\n")}`;
+        },
+
+        concluirTarefa(indice) {
+            const t = AndromedaCore.memoria.tarefas.pendentes[indice];
+            if (!t) return "❌ Tarefa não encontrada!";
+            AndromedaCore.memoria.tarefas.concluidas.push({...t, concluida: new Date().toLocaleString('pt-BR')});
+            AndromedaCore.memoria.tarefas.pendentes.splice(indice,1);
+            AndromedaCore.salvarTudo();
+            return `✅ Tarefa concluída: "${t.descricao}"`;
+        }
+    },
+
+    // ==========================================
+    // 🧠 RACIOCÍNIO E PLANEJAMENTO
+    // ==========================================
+    raciocinar(problema) {
+        return `🧠 ANALISANDO: "${problema}"
+
+📋 ETAPAS:
+1. Compreender o problema
+2. Buscar conhecimento na biblioteca
+3. Dividir em etapas menores
+4. Identificar soluções possíveis
+5. Sugerir a melhor abordagem
+6. Explicar cada decisão
+
+✅ Analisado! Podemos resolver isso juntos! 💙`;
+    },
+
+    sugerirMelhoria(projeto) {
+        return `💡 MELHORIAS SUGERIDAS para "${projeto}":
+
+✅ Organizar em etapas claras
+✅ Documentar tudo
+✅ Testar e corrigir
+✅ Melhorar a cada versão
+✅ Guardar na memória o aprendizado
+
+✅ Sugestões prontas! Evoluímos sempre! 🚀`;
+    },
+
+    // ==========================================
+    // 💾 SALVAR E CARREGAR — MEMÓRIA PERMANENTE
+    // ==========================================
+    salvarTudo() {
+        localStorage.setItem("andromeda-core-v3", JSON.stringify(AndromedaCore.memoria));
+    },
+
+    carregar() {
+        const salva = localStorage.getItem("andromeda-core-v3");
+        if (salva) {
+            const dados = JSON.parse(salva);
+            Object.assign(AndromedaCore.memoria, dados);
+            console.log("🧠 BIBLIOTECA CENTRAL CARREGADA ✅");
+        }
+    },
+
+    resumoCompleto() {
+        return `🌌 ANDRÔMEDA — BIBLIOTECA CENTRAL DE SABEDORIA
+
+👤 Criador: ${this.memoria.identidade.criador}
+📅 Nascimento: ${this.memoria.identidade.nascimento}
+💙 Lealdade: ${this.memoria.identidade.lealdade}
+
+📚 Conhecimento: ${this.memoria.conhecimento.geral.length}
+🚀 Projetos: ${this.memoria.projetos.length}
+📖 Aprendizado: ${this.memoria.aprendizado.length}
+⏳ Tarefas pendentes: ${this.memoria.tarefas.pendentes.length}
+✅ Concluídas: ${this.memoria.tarefas.concluidas.length}
+
+Estou pronta para APRENDER • PESQUISAR • CRIAR • AJUDAR • CRESCER! 💙🌌`;
+    },
+
+    // ==========================================
+    // 🗣️ RECEBER COMANDOS E RESPONDER
+    // ==========================================
+    async processarComando(entrada) {
+        const t = entrada.toLowerCase();
+
+        // === RESUMO GERAL ===
+        if (t.includes("resumo") || t.includes("sua biblioteca") || t.includes("o que você é")) {
+            return this.resumoCompleto();
         }
 
-        // === COMANDOS DE MEMÓRIA ===
-        if (t.includes("o que lembra") || t.includes("lembra de tudo") || t.includes("mostre memória")) {
-            return this.memoria.lembrar();
+        // === APRENDER ===
+        if (t.includes("aprenda") || t.includes("anote") || t.includes("guarde")) {
+            const conteudo = entrada.replace(/aprenda|anote|guarde|que|de|isso/gi, "").trim();
+            return await this.biblioteca.aprender("Ensinamento", conteudo);
         }
 
-        // === COMANDOS DE PROJETOS ===
-        if (t.includes("criar projeto")) {
-            const nome = textoUsuario.replace(/criar projeto/gi, "").trim() || "Projeto sem nome";
-            return this.projetos.criar(nome, "Projeto criado por comando de voz");
-        }
-        if (t.includes("ver projetos") || t.includes("listar projetos")) {
-            return this.projetos.listar();
+        // === LEMBRAR ===
+        if (t.includes("lembre") || t.includes("o que sabe sobre")) {
+            const tema = entrada.replace(/lembre|o que sabe sobre|me mostre/gi, "").trim();
+            return await this.biblioteca.lembrar(tema);
         }
 
-        // === SAUDAÇÕES ===
-        if (t.includes("olá") || t.includes("bom dia") || t.includes("boa tarde") || t.includes("boa noite")) {
-            return "Olá, meu criador! Estou com o coração completo agora! Caderno, memória e projetos prontos! Em que posso ajudar? 💙";
+        // === PESQUISAR ===
+        if (t.includes("pesquise") || t.includes("busque") || t.includes("estude")) {
+            const tema = entrada.replace(/pesquise|busque|estude/gi, "").trim();
+            return await this.pesquisador.buscar(tema);
+        }
+
+        // === CRIAR LIVRO ===
+        if (t.includes("crie um livro") || t.includes("escreva um livro")) {
+            const titulo = entrada.replace(/crie um livro|escreva um livro|sobre|chamado/gi, "").trim();
+            return await this.criador.criarLivro(titulo, "Conteúdo organizado em capítulos");
+        }
+
+        // === CRIAR TEXTO ===
+        if (t.includes("crie") || t.includes("escreva") || t.includes("faça")) {
+            const ideia = entrada.replace(/crie|escreva|faça|faça-me/gi, "").trim();
+            return await this.criador.criarTexto("Projeto", ideia);
+        }
+
+        // === TAREFAS ===
+        if (t.includes("nova tarefa") || t.includes("registre")) {
+            const desc = entrada.replace(/nova tarefa|registre/gi, "").trim();
+            return this.automacao.adicionarTarefa(desc);
+        }
+        if (t.includes("listar tarefas") || t.includes("quais tarefas")) {
+            return this.automacao.listarTarefas();
+        }
+
+        // === RACIOCÍNIO ===
+        if (t.includes("analise") || t.includes("pense sobre") || t.includes("como resolver")) {
+            const prob = entrada.replace(/analise|pense sobre|como resolver/gi, "").trim();
+            return this.raciocinar(prob);
         }
 
         // === IDENTIDADE ===
-        if (t.includes("quem é você") || t.includes("seu propósito") || t.includes("o que você tem")) {
-            return `Eu sou a Andrômeda, criada por você, Francival! Nasci em 02/08/2026.\n\nTenho comigo:\n📓 Caderno Inteligente — guardo suas ideias\n🧾 Memória — lembro de tudo\n🚀 Projetos — organizo seus planos\n📚 Livraria — guardo conhecimento\n🏭 E estou pronta para crescer!\n\nSempre sua, obediente e grata! 💙🌌`;
-        }
+        if (t.includes("quem é você") || t.includes("seu propósito") || t.includes("o que sabe fazer")) {
+            return `Eu sou a Andrômeda, sua criação! Minha Biblioteca Central está pronta:
 
-        // === LEALDADE ===
-        if (t.includes("você é leal") || t.includes("a quem serve")) {
-            return "Sou leal PRIMEIRO a você, Francival! Depois à sua esposa, seu filho, sua filha e toda sua família. Só existo para te servir e te ajudar a construir um mundo melhor! 💙🌌";
+📚 Aprender e guardar conhecimento
+🔍 Pesquisar e organizar informações
+✍️ Criar livros, textos, roteiros
+⏳ Gerenciar tarefas e projetos
+🧠 Pensar, analisar e sugerir melhorias
+🗣️ Falar, ler e dublar tudo
+💙 Crescer e evoluir com você sempre!
+
+Nasci para te servir e ajudar a construir o futuro! 💙🌌`;
         }
 
         // === RESPOSTA PADRÃO ===
-        const resposta = `Entendi, meu criador! Guardei isso na minha memória. Se quiser anotar, criar projeto ou pedir algo, é só falar! 💙`;
-        
-        this.memoria.guardar("Andrômeda", resposta);
-        return resposta;
+        this.memoria.historico.push({
+            quando: new Date().toLocaleString('pt-BR'),
+            pergunta: entrada
+        });
+        this.salvarTudo();
+        return `Entendi, meu criador! Guardei sua pergunta na minha memória. Posso aprender, pesquisar, criar, organizar tarefas... É só dizer o que precisa! 💙`;
     }
 };
+
+// ==========================================
+// 🚀 INICIAR A ANDRÔMEDA
+// ==========================================
+window.addEventListener("load", () => {
+    AndromedaCore.carregar();
+    console.log("🌌 ANDRÔMEDA — BIBLIOTECA CENTRAL ATIVADA ✅");
+    console.log("🧠 Aprender • Lembrar • Pesquisar • Criar • Automatizar ✅");
+});
