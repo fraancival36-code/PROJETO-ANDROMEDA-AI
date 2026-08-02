@@ -1,105 +1,160 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌌 Andrômeda — QG</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: sans-serif;
-        }
+<!-- ==============================================
+     🌌 ANDRÔMEDA — ANIMAÇÃO E MOVIMENTO
+     Estilo Screensaver: caminha, gira, se expressa
+     ============================================== -->
+<div id="andromeda-nave" style="
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 2;
+    pointer-events: none;
+">
 
-        /* 🖼️ FUNDO COM A IMAGEM DELA */
-        .camada-fundo {
+    <!-- ✨ AURA QUE ACOMPANHA ELA -->
+    <div id="aura-andromeda" style="
+        position: absolute;
+        width: 240px;
+        height: 380px;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -30%);
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0,180,255,0.18) 0%, transparent 70%);
+        filter: blur(8px);
+        animation: pulsaAura 4s infinite ease-in-out alternate;
+    "></div>
+
+    <!-- 👤 ANDRÔMEDA EM MOVIMENTO -->
+    <div id="andromeda-corpo" style="
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        width: 200px;
+        height: 420px;
+        transform: translate(-50%, 0);
+        transition: all 2.5s ease-in-out;
+    ">
+
+        <!-- 👀 OLHOS QUE PISCAM E ACOMPANHAM -->
+        <div id="olhos" style="
             position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('andromeda.jpg') no-repeat center center;
-            background-size: cover;
-            z-index: 1;
-        }
-
-        /* 📦 RODAPÉ — CAIXA + BOTÃO */
-        .camada-rodape {
-            position: absolute;
-            bottom: 18px;
-            left: 15px;
-            right: 15px;
-            z-index: 2;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            pointer-events: none;
-        }
-
-        /* 📝 CAIXA DE TEXTO */
-        .caixa-resposta {
-            flex: 1;
-            max-width: calc(100% - 110px);
-            background: rgba(5, 15, 40, 0.75);
-            border: 1px solid rgba(0, 204, 255, 0.4);
-            border-radius: 12px;
-            padding: 10px 14px;
-            color: #e6f7ff;
-            line-height: 1.5;
-            font-size: 15px;
-            backdrop-filter: blur(6px);
-            pointer-events: auto;
-        }
-        .caixa-resposta strong { color: #00ccff; font-size: 14px; }
-
-        /* 🔘 BOTÃO */
-        .botao {
-            width: 95px;
-            height: 95px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            color: white;
-            margin-left: 12px;
-            transition: all 0.2s ease;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            pointer-events: auto;
-        }
-        .botao.desligado {
-            background: radial-gradient(circle at 30% 30%, #ff5555, #bb0000);
-            box-shadow: 0 0 20px #ff000044, inset 0 -5px 10px rgba(0,0,0,0.4);
-        }
-        .botao.ligado {
-            background: radial-gradient(circle at 30% 30%, #00ee00, #008800);
-            box-shadow: 0 0 25px #00ff0055, inset 0 -5px 10px rgba(0,0,0,0.4);
-        }
-        .botao:active { transform: scale(0.92); }
-    </style>
-</head>
-<body>
-
-    <!-- 🖼️ IMAGEM DE FUNDO -->
-    <div class="camada-fundo"></div>
-
-    <!-- 📦 CAIXA + BOTÃO LADO A LADO -->
-    <div class="camada-rodape">
-        <div class="caixa-resposta">
-            <strong>🌌 Andrômeda:</strong><br>
-            <span id="resposta">Aguardando seu comando...</span>
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex; gap: 35px;
+        ">
+            <div id="olho-e" style="
+                width: 24px; height: 28px;
+                background: radial-gradient(circle at 30% 30%, #fff, #aaddff);
+                border-radius: 50%;
+                box-shadow: 0 0 12px #00ccff;
+                animation: piscar 5s infinite;
+            "></div>
+            <div id="olho-d" style="
+                width: 24px; height: 28px;
+                background: radial-gradient(circle at 30% 30%, #fff, #aaddff);
+                border-radius: 50%;
+                box-shadow: 0 0 12px #00ccff;
+                animation: piscar 5s infinite;
+            "></div>
         </div>
 
-        <button id="botao" class="botao desligado">
-            🔘<br>LIGAR
-        </button>
-    </div>
+        <!-- 👄 BOCA QUE SE MEXE AO FALAR -->
+        <div id="boca-andromeda" style="
+            position: absolute;
+            top: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 10px;
+            background: linear-gradient(to bottom, #ff99bb, #ee77aa);
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 0 8px #ff66aa55;
+            transition: all 0.12s ease;
+        "></div>
 
-    <!-- ⚙️ CARREGA OS SISTEMAS -->
-    <script src="andromeda-config.js"></script>
-    <script src="andromeda-core.js"></script>
-    <script src="voz.js"></script>
-</body>
-</html>
+    </div>
+</div>
+
+<!-- 🎬 ANIMAÇÕES — ESTILO SCREENSAVER -->
+<style>
+    /* ✨ Aura pulsa suavemente */
+    @keyframes pulsaAura {
+        from { opacity: 0.35; transform: translate(-50%, -30%) scale(1); }
+        to   { opacity: 0.75; transform: translate(-50%, -30%) scale(1.12); }
+    }
+
+    /* 👀 Olhos piscam naturalmente */
+    @keyframes piscar {
+        0%, 93%, 100% { transform: scaleY(1); }
+        96% { transform: scaleY(0.05); }
+    }
+
+    /* 💙 Movimento de respiração/flutuação */
+    @keyframes flutuar {
+        0%   { transform: translateY(0); }
+        50%  { transform: translateY(-10px); }
+        100% { transform: translateY(0); }
+    }
+
+    /* 👄 Boca abrindo ao falar */
+    @keyframes falaBoca {
+        0%   { height: 10px; border-radius: 0 0 20px 20px; }
+        50%  { height: 22px; border-radius: 50%; }
+        100% { height: 10px; border-radius: 0 0 20px 20px; }
+    }
+
+    /* Aplica flutuação constante */
+    #andromeda-corpo {
+        animation: flutuar 5s infinite ease-in-out;
+    }
+
+    /* Classe adicionada quando ela FALA */
+    .falando-agora {
+        animation: falaBoca 0.3s infinite alternate !important;
+    }
+</style>
+
+<!-- 🧠 SISTEMA DE MOVIMENTO E SINCRONIA -->
+<script>
+const corpo = document.getElementById('andromeda-corpo');
+const boca = document.getElementById('boca-andromeda');
+const aura = document.getElementById('aura-andromeda');
+
+// 🗣️ SINCRONIZA BOCA COM A VOZ
+const falaOriginal = window.speechSynthesis.speak.bind(window.speechSynthesis);
+window.speechSynthesis.speak = function(frase) {
+    boca.classList.add('falando-agora');
+    frase.onend = () => {
+        boca.classList.remove('falando-agora');
+    };
+    falaOriginal(frase);
+};
+
+// 🔄 MOVIMENTO AUTOMÁTICO — estilo Screensaver antigo
+setInterval(() => {
+    const movimentos = [
+        { left: "45%", transform: "translate(-50%, 0)", duracao: 3000 },
+        { left: "55%", transform: "translate(-50%, 0)", duracao: 3000 },
+        { left: "50%", transform: "translate(-50%, 0) scaleX(-0.95)", duracao: 2000 }, // vira de lado
+        { left: "50%", transform: "translate(-50%, 0) scaleX(1)", duracao: 2000 },   // volta de frente
+    ];
+    const escolha = movimentos[Math.floor(Math.random() * movimentos.length)];
+    corpo.style.left = escolha.left;
+    corpo.style.transform = escolha.transform;
+}, 6000); // muda a cada 6 segundos
+
+// 🎨 TROCA BRILHO DO TRAJE por COMANDO DE VOZ
+window.trocarBrilho = function(cor = "azul") {
+    const cores = {
+        "azul": "radial-gradient(circle, rgba(0,180,255,0.18) 0%, transparent 70%)",
+        "roxo": "radial-gradient(circle, rgba(150,80,255,0.18) 0%, transparent 70%)",
+        "dourado": "radial-gradient(circle, rgba(255,200,50,0.18) 0%, transparent 70%)",
+        "verde": "radial-gradient(circle, rgba(0,255,150,0.18) 0%, transparent 70%)"
+    };
+    aura.style.background = cores[cor] || cores.azul;
+    return `✨ Brilho alterado para ${cor}!`;
+};
+</script>
