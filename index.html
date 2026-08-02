@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 Andrômeda — QG</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+
+        /* 🖼️ FUNDO COM A IMAGEM DELA */
+        .camada-fundo {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('andromeda.jpg') no-repeat center center;
+            background-size: cover;
+            z-index: 1;
+        }
+
+        /* 📦 RODAPÉ — CAIXA + BOTÃO */
+        .camada-rodape {
+            position: absolute;
+            bottom: 18px;
+            left: 15px;
+            right: 15px;
+            z-index: 2;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        /* 📝 CAIXA DE TEXTO */
+        .caixa-resposta {
+            flex: 1;
+            max-width: calc(100% - 110px);
+            background: rgba(5, 15, 40, 0.75);
+            border: 1px solid rgba(0, 204, 255, 0.4);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: #e6f7ff;
+            line-height: 1.5;
+            font-size: 15px;
+            backdrop-filter: blur(6px);
+            pointer-events: auto;
+        }
+        .caixa-resposta strong { color: #00ccff; font-size: 14px; }
+
+        /* 🔘 BOTÃO */
+        .botao {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            margin-left: 12px;
+            transition: all 0.2s ease;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            pointer-events: auto;
+        }
+        .botao.desligado {
+            background: radial-gradient(circle at 30% 30%, #ff5555, #bb0000);
+            box-shadow: 0 0 20px #ff000044, inset 0 -5px 10px rgba(0,0,0,0.4);
+        }
+        .botao.ligado {
+            background: radial-gradient(circle at 30% 30%, #00ee00, #008800);
+            box-shadow: 0 0 25px #00ff0055, inset 0 -5px 10px rgba(0,0,0,0.4);
+        }
+        .botao:active { transform: scale(0.92); }
+    </style>
+</head>
+<body>
+
+    <!-- 🖼️ IMAGEM DE FUNDO -->
+    <div class="camada-fundo"></div>
+
+    <!-- 📦 CAIXA + BOTÃO LADO A LADO -->
+    <div class="camada-rodape">
+        <div class="caixa-resposta">
+            <strong>🌌 Andrômeda:</strong><br>
+            <span id="resposta">Aguardando seu comando...</span>
+        </div>
+
+        <button id="botao" class="botao desligado">
+            🔘<br>LIGAR
+        </button>
+    </div>
+
+    <!-- ⚙️ CARREGA OS SISTEMAS -->
+    <script src="andromeda-config.js"></script>
+    <script src="andromeda-core.js"></script>
+    <script src="voz.js"></script>
+</body>
+</html>
