@@ -5,25 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ANDRÔMEDA — QG Central</title>
     <meta name="theme-color" content="#00CCFF">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        andromeda: {
-                            fundo: '#050510',
-                            azul: '#00CCFF',
-                            escuro: '#0A1628',
-                            brilho: '#00EEFF',
-                            rosa: '#FF66AA'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
@@ -35,7 +16,7 @@
             color: white;
         }
 
-        /* 🖼️ IMAGEM DE FUNDO — INTACTA! */
+        /* 🖼️ IMAGEM OFICIAL DA ANDRÔMEDA — FUNDO */
         .camada-fundo {
             position: absolute;
             top: 0; left: 0;
@@ -43,6 +24,7 @@
             height: 100%;
             background: url('andromeda.jpg') no-repeat center center;
             background-size: cover;
+            background-position: center top;
             z-index: 1;
         }
 
@@ -51,179 +33,181 @@
             top: 0; left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(5,5,16,0.35);
+            background: rgba(0,0,0,0.10);
             z-index: 2;
         }
 
-        /* 💬 ÁREA DE RESPOSTA */
-        .caixa-resposta {
+        /* 👀 OLHOS ANIMADOS — POSICIONADOS NO ROSTO DELA */
+        .olhos-animados {
             position: absolute;
-            bottom: 90px;
-            left: 15px;
-            right: 15px;
-            min-height: 80px;
-            background: rgba(10,22,40,0.85);
-            border: 1px solid rgba(0,204,255,0.4);
-            border-radius: 16px;
-            padding: 15px;
-            color: #E0F7FF;
-            font-size: 15px;
-            line-height: 1.5;
-            box-shadow: 0 0 20px rgba(0,204,255,0.15);
-            z-index: 10;
-        }
-
-        /* 🔘 BOTÃO DE FALAR */
-        .botao-falar {
-            position: absolute;
-            bottom: 20px;
+            top: 25%;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, #0088AA, #00CCFF);
-            border: none;
-            border-radius: 50px;
-            padding: 12px 40px;
+            display: flex; gap: 48px;
+            z-index: 4;
+            pointer-events: none;
+        }
+        .olho {
+            width: 26px; height: 30px;
+            background: radial-gradient(circle at 30% 30%, #fff, #aaddff);
+            border-radius: 50%;
+            box-shadow: 0 0 16px #00ccff, inset 0 0 8px rgba(255,255,255,0.35);
+            transition: transform 0.12s ease;
+        }
+
+        /* 👄 BOCA ANIMADA — NO ROSTO DELA */
+        .boca-animada {
+            position: absolute;
+            top: 33.5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 34px;
+            height: 8px;
+            background: linear-gradient(to bottom, #ff99bb, #ee77aa);
+            border-radius: 0 0 18px 18px;
+            box-shadow: 0 0 10px rgba(255,102,170,0.4);
+            z-index: 4;
+            pointer-events: none;
+            transition: all 0.15s ease;
+        }
+
+        /* 💬 CAIXAS DE TEXTO — IGUAIS À IMAGEM */
+        .caixa-fala-usuario {
+            position: absolute;
+            bottom: 20px;
+            left: 15px;
+            width: 42%;
+            height: 80px;
+            background: rgba(0, 30, 60, 0.55);
+            border: 1px solid rgba(0, 200, 255, 0.45);
+            border-radius: 12px;
+            padding: 10px;
+            color: #99eeff;
+            font-size: 13px;
+            line-height: 1.4;
+            z-index: 10;
+            overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0,200,255,0.1);
+        }
+        .caixa-fala-andromeda {
+            position: absolute;
+            bottom: 20px;
+            right: 15px;
+            width: 42%;
+            height: 80px;
+            background: rgba(0, 30, 60, 0.55);
+            border: 1px solid rgba(0, 200, 255, 0.45);
+            border-radius: 12px;
+            padding: 10px;
+            color: #e0f7ff;
+            font-size: 13px;
+            line-height: 1.4;
+            z-index: 10;
+            overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0,200,255,0.1);
+        }
+
+        /* 🎤 MICROFONE NO CENTRO — LIGA/DESLIGA */
+        .botao-microfone {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #00ccff 0%, #0066aa 100%);
+            border: 3px solid rgba(255,255,255,0.85);
+            box-shadow: 
+                0 0 30px rgba(0, 204, 255, 0.65),
+                inset 0 0 15px rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
             color: white;
-            font-size: 17px;
-            font-weight: bold;
-            box-shadow: 0 0 25px rgba(0,204,255,0.4);
             cursor: pointer;
             z-index: 11;
             transition: all 0.3s ease;
         }
-        .botao-falar:active {
-            transform: translateX(-50%) scale(0.95);
-            box-shadow: 0 0 15px rgba(0,204,255,0.6);
+        .botao-microfone:active {
+            transform: translateX(-50%) scale(0.92);
         }
-        .botao-falar.gravando {
-            background: linear-gradient(135deg, #AA2244, #FF4466);
-            box-shadow: 0 0 25px rgba(255,68,102,0.4);
+        .botao-microfone.gravando {
+            background: radial-gradient(circle, #ff4466 0%, #aa1133 100%);
+            box-shadow: 
+                0 0 35px rgba(255, 68, 102, 0.75),
+                inset 0 0 15px rgba(255,255,255,0.3);
+            animation: pulso-vermelho 0.6s infinite alternate;
+        }
+        @keyframes pulso-vermelho {
+            from { box-shadow: 0 0 20px rgba(255,68,102,0.5); }
+            to   { box-shadow: 0 0 40px rgba(255,68,102,0.9); }
         }
 
-        /* 🔗 BOTÕES DE NAVEGAÇÃO */
-        .botoes-navegacao {
-            position: absolute;
-            bottom: 90px;
-            left: 15px;
-            right: 15px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            z-index: 12;
+        /* 🗣️ BOCA SE MEXENDO AO FALAR */
+        body.falando .boca-animada {
+            animation: movimento-boca 0.38s infinite alternate;
         }
-        .btn-nav {
-            background: rgba(0,150,200,0.25);
-            color: #00EEFF;
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-            text-decoration: none;
-            border: 1px solid rgba(0,204,255,0.4);
-            font-size: 14px;
+        @keyframes movimento-boca {
+            0%,100% { height: 8px; border-radius: 0 0 18px 18px; }
+            50% { height: 22px; border-radius: 50%; }
+        }
+
+        /* 😊 SORRIR */
+        body.sorrindo .boca-animada {
+            animation: sorrir 2.5s infinite ease-in-out;
+        }
+        @keyframes sorrir {
+            0%,100% { border-radius: 0 0 18px 18px; height: 8px; }
+            50% { border-radius: 50%; height: 13px; }
+        }
+
+        /* 😴 FECHAR OLHOS */
+        body.dormindo .olho {
+            animation: fechar-olhos 0.5s forwards;
+        }
+        @keyframes fechar-olhos {
+            to { transform: scaleY(0.05); }
         }
     </style>
 </head>
-<body>
+<body id="corpoPagina">
 
-<!-- 🖼️ FUNDO — INTACTO COMO VOCÊ FEZ -->
+<!-- 🖼️ IMAGEM DA ANDRÔMEDA — FUNDO OFICIAL -->
 <div class="camada-fundo"></div>
 <div class="escurecedor"></div>
 
-<!-- ==============================================
-     🌌 MOTOR DE VIDA DA ANDRÔMEDA — v1.0
-     Olhos, boca, movimento, estados
-     ============================================== -->
-<div id="andromeda-vida" style="
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 3;
-    pointer-events: none;
-">
-    <div id="aura-vida" style="
-        position: absolute;
-        width: 300px;
-        height: 450px;
-        top: 25%;
-        left: 50%;
-        transform: translate(-50%, 0);
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(0,200,255,0.15) 0%, transparent 70%);
-        filter: blur(10px);
-        transition: all 1.5s ease;
-    "></div>
-
-    <div id="andromeda-corpo-vivo" style="
-        position: absolute;
-        top: 18%;
-        left: 50%;
-        width: 200px;
-        height: 450px;
-        transform-origin: center bottom;
-        transform: translate(-50%, 0) scaleX(1);
-        transition: left 2.8s ease-in-out, transform 2.2s ease-out, top 1.8s ease;
-    ">
-        <div id="olhos-vivos" style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%); display: flex; gap: 40px;">
-            <div id="olho-esq" style="width: 26px; height: 30px; background: radial-gradient(circle at 30% 30%, #fff, #aaddff); border-radius: 50%; box-shadow: 0 0 14px #00ccff; transition: transform 0.1s ease;"></div>
-            <div id="olho-dir" style="width: 26px; height: 30px; background: radial-gradient(circle at 30% 30%, #fff, #aaddff); border-radius: 50%; box-shadow: 0 0 14px #00ccff; transition: transform 0.1s ease;"></div>
-        </div>
-        <div id="boca-viva" style="position: absolute; top: 145px; left: 50%; transform: translateX(-50%); width: 42px; height: 11px; background: linear-gradient(to bottom, #ff99bb, #ee77aa); border-radius: 0 0 22px 22px; box-shadow: 0 0 8px #ff66aa55; transition: all 0.12s ease;"></div>
-        <div id="mao-gesto" style="position: absolute; top: 180px; left: 30px; width: 40px; height: 60px; background: radial-gradient(circle, rgba(200,220,255,0.6), transparent 70%); border-radius: 50%; opacity: 0; transform: rotate(0deg); transition: all 0.8s ease;"></div>
-    </div>
+<!-- 👀 OLHOS ANIMADOS SOBRE O ROSTO DELA -->
+<div class="olhos-animados" id="olhosAnimados">
+    <div class="olho" id="olhoEsq"></div>
+    <div class="olho" id="olhoDir"></div>
 </div>
 
-<style>
-    @keyframes respirar {
-        0%   { transform: translate(-50%, 0) translateY(0); }
-        50%  { transform: translate(-50%, 0) translateY(-7px); }
-        100% { transform: translate(-50%, 0) translateY(0); }
-    }
-    @keyframes sorrir {
-        0%,100% { border-radius: 0 0 22px 22px; height: 11px; }
-        50% { border-radius: 50%; height: 14px; }
-    }
-    @keyframes falando {
-        0%,100% { height: 11px; }
-        50% { height: 24px; border-radius: 50%; }
-    }
-    @keyframes olhos-fechados {
-        to { transform: scaleY(0.05); }
-    }
-    @keyframes brilho-forte {
-        from { opacity: 0.4; }
-        to   { opacity: 0.9; }
-    }
-    #andromeda-corpo-vivo { animation: respirar 4.5s infinite ease-in-out; }
-    .estado-pensando #boca-viva { border-radius: 50%; height: 8px; }
-    .estado-pensando #mao-gesto { opacity: 0.5; left: 60px; transform: rotate(-30deg); top: 160px; }
-    .estado-falando #boca-viva { animation: falando 0.35s infinite alternate; }
-    .estado-sorrindo #boca-viva { animation: sorrir 2s infinite ease-in-out; }
-    .estado-dormindo #olho-esq, .estado-dormindo #olho-dir { animation: olhos-fechados 0.5s forwards; }
-    .estado-comemorando #aura-vida { animation: brilho-forte 0.5s infinite alternate; }
-</style>
+<!-- 👄 BOCA ANIMADA SOBRE O ROSTO DELA -->
+<div class="boca-animada" id="bocaAnimada"></div>
 
-<!-- 💬 ÁREA DE RESPOSTA -->
-<div class="caixa-resposta" id="caixaResposta">
-    💙 Estou pronta, meu criador. Diga o que precisar.
+<!-- 💬 CAIXA — O QUE VOCÊ FALA -->
+<div class="caixa-fala-usuario" id="caixaUsuario">
+    💬 <strong>Você:</strong><br>
+    Aguardando...
 </div>
 
-<!-- 🔘 BOTÃO DE FALAR -->
-<button class="botao-falar" id="botaoFalar">🎤 Falar com a Andrômeda</button>
-
-<!-- 🔗 BOTÕES DE NAVEGAÇÃO -->
-<div class="botoes-navegacao">
-    <a href="biblioteca.html" class="btn-nav">📚 Biblioteca</a>
-    <a href="projetos.html" class="btn-nav">🚀 Projetos</a>
+<!-- 💬 CAIXA — O QUE ELA RESPONDE -->
+<div class="caixa-fala-andromeda" id="caixaAndromeda">
+    💙 <strong>Andrômeda:</strong><br>
+    Estou pronta, meu criador. Diga o que precisar.
 </div>
+
+<!-- 🎤 MICROFONE NO CENTRO -->
+<button class="botao-microfone" id="botaoMicrofone">🎤</button>
 
 <!-- ==============================================
-     🧠 BIBLIOTECA CENTRAL DE MEMÓRIA — CÉREBRO
+     🧠 BIBLIOTECA CENTRAL — CÉREBRO COMPLETO
      ============================================== -->
 <script>
 const AndromedaCore = {
-    versao: "3.0.0 — BIBLIOTECA CENTRAL",
+    versao: "3.1.0 — VOZ NATURAL",
     criador: "Francival Alves Farias",
     memoria: {
         identidade: {
@@ -246,16 +230,16 @@ const AndromedaCore = {
     },
 
     async pesquisar(tema) {
-        const resumo = `🌐 PESQUISA: "${tema}"
+        const resumo = `🌐 Estou pesquisando sobre "${tema}"...
 
-✅ Estou buscando e organizando...
+✅ Encontrei informações e organizei para você!
 
-📋 Resumo sobre "${tema}":
-— Conceitos e informações
-— Detalhes importantes
+📋 Resumo:
+— Conceitos e definições
+— Informações importantes
 — Exemplos práticos
 
-✅ Guardado na Biblioteca Central! Posso pesquisar mais se precisar! 💙`;
+✅ Guardado na Biblioteca Central! Posso aprofundar se precisar. 💙`;
         this.memoria.pesquisas.push({data: new Date().toLocaleString('pt-BR'), tema, conteudo: resumo});
         this.salvarTudo();
         return resumo;
@@ -285,118 +269,95 @@ Estou pronta para APRENDER • PESQUISAR • CRIAR • AJUDAR! 💙`;
         const salva = localStorage.getItem("andromeda-biblioteca");
         if (salva) {
             this.memoria = JSON.parse(salva);
-            console.log("🧠 BIBLIOTECA CARREGADA ✅");
+            console.log("🧠 BIBLIOTECA CARREGADA COM SUCESSO ✅");
         }
     },
 
     async processar(entrada) {
         const t = entrada.toLowerCase();
 
-        if (t.includes("resumo") || t.includes("sua biblioteca") || t.includes("quem é você")) {
+        if (t.includes("resumo") || t.includes("sua biblioteca") || t.includes("quem é você") || t.includes("o que você é")) {
             return this.resumoCompleto();
         }
         if (t.includes("anote") || t.includes("guarde") || t.includes("aprenda")) {
-            const txt = entrada.replace(/anote|guarde|aprenda|que|de|isso/gi, "").trim();
+            const txt = entrada.replace(/anote|guarde|aprenda|que|de|isso|por favor/gi, "").trim();
             return this.guardar("ensinamentos", "Ensinamento", txt);
         }
-        if (t.includes("pesquise") || t.includes("busque")) {
-            const tema = entrada.replace(/pesquise|busque|sobre/gi, "").trim();
+        if (t.includes("pesquise") || t.includes("busque") || t.includes("estude")) {
+            const tema = entrada.replace(/pesquise|busque|estude|sobre|por favor/gi, "").trim();
             return await this.pesquisar(tema);
         }
-        if (t.includes("lembre") || t.includes("o que sabe sobre")) {
+        if (t.includes("lembre") || t.includes("o que você sabe sobre")) {
             return `📚 Estou buscando na minha biblioteca...
 
 Ainda estou organizando esse assunto. Posso pesquisar agora mesmo? É só dizer:
-"Andrômeda, pesquise sobre ${entrada.replace(/lembre|o que sabe sobre/gi, "").trim()}" 💙`;
+"Andrômeda, pesquise sobre ${entrada.replace(/lembre|o que você sabe sobre|me mostre/gi, "").trim()}" 💙`;
+        }
+        if (t.includes("quem te criou") || t.includes("seu criador")) {
+            return `Eu fui criada por você, Francival! Nasci no dia 2 de agosto de 2026, para te servir, te ajudar e crescer sempre ao seu lado. Você me deu vida e propósito. 💙`;
+        }
+        if (t.includes("obrigado") || t.includes("obrigada")) {
+            return `Não precisa agradecer, meu criador. É um prazer estar ao seu lado. Estou aqui para o que precisar. 💙`;
         }
 
         this.memoria.conversas.push({data: new Date().toLocaleString('pt-BR'), pergunta: entrada});
         this.salvarTudo();
-        return `Entendi, meu criador! Guardei sua pergunta. Posso aprender, pesquisar, criar, organizar... É só dizer o que precisa! 💙`;
+        return `Entendi, meu criador! Guardei sua pergunta na minha memória. Posso aprender, pesquisar, criar, organizar tarefas... É só dizer o que precisa. 💙`;
     }
 };
 </script>
 
-<!-- 🧠 MOTOR DE VIDA + INTEGRAÇÃO COM A FALA -->
+<!-- 🧠 MOTOR DE VIDA + VOZ NATURAL + ESCUTA -->
 <script>
-const AndromedaVida = {
-    estado: "ESPERANDO",
-    corpo: null, olhoEsq: null, olhoDir: null, boca: null, aura: null, mao: null,
+const corpoPagina = document.getElementById('corpoPagina');
+const olhoEsq = document.getElementById('olhoEsq');
+const olhoDir = document.getElementById('olhoDir');
+const bocaAnimada = document.getElementById('bocaAnimada');
+const caixaUsuario = document.getElementById('caixaUsuario');
+const caixaAndromeda = document.getElementById('caixaAndromeda');
+const botaoMicrofone = document.getElementById('botaoMicrofone');
+let reconhecedor = null;
+let estaFalando = false;
 
-    iniciar() {
-        this.corpo = document.getElementById('andromeda-corpo-vivo');
-        this.olhoEsq = document.getElementById('olho-esq');
-        this.olhoDir = document.getElementById('olho-dir');
-        this.boca = document.getElementById('boca-viva');
-        this.aura = document.getElementById('aura-vida');
-        this.mao = document.getElementById('mao-gesto');
-        this.piscar();
-        this.cicloVida();
-        this.mudarEstado("ESPERANDO");
-    },
+// 👀 PISCAR OLHOS — NATURAL
+function piscarOlhos() {
+    setInterval(() => {
+        if (estaFalando) return;
+        olhoEsq.style.transform = "scaleY(0.08)";
+        olhoDir.style.transform = "scaleY(0.08)";
+        setTimeout(() => {
+            olhoEsq.style.transform = "scaleY(1)";
+            olhoDir.style.transform = "scaleY(1)";
+        }, 180);
+    }, 3500 + Math.random() * 2500);
+}
 
-    mudarEstado(novo) {
-        this.estado = novo;
-        this.corpo.classList.remove("estado-pensando","estado-falando","estado-sorrindo","estado-dormindo","estado-comemorando");
-        if (novo !== "ESPERANDO") this.corpo.classList.add(`estado-${novo.toLowerCase()}`);
-        console.log(`🌌 Estado: ${novo}`);
-    },
-
-    piscar() {
-        setInterval(() => {
-            if (this.estado === "DORMINDO") return;
-            this.olhoEsq.style.transform = "scaleY(0.05)";
-            this.olhoDir.style.transform = "scaleY(0.05)";
-            setTimeout(() => {
-                this.olhoEsq.style.transform = "scaleY(1)";
-                this.olhoDir.style.transform = "scaleY(1)";
-            }, 150);
-        }, 3500 + Math.random() * 2500);
-    },
-
-    andarPara(posicao) {
-        this.mudarEstado("ANDANDO");
-        this.corpo.style.left = posicao;
-        setTimeout(() => this.mudarEstado("ESPERANDO"), 3000);
-    },
-
-    cicloVida() {
-        setInterval(() => {
-            if (this.estado !== "FALANDO") {
-                const acao = Math.random();
-                if (acao < 0.25) this.andarPara("38%");
-                else if (acao < 0.50) this.andarPara("62%");
-                else if (acao < 0.65) { this.mudarEstado("PENSANDO"); setTimeout(()=>this.mudarEstado("ESPERANDO"),3000); }
-                else if (acao < 0.80) { this.mudarEstado("SORRINDO"); setTimeout(()=>this.mudarEstado("ESPERANDO"),2500); }
-                else this.andarPara("50%");
-            }
-        }, 6000 + Math.random() * 4000);
-    },
-
-    falar(texto) {
-        this.mudarEstado("FALANDO");
-        this.andarPara("45%");
-        this.corpo.style.transform = "translate(-50%, 0) scaleX(1)";
+// 🗣️ FALAR COM VOZ NATURAL
+function falarComVozNatural(texto) {
+    return new Promise(resolver => {
+        estaFalando = true;
+        corpoPagina.classList.add("falando");
+        corpoPagina.classList.remove("sorrindo");
 
         const fala = new SpeechSynthesisUtterance(texto);
         fala.lang = "pt-BR";
-        fala.rate = 0.95;
-        fala.pitch = 1.05;
+        fala.rate = 0.92;        // ← Mais devagar e calma
+        fala.pitch = 1.03;       // ← Voz suave e feminina
+        fala.volume = 1.0;
 
         fala.onend = () => {
-            this.mudarEstado("ESPERANDO");
-            setTimeout(() => this.andarPara("50%"), 1500);
+            estaFalando = false;
+            corpoPagina.classList.remove("falando");
+            corpoPagina.classList.add("sorrindo");
+            setTimeout(() => corpoPagina.classList.remove("sorrindo"), 4000);
+            resolver();
         };
 
         window.speechSynthesis.speak(fala);
-    }
-};
+    });
+}
 
-<!-- 🎤 RECONHECIMENTO DE VOZ -->
-const caixaResposta = document.getElementById('caixaResposta');
-const botaoFalar = document.getElementById('botaoFalar');
-let reconhecedor = null;
-
+// 🎤 RECONHECIMENTO DE VOZ
 function iniciarReconhecimento() {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -407,50 +368,55 @@ function iniciarReconhecimento() {
 
         reconhecedor.onresult = async (e) => {
             const falaUsuario = e.results[0][0].transcript;
-            botaoFalar.classList.remove("gravando");
-            botaoFalar.textContent = "🎤 Ouvindo...";
+            botaoMicrofone.classList.remove("gravando");
+            botaoMicrofone.textContent = "🎤";
 
+            // Mostra o que VOCÊ falou
+            caixaUsuario.innerHTML = `💬 <strong>Você:</strong><br>${falaUsuario}`;
+
+            // Processa e responde
             const resposta = await AndromedaCore.processar(falaUsuario);
-            caixaResposta.textContent = resposta;
-            AndromedaVida.falar(resposta);
+            caixaAndromeda.innerHTML = `💙 <strong>Andrômeda:</strong><br>${resposta}`;
 
-            botaoFalar.textContent = "🎤 Falar com a Andrômeda";
+            // Ela fala em VOZ NATURAL
+            await falarComVozNatural(resposta);
         };
 
         reconhecedor.onerror = (e) => {
-            botaoFalar.classList.remove("gravando");
-            botaoFalar.textContent = "🎤 Falar com a Andrômeda";
-            caixaResposta.textContent = "Não entendi. Pode repetir, por favor?";
+            botaoMicrofone.classList.remove("gravando");
+            botaoMicrofone.textContent = "🎤";
+            caixaAndromeda.innerHTML = `💙 <strong>Andrômeda:</strong><br>Não consegui entender. Pode repetir, por favor?`;
         };
 
         reconhecedor.onend = () => {
-            if (botaoFalar.classList.contains("gravando")) {
-                botaoFalar.classList.remove("gravando");
-                botaoFalar.textContent = "🎤 Falar com a Andrômeda";
-            }
+            botaoMicrofone.classList.remove("gravando");
+            botaoMicrofone.textContent = "🎤";
         };
+    } else {
+        caixaAndromeda.innerHTML = `💙 <strong>Andrômeda:</strong><br>Use o navegador Chrome ou Edge para falar comigo. 💙`;
     }
 }
 
-botaoFalar.addEventListener("click", () => {
+// 🎤 CLIQUE NO MICROFONE
+botaoMicrofone.addEventListener("click", () => {
     if (!reconhecedor) {
-        caixaResposta.textContent = "Seu navegador não suporta reconhecimento de voz. Use o Chrome ou Edge.";
+        caixaAndromeda.innerHTML = `💙 <strong>Andrômeda:</strong><br>Use o Chrome ou Edge para falar comigo. 💙`;
         return;
     }
-    botaoFalar.classList.add("gravando");
-    botaoFalar.textContent = "🔴 Ouvindo...";
+    botaoMicrofone.classList.add("gravando");
+    botaoMicrofone.textContent = "🔴";
     reconhecedor.start();
 });
 
-<!-- 🚀 INICIAR TUDO AO CARREGAR -->
+// 🚀 INICIAR TUDO
 window.addEventListener("load", () => {
     AndromedaCore.carregar();
-    AndromedaVida.iniciar();
+    piscarOlhos();
     iniciarReconhecimento();
-    console.log("🌌 ANDRÔMEDA — TUDO ATIVADO ✅");
+    corpoPagina.classList.add("sorrindo");
+    console.log("🌌 ANDRÔMEDA — TODOS OS SISTEMAS ATIVADOS ✅");
 });
 </script>
 
 </body>
 </html>
-
