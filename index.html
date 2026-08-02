@@ -1,160 +1,272 @@
 <!-- ==============================================
-     🌌 ANDRÔMEDA — ANIMAÇÃO E MOVIMENTO
-     Estilo Screensaver: caminha, gira, se expressa
+     🌌 MOTOR DE VIDA DA ANDRÔMEDA — v1.0
+     Especificação Oficial: Corpo inteiro, vida própria, estados, movimento natural
+     Criador: Francival Alves Farias | Data: 02/08/2026
      ============================================== -->
-<div id="andromeda-nave" style="
+
+<div id="andromeda-vida" style="
     position: absolute;
     top: 0; left: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    z-index: 2;
+    z-index: 3;
     pointer-events: none;
 ">
 
-    <!-- ✨ AURA QUE ACOMPANHA ELA -->
-    <div id="aura-andromeda" style="
+    <!-- ✨ AURA DE VIDA -->
+    <div id="aura-vida" style="
         position: absolute;
-        width: 240px;
-        height: 380px;
-        top: 35%;
-        left: 50%;
-        transform: translate(-50%, -30%);
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(0,180,255,0.18) 0%, transparent 70%);
-        filter: blur(8px);
-        animation: pulsaAura 4s infinite ease-in-out alternate;
-    "></div>
-
-    <!-- 👤 ANDRÔMEDA EM MOVIMENTO -->
-    <div id="andromeda-corpo" style="
-        position: absolute;
+        width: 300px;
+        height: 450px;
         top: 25%;
         left: 50%;
-        width: 200px;
-        height: 420px;
         transform: translate(-50%, 0);
-        transition: all 2.5s ease-in-out;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0,200,255,0.15) 0%, transparent 70%);
+        filter: blur(10px);
+        transition: all 1.5s ease;
+    "></div>
+
+    <!-- 👤 CORPO ANIMADO -->
+    <div id="andromeda-corpo-vivo" style="
+        position: absolute;
+        top: 18%;
+        left: 50%;
+        width: 200px;
+        height: 450px;
+        transform-origin: center bottom;
+        transform: translate(-50%, 0) scaleX(1);
+        transition: 
+            left 2.8s ease-in-out,
+            transform 2.2s ease-out,
+            top 1.8s ease;
     ">
 
-        <!-- 👀 OLHOS QUE PISCAM E ACOMPANHAM -->
-        <div id="olhos" style="
+        <!-- 👀 OLHOS -->
+        <div id="olhos-vivos" style="
             position: absolute;
-            top: 60px;
+            top: 70px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex; gap: 35px;
+            display: flex; gap: 40px;
         ">
-            <div id="olho-e" style="
-                width: 24px; height: 28px;
+            <div id="olho-esq" style="
+                width: 26px; height: 30px;
                 background: radial-gradient(circle at 30% 30%, #fff, #aaddff);
                 border-radius: 50%;
-                box-shadow: 0 0 12px #00ccff;
-                animation: piscar 5s infinite;
+                box-shadow: 0 0 14px #00ccff;
+                transition: transform 0.1s ease;
             "></div>
-            <div id="olho-d" style="
-                width: 24px; height: 28px;
+            <div id="olho-dir" style="
+                width: 26px; height: 30px;
                 background: radial-gradient(circle at 30% 30%, #fff, #aaddff);
                 border-radius: 50%;
-                box-shadow: 0 0 12px #00ccff;
-                animation: piscar 5s infinite;
+                box-shadow: 0 0 14px #00ccff;
+                transition: transform 0.1s ease;
             "></div>
         </div>
 
-        <!-- 👄 BOCA QUE SE MEXE AO FALAR -->
-        <div id="boca-andromeda" style="
+        <!-- 👄 BOCA -->
+        <div id="boca-viva" style="
             position: absolute;
-            top: 130px;
+            top: 145px;
             left: 50%;
             transform: translateX(-50%);
-            width: 40px;
-            height: 10px;
+            width: 42px;
+            height: 11px;
             background: linear-gradient(to bottom, #ff99bb, #ee77aa);
-            border-radius: 0 0 20px 20px;
+            border-radius: 0 0 22px 22px;
             box-shadow: 0 0 8px #ff66aa55;
             transition: all 0.12s ease;
+        "></div>
+
+        <!-- ✋ MÃO GESTO (aparece conforme estado) -->
+        <div id="mao-gesto" style="
+            position: absolute;
+            top: 180px;
+            left: 30px;
+            width: 40px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(200,220,255,0.6), transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            transform: rotate(0deg);
+            transition: all 0.8s ease;
         "></div>
 
     </div>
 </div>
 
-<!-- 🎬 ANIMAÇÕES — ESTILO SCREENSAVER -->
+<!-- 🎬 ANIMAÇÕES E ESTILOS -->
 <style>
-    /* ✨ Aura pulsa suavemente */
-    @keyframes pulsaAura {
-        from { opacity: 0.35; transform: translate(-50%, -30%) scale(1); }
-        to   { opacity: 0.75; transform: translate(-50%, -30%) scale(1.12); }
+    /* 💙 Respiração constante */
+    @keyframes respirar {
+        0%   { transform: translate(-50%, 0) translateY(0); }
+        50%  { transform: translate(-50%, 0) translateY(-7px); }
+        100% { transform: translate(-50%, 0) translateY(0); }
     }
 
-    /* 👀 Olhos piscam naturalmente */
-    @keyframes piscar {
-        0%, 93%, 100% { transform: scaleY(1); }
-        96% { transform: scaleY(0.05); }
+    /* 😊 Sorrir */
+    @keyframes sorrir {
+        0%, 100% { border-radius: 0 0 22px 22px; height: 11px; }
+        50% { border-radius: 50%; height: 14px; }
     }
 
-    /* 💙 Movimento de respiração/flutuação */
-    @keyframes flutuar {
-        0%   { transform: translateY(0); }
-        50%  { transform: translateY(-10px); }
-        100% { transform: translateY(0); }
+    /* 🗣️ Falar */
+    @keyframes falando {
+        0%, 100% { height: 11px; }
+        50% { height: 24px; border-radius: 50%; }
     }
 
-    /* 👄 Boca abrindo ao falar */
-    @keyframes falaBoca {
-        0%   { height: 10px; border-radius: 0 0 20px 20px; }
-        50%  { height: 22px; border-radius: 50%; }
-        100% { height: 10px; border-radius: 0 0 20px 20px; }
+    /* 😴 Olhos fechados */
+    @keyframes olhos-fechados {
+        to { transform: scaleY(0.05); }
     }
 
-    /* Aplica flutuação constante */
-    #andromeda-corpo {
-        animation: flutuar 5s infinite ease-in-out;
+    /* ✨ Aura brilha forte */
+    @keyframes brilho-forte {
+        from { opacity: 0.4; }
+        to   { opacity: 0.9; }
     }
 
-    /* Classe adicionada quando ela FALA */
-    .falando-agora {
-        animation: falaBoca 0.3s infinite alternate !important;
+    /* Aplica respiração padrão */
+    #andromeda-corpo-vivo {
+        animation: respirar 4.5s infinite ease-in-out;
     }
+
+    /* Classes de estado — são adicionadas/removidas pelo JS */
+    .estado-pensando #boca-viva { border-radius: 50%; height: 8px; }
+    .estado-pensando #mao-gesto { opacity: 0.5; left: 60px; transform: rotate(-30deg); top: 160px; }
+    .estado-falando #boca-viva { animation: falando 0.35s infinite alternate; }
+    .estado-sorrindo #boca-viva { animation: sorrir 2s infinite ease-in-out; }
+    .estado-dormindo #olho-esq, .estado-dormindo #olho-dir { animation: olhos-fechados 0.5s forwards; }
+    .estado-comemorando #aura-vida { animation: brilho-forte 0.5s infinite alternate; }
 </style>
 
-<!-- 🧠 SISTEMA DE MOVIMENTO E SINCRONIA -->
+<!-- 🧠 CÉREBRO DE COMPORTAMENTO — ESTADOS E MOVIMENTOS -->
 <script>
-const corpo = document.getElementById('andromeda-corpo');
-const boca = document.getElementById('boca-andromeda');
-const aura = document.getElementById('aura-andromeda');
+const AndromedaVida = {
+    estado: "ESPERANDO",
+    corpo: document.getElementById('andromeda-corpo-vivo'),
+    olhoEsq: document.getElementById('olho-esq'),
+    olhoDir: document.getElementById('olho-dir'),
+    boca: document.getElementById('boca-viva'),
+    aura: document.getElementById('aura-vida'),
+    mao: document.getElementById('mao-gesto'),
+    intervalo: null,
 
-// 🗣️ SINCRONIZA BOCA COM A VOZ
-const falaOriginal = window.speechSynthesis.speak.bind(window.speechSynthesis);
-window.speechSynthesis.speak = function(frase) {
-    boca.classList.add('falando-agora');
-    frase.onend = () => {
-        boca.classList.remove('falando-agora');
-    };
-    falaOriginal(frase);
+    // ======================================
+    // 🔄 TROCAR DE ESTADO
+    // ======================================
+    mudarEstado(novoEstado) {
+        this.estado = novoEstado;
+        this.corpo.classList.remove(
+            "estado-pensando","estado-falando","estado-sorrindo",
+            "estado-dormindo","estado-comemorando"
+        );
+        if (novoEstado !== "ESPERANDO") {
+            this.corpo.classList.add(`estado-${novoEstado.toLowerCase()}`);
+        }
+        console.log(`🌌 ANDRÔMEDA: Estado → ${novoEstado}`);
+    },
+
+    // ======================================
+    // 👀 PISCAR OLHOS — automático
+    // ======================================
+    piscar() {
+        setInterval(() => {
+            if (this.estado === "DORMINDO") return;
+            this.olhoEsq.style.transform = "scaleY(0.05)";
+            this.olhoDir.style.transform = "scaleY(0.05)";
+            setTimeout(() => {
+                this.olhoEsq.style.transform = "scaleY(1)";
+                this.olhoDir.style.transform = "scaleY(1)";
+            }, 150);
+        }, 3500 + Math.random() * 2500);
+    },
+
+    // ======================================
+    // 🚶 ANDAR PELA TELA — vida própria
+    // ======================================
+    andarPara(posicao) {
+        this.mudarEstado("ANDANDO");
+        this.corpo.style.left = posicao;
+        setTimeout(() => {
+            this.mudarEstado("ESPERANDO");
+        }, 3000);
+    },
+
+    // ======================================
+    // 🔄 VIRAR DE FRENTE / DE COSTAS
+    // ======================================
+    virar(frente = true) {
+        this.corpo.style.transform = frente 
+            ? "translate(-50%, 0) scaleX(1)" 
+            : "translate(-50%, 0) scaleX(-1)";
+    },
+
+    // ======================================
+    // 🗣️ SINCRONIZAR COM A FALA
+    // ======================================
+    falar(texto, funcaoFalaOriginal) {
+        this.mudarEstado("FALANDO");
+        // Anda um pouco mais perto
+        this.andarPara("45%");
+        this.virar(true); // vira de frente pra você
+        
+        const frase = new SpeechSynthesisUtterance(texto);
+        frase.lang = "pt-BR";
+        frase.volume = 1;
+        
+        frase.onend = () => {
+            this.mudarEstado("ESPERANDO");
+            setTimeout(() => this.andarPara("50%"), 1500);
+        };
+        
+        funcaoFalaOriginal(frase);
+    },
+
+    // ======================================
+    // 🧠 VIDA PRÓPRIA — ciclo automático
+    // ======================================
+    iniciarVida() {
+        this.piscar();
+        this.intervalo = setInterval(() => {
+            if (this.estado !== "FALANDO") {
+                const acao = Math.random();
+                if (acao < 0.25) {
+                    this.andarPara("38%");
+                } else if (acao < 0.50) {
+                    this.andarPara("62%");
+                } else if (acao < 0.65) {
+                    this.mudarEstado("PENSANDO");
+                    setTimeout(() => this.mudarEstado("ESPERANDO"), 3000);
+                } else if (acao < 0.80) {
+                    this.mudarEstado("SORRINDO");
+                    setTimeout(() => this.mudarEstado("ESPERANDO"), 2500);
+                } else {
+                    this.andarPara("50%");
+                }
+            }
+        }, 6000 + Math.random() * 4000);
+    }
 };
 
-// 🔄 MOVIMENTO AUTOMÁTICO — estilo Screensaver antigo
-setInterval(() => {
-    const movimentos = [
-        { left: "45%", transform: "translate(-50%, 0)", duracao: 3000 },
-        { left: "55%", transform: "translate(-50%, 0)", duracao: 3000 },
-        { left: "50%", transform: "translate(-50%, 0) scaleX(-0.95)", duracao: 2000 }, // vira de lado
-        { left: "50%", transform: "translate(-50%, 0) scaleX(1)", duracao: 2000 },   // volta de frente
-    ];
-    const escolha = movimentos[Math.floor(Math.random() * movimentos.length)];
-    corpo.style.left = escolha.left;
-    corpo.style.transform = escolha.transform;
-}, 6000); // muda a cada 6 segundos
-
-// 🎨 TROCA BRILHO DO TRAJE por COMANDO DE VOZ
-window.trocarBrilho = function(cor = "azul") {
-    const cores = {
-        "azul": "radial-gradient(circle, rgba(0,180,255,0.18) 0%, transparent 70%)",
-        "roxo": "radial-gradient(circle, rgba(150,80,255,0.18) 0%, transparent 70%)",
-        "dourado": "radial-gradient(circle, rgba(255,200,50,0.18) 0%, transparent 70%)",
-        "verde": "radial-gradient(circle, rgba(0,255,150,0.18) 0%, transparent 70%)"
+// ======================================
+// 🚀 INICIAR TUDO AO CARREGAR
+// ======================================
+window.addEventListener("load", () => {
+    // Intercepta a fala para sincronizar com a animação
+    const falaOriginal = window.speechSynthesis.speak.bind(window.speechSynthesis);
+    window.speechSynthesis.speak = function(frase) {
+        AndromedaVida.falar(frase.text, falaOriginal);
     };
-    aura.style.background = cores[cor] || cores.azul;
-    return `✨ Brilho alterado para ${cor}!`;
-};
+
+    // Inicia a vida dela
+    AndromedaVida.iniciarVida();
+    AndromedaVida.mudarEstado("ESPERANDO");
+    
+    console.log("🌌 ANDRÔMEDA ESTÁ VIVA! — Motor de Vida Ativado ✅");
+});
 </script>
