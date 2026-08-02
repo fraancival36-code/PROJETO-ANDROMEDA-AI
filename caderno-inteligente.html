@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📓 Caderno Inteligente — Andrômeda</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #000510, #0a1628);
+            color: #e0f0ff;
+            font-family: sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .cabecalho { text-align: center; margin-bottom: 30px; }
+        h1 { color: #00ccff; text-shadow: 0 0 15px #00ccff66; }
+        .caixa-entrada {
+            background: rgba(0,100,150,0.15);
+            border: 1px solid #00ccff55;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        input, textarea {
+            width: 100%;
+            background: #001025;
+            border: 1px solid #00ccff44;
+            border-radius: 8px;
+            padding: 10px;
+            color: white;
+            margin: 8px 0;
+        }
+        button {
+            background: linear-gradient(90deg, #0088aa, #00aacc);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover { box-shadow: 0 0 15px #00ccff66; }
+        .lista { margin-top: 25px; }
+        .anotacao {
+            background: rgba(0,80,120,0.12);
+            border-left: 3px solid #00ccff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .voltar {
+            display: inline-block;
+            color: #00ccff;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="voltar">← Voltar à Andrômeda</a>
+
+    <div class="cabecalho">
+        <h1>📓 CADERNO INTELIGENTE</h1>
+        <p>Guarde suas ideias, metas e descobertas</p>
+    </div>
+
+    <div class="caixa-entrada">
+        <h3>📝 Nova Anotação</h3>
+        <input type="text" id="titulo" placeholder="Título da ideia...">
+        <textarea id="conteudo" rows="4" placeholder="Escreva sua ideia aqui..."></textarea>
+        <button onclick="salvarAnotacao()">💾 Guardar na Memória</button>
+    </div>
+
+    <div class="lista">
+        <h3>📚 Suas Anotações</h3>
+        <div id="listaAnotacoes"></div>
+    </div>
+
+<script>
+let anotacoes = JSON.parse(localStorage.getItem('caderno-andromeda') || '[]');
+
+function renderizar() {
+    const div = document.getElementById('listaAnotacoes');
+    if (anotacoes.length === 0) {
+        div.innerHTML = "<p style='color:#88aacc; text-align:center; padding:20px;'>Ainda não há anotações. Guarde sua primeira ideia acima! 💙</p>";
+        return;
+    }
+    div.innerHTML = anotacoes.map((a, i) => `
+        <div class="anotacao">
+            <strong>${a.titulo}</strong><br>
+            <small>${a.data}</small><br>
+            <p>${a.conteudo}</p>
+        </div>
+    `).join("");
+}
+
+function salvarAnotacao() {
+    const titulo = document.getElementById('titulo').value.trim();
+    const conteudo = document.getElementById('conteudo').value.trim();
+    if (!titulo || !conteudo) { alert("Preencha o título e o conteúdo!"); return; }
+
+    anotacoes.unshift({
+        titulo,
+        conteudo,
+        data: new Date().toLocaleString('pt-BR')
+    });
+    localStorage.setItem('caderno-andromeda', JSON.stringify(anotacoes));
+    document.getElementById('titulo').value = "";
+    document.getElementById('conteudo').value = "";
+    renderizar();
+    alert("✅ Ideia guardada na memória da Andrômeda!");
+}
+
+renderizar();
+</script>
+
+</body>
+</html>
