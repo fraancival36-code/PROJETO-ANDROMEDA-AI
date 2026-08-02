@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Projetos — Andrômeda</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #050010, #100828);
+            color: #f0e8ff;
+            font-family: sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        h1 { color: #cc66ff; text-align: center; margin-bottom: 30px; text-shadow: 0 0 15px #cc66ff66; }
+        .caixa {
+            background: rgba(100,0,150,0.1);
+            border: 1px solid #cc66ff55;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            background: #150530;
+            border: 1px solid #cc66ff44;
+            border-radius: 8px;
+            padding: 10px;
+            color: white;
+            margin: 6px 0;
+        }
+        button {
+            background: linear-gradient(90deg, #8822cc, #aa44ee);
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .projeto {
+            background: rgba(80,0,120,0.1);
+            border-left: 3px solid #cc66ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        .barra {
+            height: 8px;
+            background: #220044;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+        .progresso {
+            height: 100%;
+            background: linear-gradient(90deg, #cc66ff, #ee88ff);
+            border-radius: 4px;
+        }
+        .voltar { color: #cc66ff; text-decoration: none; display: inline-block; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="voltar">← Voltar à Andrômeda</a>
+    <h1>🚀 ÁREA DE PROJETOS</h1>
+
+    <div class="caixa">
+        <h3>➕ Novo Projeto</h3>
+        <input type="text" id="nomeProj" placeholder="Nome do projeto...">
+        <textarea id="objetivoProj" rows="3" placeholder="Objetivo..."></textarea>
+        <button onclick="criarProjeto()">🚀 Criar Projeto</button>
+    </div>
+
+    <div id="listaProjetos"></div>
+
+<script>
+let projetos = JSON.parse(localStorage.getItem('projetos-andromeda') || '[]');
+
+function renderizar() {
+    const div = document.getElementById('listaProjetos');
+    if (projetos.length === 0) {
+        div.innerHTML = "<p style='text-align:center; color:#bbaadd; padding:30px;'>Nenhum projeto ainda. Crie o primeiro! 💙</p>";
+        return;
+    }
+    div.innerHTML = projetos.map((p, i) => `
+        <div class="projeto">
+            <h4>${p.nome}</h4>
+            <p>${p.objetivo}</p>
+            <small>Início: ${p.data}</small>
+            <div class="barra"><div class="progresso" style="width:${p.progresso}%"></div></div>
+            <small>${p.progresso}% concluído</small>
+        </div>
+    `).join("");
+}
+
+function criarProjeto() {
+    const nome = document.getElementById('nomeProj').value.trim();
+    const obj = document.getElementById('objetivoProj').value.trim();
+    if (!nome) { alert("Dê um nome ao projeto!"); return; }
+
+    projetos.unshift({
+        nome,
+        objetivo: obj,
+        data: new Date().toLocaleDateString('pt-BR'),
+        progresso: 0
+    });
+    localStorage.setItem('projetos-andromeda', JSON.stringify(projetos));
+    document.getElementById('nomeProj').value = "";
+    document.getElementById('objetivoProj').value = "";
+    renderizar();
+    alert("✅ Projeto criado! A Andrômeda vai acompanhar seu progresso! 💙");
+}
+
+renderizar();
+</script>
+
+</body>
+</html>
