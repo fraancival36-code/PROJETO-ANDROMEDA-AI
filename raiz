@@ -1,0 +1,11 @@
+andromeda-qg/
+├── index.html                    ← Tela principal (já existe!)
+├── andromeda-core.js            ← Cérebro principal (ATUALIZADO)
+├── andromeda-config.js          ← Personalidade (já existe!)
+├── voz.js                       ← Fala e escuta (já existe!)
+│
+├── 📄 caderno-inteligente.html   ← 🆕 ONDE GUARDA IDEIAS
+├── 📄 memoria-sistema.js         ← 🆕 MEMÓRIA COMPLETA
+├── 📄 projetos.js                ← 🆕 GERENCIAR PROJETOS
+├── 📄 livraria.html              ← 🆕 BIBLIOTECA DE LIVROS
+└── 📄 painel-admin.html          ← 🆕 PAINEL DE CONTROLE
