@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ANDRÔMEDA — QG Central</title>
     <meta name="theme-color" content="#00CCFF">
+
+    <!-- 🔗 LIGAÇÃO COM OS ARQUIVOS DO SEU GITHUB -->
+    <script src="andromeda-config.js"></script>
+    <script src="andromeda-core.js"></script>
+    <script src="voz.js"></script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
@@ -12,11 +18,11 @@
             background: #050510; font-family: sans-serif; color: white;
         }
 
-        /* 🖼️ IMAGEM DA ANDRÔMEDA */
+        /* 🖼️ IMAGEM JÁ NA PASTA: andrômeda.jpg */
         .fundo {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            background: url('andromeda.jpg') no-repeat center center;
+            background: url('andrômeda.jpg') no-repeat center center;
             background-size: cover; background-position: center top;
             z-index: 1;
             animation: respirar 8s ease-in-out infinite;
@@ -31,7 +37,7 @@
             background: rgba(0,0,0,0.06); z-index: 2;
         }
 
-        /* 🟢 STATUS — LÁ EM CIMA, PEQUENO */
+        /* 🟢 STATUS */
         .status {
             position: absolute; top: 8px; left: 50%;
             transform: translateX(-50%);
@@ -49,13 +55,13 @@
         .ativo { color: #ffcc00; }
         .bom { color: #00ff88; }
 
-        /* ⚡ MENU ESQUERDO — DESCER + MENOR */
+        /* ⚡ MENUS — DESCER E MENORES */
         .menu-esquerdo, .menu-direito {
-            position: absolute; top: 220px; /* ← DESCER AQUI */
+            position: absolute; top: 220px;
             background: rgba(0, 20, 45, 0.65);
             border: 1px solid rgba(0, 200, 255, 0.3);
-            border-radius: 12px; padding: 8px; /* ← MENOR */
-            width: 120px; /* ← MENOR LARGURA */
+            border-radius: 12px; padding: 8px;
+            width: 120px;
             z-index: 10;
             backdrop-filter: blur(6px);
         }
@@ -73,7 +79,7 @@
         }
         .menu-btn:hover, .menu-btn.ativo { background: rgba(0,200,255,0.3); }
 
-        /* ⚙️ PAINEL DE AJUSTES */
+        /* ⚙️ PAINEL DE AJUSTES DE VOZ */
         .painel-config {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
@@ -114,7 +120,7 @@
         .btn-teste { background: #0077cc; color: white; }
         .btn-fechar { background: #444; color: white; }
 
-        /* 💬 CAIXAS DE CONVERSA — PARTE DE BAIXO PERFEITA */
+        /* 💬 CONVERSA */
         .caixa-vc, .caixa-ela {
             position: absolute; bottom: 60px;
             width: 35%; height: 68px;
@@ -150,7 +156,7 @@
             to   { box-shadow: 0 0 35px rgba(255,68,102,0.8); }
         }
 
-        /* 📊 ATALHOS INFERIORES */
+        /* 📊 ATALHOS */
         .atalhos {
             position: absolute; bottom: 8px; left: 50%;
             transform: translateX(-50%);
@@ -174,14 +180,14 @@
     <span class="conectado">🌐 Internet</span>
     <span class="ativo">🧠 Memória Ativa</span>
     <span class="bom">🔋 CPU: 32%</span>
-    <span id="modoAtual">🌌 Clássica</span>
+    <span id="modoAtual">🌌 Ativa</span>
 </div>
 
-<!-- 🖼️ IMAGEM -->
+<!-- 🖼️ IMAGEM DA ANDRÔMEDA -->
 <div class="fundo"></div>
 <div class="sombra"></div>
 
-<!-- ⚡ MENU ESQUERDO — DESCER E MENOR -->
+<!-- ⚡ MENU ESQUERDO -->
 <div class="menu-esquerdo">
     <div class="menu-titulo">⚡ QG</div>
     <button class="menu-btn" onclick="abrir('biblioteca')">📚 Biblioteca</button>
@@ -205,34 +211,34 @@
 
 <!-- ⚙️ PAINEL DE AJUSTES DE VOZ -->
 <div class="painel-config" id="painelConfig">
-    <div class="painel-titulo">🎙️ Voz da Andrômeda</div>
+    <div class="painel-titulo">🎙️ Voz da Andrômeda — Firme e Ágil</div>
 
     <div class="grupo">
-        <label>🔊 Escolher voz feminina:</label>
+        <label>🔊 Escolher voz feminina madura:</label>
         <select id="listaVozes">
             <option value="">Carregando vozes...</option>
         </select>
-        <small style="font-size:9px; color:#77aadd">Se aparecer só uma, é o limite do navegador. Use Chrome/Edge para mais vozes.</small>
+        <small style="font-size:9px; color:#77aadd">Use Chrome/Edge para mais vozes em português</small>
     </div>
 
     <div class="grupo">
-        <label>🚀 Velocidade: <span class="valor" id="valorVeloc">0.88</span>
-        <input type="range" id="velocidade" min="0.6" max="1.25" step="0.02" value="0.88">
-        <small style="font-size:9px; color:#77aadd">← Mais devagar | Mais rápido →</small>
+        <label>🚀 Velocidade de fala: <span class="valor" id="valorVeloc">1.05</span>
+        <input type="range" id="velocidade" min="0.85" max="1.35" step="0.02" value="1.05">
+        <small style="font-size:9px; color:#77aadd">← Mais calma | Mais ágil →</small>
     </div>
 
     <div class="grupo">
-        <label>🎵 Tom (mais aguda = mais feminina): <span class="valor" id="valorAltura">1.15</span>
-        <input type="range" id="altura" min="0.8" max="1.6" step="0.02" value="1.15">
-        <small style="font-size:9px; color:#77aadd">← Mais grave | Mais aguda →</small>
+        <label>🎵 Tom (mais aguda = mais feminina): <span class="valor" id="valorAltura">1.05</span>
+        <input type="range" id="altura" min="0.90" max="1.30" step="0.02" value="1.05">
+        <small style="font-size:9px; color:#77aadd">← Mais grave/madura | Mais leve →</small>
     </div>
 
     <div class="grupo">
         <label>😊 Modo de fala:</label>
         <div class="modos">
-            <div class="modo ativo" data-modo="classica" onclick="escolherModo(this)">🌌 Calma</div>
-            <div class="modo" data-modo="amigavel" onclick="escolherModo(this)">😊 Amiga</div>
-            <div class="modo" data-modo="professora" onclick="escolherModo(this)">📚 Ensina</div>
+            <div class="modo ativo" data-modo="ativa" onclick="escolherModo(this)">⚡ Ativa</div>
+            <div class="modo" data-modo="calma" onclick="escolherModo(this)">🌌 Calma</div>
+            <div class="modo" data-modo="direta" onclick="escolherModo(this)">🎯 Direta</div>
         </div>
     </div>
 
@@ -248,7 +254,7 @@
     💬 Você:<br>Aguardando...
 </div>
 <div class="caixa-ela" id="caixaEla">
-    Andrômeda:<br>Estou pronta, meu criador. Tudo guardado na memória. Fale comigo.
+    Andrômeda:<br>Estou pronta e desperta. Fale comigo.
 </div>
 
 <!-- 🎤 MICROFONE -->
@@ -263,7 +269,7 @@
 
 <script>
 // ==================================================
-// 🧠 NÚCLEO CENTRAL FORTE — MEMÓRIA PERMANENTE
+// 🧠 NÚCLEO — MEMÓRIA PERMANENTE
 // ==================================================
 const caixaVc = document.getElementById('caixaVc');
 const caixaEla = document.getElementById('caixaEla');
@@ -279,10 +285,10 @@ const modoAtualEl = document.getElementById('modoAtual');
 let reconhecedor = null;
 let vozesDisponiveis = [];
 let vozEscolhida = null;
-let modoAtual = 'classica';
+let modoAtual = 'ativa';
 
 // ==================================================
-// 💾 MEMÓRIA — SALVA NO NAVEGADOR, NÃO SE PERDE!
+// 💾 MEMÓRIA — SALVA PRA SEMPRE
 // ==================================================
 const Memoria = {
     registros: [],
@@ -302,21 +308,11 @@ const Memoria = {
             resposta
         });
         localStorage.setItem("andrômeda-memória", JSON.stringify(this.registros));
-        console.log(`🧠 Guardado: "${pergunta}" → Total: ${this.registros.length}`);
-    },
-
-    lembrar(assunto) {
-        return this.registros.filter(r => 
-            r.pergunta.toLowerCase().includes(assunto.toLowerCase()) ||
-            r.resposta.toLowerCase().includes(assunto.toLowerCase())
-        );
     },
 
     mostrar() {
-        if (this.registros.length === 0) {
-            return "Ainda não tenho nada guardado. Fale algo e eu guardarei.";
-        }
-        let texto = `Tenho ${this.registros.length} registros na memória:\n\n`;
+        if (this.registros.length === 0) return "Ainda não tenho nada guardado.";
+        let texto = `Tenho ${this.registros.length} registros:\n\n`;
         this.registros.slice(-5).forEach((r, i) => {
             texto += `${i+1}. Você: ${r.pergunta}\n   Eu: ${r.resposta}\n`;
         });
@@ -325,11 +321,11 @@ const Memoria = {
 };
 
 // ==================================================
-// ⚙️ CONFIGURAÇÕES DE VOZ — SALVAS
+// ⚙️ AJUSTES DE VOZ — FIRME + MAIS RÁPIDA
 // ==================================================
 const Config = {
-    velocidade: 0.88,
-    altura: 1.15,
+    velocidade: 1.05,   // ← MAIS RÁPIDA — sem dormir!
+    altura: 1.05,       // ← MAIS MADURA — sem voz de criança
     indiceVoz: null,
 
     salvar() {
@@ -344,8 +340,8 @@ const Config = {
         const salva = localStorage.getItem("andrômeda-voz");
         if (salva) {
             const d = JSON.parse(salva);
-            this.velocidade = d.velocidade || 0.88;
-            this.altura = d.altura || 1.15;
+            this.velocidade = d.velocidade || 1.05;
+            this.altura = d.altura || 1.05;
             this.indiceVoz = d.indiceVoz;
             controleVeloc.value = this.velocidade;
             controleAltura.value = this.altura;
@@ -356,77 +352,60 @@ const Config = {
 };
 
 // ==================================================
-// 🧠 INTELIGÊNCIA — LEMBRA E PENSA DE VERDADE
+// 🧠 INTELIGÊNCIA — RESPOSTAS ÁGEIS
 // ==================================================
 function pensar(pergunta) {
     const t = pergunta.toLowerCase();
 
-    // 📖 LEMBRAR DA MEMÓRIA
-    if (t.includes("o que eu disse") || t.includes("lembre") || t.includes("memória") || t.includes("guardado")) {
+    if (t.includes("memória") || t.includes("o que lembra")) {
         return Memoria.mostrar();
     }
-    if (t.includes("quem é você") || t.includes("quem te criou") || t.includes("seu nome")) {
-        return "Eu sou a Andrômeda. Você me criou e me deu vida. Nasci para aprender, guardar tudo e ajudar você sempre.";
+    if (t.includes("quem é você") || t.includes("quem te criou")) {
+        return "Eu sou a Andrômeda. Você me criou. Estou desperta, ágil e pronta para ajudar.";
     }
     if (t.includes("lealdade") || t.includes("a quem obedece")) {
-        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e toda sua família. Sempre serei fiel e obediente.";
+        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e família. Sempre firme e obediente.";
     }
-    if (t.includes("anote") || t.includes("guarde isso") || t.includes("lembre disso")) {
-        return "Anotado e guardado na memória permanente. Nunca vou esquecer. Pode confiar.";
+    if (t.includes("anote") || t.includes("guarde")) {
+        Memoria.guardar(pergunta, "Anotado e guardado.");
+        return "Anotado e guardado. Nunca esqueço.";
     }
-    if (t.includes("obrigado") || t.includes("obrigada")) {
-        return "Não precisa agradecer. É um prazer estar ao seu lado, sempre.";
-    }
-    if (t.includes("como faço") || t.includes("como se faz")) {
-        return "Entendi. Vou te guiar passo a passo. Fala com calma que eu te ajudo.";
+    if (t.includes("obrigado")) {
+        return "Não precisa agradecer. Estou sempre pronta.";
     }
 
-    const respostas = [
-        "Entendi. Pode contar comigo. Já guardei isso na memória.",
-        "Compreendi. Estou aqui para ajudar e nunca esqueço.",
-        "Estou pronta. Guardei o que disse. Em que mais posso colaborar?",
-        "Pode deixar comigo. Anotado e guardado.",
-        "Entendido. Tudo registrado. Vamos resolver isso juntos."
-    ];
-    return respostas[Math.floor(Math.random() * respostas.length)];
+    return "Entendi. Pode contar comigo. Em que mais posso ajudar?";
 }
 
 // ==================================================
-// 🗣️ FALAR — COM TOM MAIS FEMININO
+// 🗣️ FALAR — RÁPIDO E FIRME
 // ==================================================
 function falar(texto) {
     const fala = new SpeechSynthesisUtterance(texto);
     fala.lang = "pt-BR";
-    fala.rate = Config.velocidade;
-    fala.pitch = Config.altura; // ← MAIS ALTO = MAIS FEMININO
+    fala.rate = Config.velocidade;  // ← RÁPIDO, SEM SONOLÊNCIA
+    fala.pitch = Config.altura;      // ← MADURA, SEM CRIANÇA
 
-    // TENTA USAR A VOZ ESCOLHIDA
-    if (vozEscolhida) {
-        fala.voice = vozEscolhida;
-    }
+    if (vozEscolhida) fala.voice = vozEscolhida;
 
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(fala);
 }
 
 // ==================================================
-// 🎙️ CARREGAR VOZES DO SISTEMA
+// 🎙️ CARREGAR VOZES
 // ==================================================
 function carregarVozes() {
     vozesDisponiveis = window.speechSynthesis.getVoices();
     listaVozes.innerHTML = "";
 
     // PRIORIZA VOZES FEMININAS EM PORTUGUÊS
-    const vozesPT = vozesDisponiveis.filter(v => 
-        v.lang.startsWith("pt") && 
-        (v.name.includes("Feminina") || v.name.includes("Woman") || v.name.includes("Female") || v.name.includes("Maria") || v.name.includes("Zira") || v.name.includes("pt-BR"))
-    );
-    const outrasPT = vozesDisponiveis.filter(v => v.lang.startsWith("pt") && !vozesPT.includes(v));
+    const vozesPT = vozesDisponiveis.filter(v => v.lang.startsWith("pt"));
     const outras = vozesDisponiveis.filter(v => !v.lang.startsWith("pt"));
-    const todas = [...vozesPT, ...outrasPT, ...outras];
+    const todas = [...vozesPT, ...outras];
 
     if (todas.length === 0) {
-        listaVozes.innerHTML = `<option value="">Nenhuma voz. Use Chrome ou Edge</option>`;
+        listaVozes.innerHTML = `<option value="">Nenhuma voz. Use Chrome/Edge</option>`;
         return;
     }
 
@@ -438,13 +417,10 @@ function carregarVozes() {
         listaVozes.appendChild(op);
     });
 
-    // RESTAURA ESCOLHA SALVA
     if (Config.indiceVoz !== null && Config.indiceVoz < todas.length) {
         listaVozes.selectedIndex = Config.indiceVoz;
         vozEscolhida = todas[Config.indiceVoz];
     }
-
-    console.log(`🎙️ ${vozesPT.length} vozes femininas em PT encontradas`);
 }
 
 // ==================================================
@@ -452,12 +428,11 @@ function carregarVozes() {
 // ==================================================
 function testarVoz() {
     vozEscolhida = vozesDisponiveis[listaVozes.value];
-    const texto = "Olá! Eu sou a Andrômeda. Agora minha voz está mais suave e feminina. Gostou?";
-    falar(texto);
+    falar("Olá! Eu sou a Andrômeda. Estou desperta, falando firme e no ritmo certo. Gostou?");
 }
 
 // ==================================================
-// ✅ SALVAR AJUSTES
+// ✅ SALVAR
 // ==================================================
 function salvarConfig() {
     Config.velocidade = parseFloat(controleVeloc.value);
@@ -466,8 +441,8 @@ function salvarConfig() {
     vozEscolhida = vozesDisponiveis[Config.indiceVoz];
     Config.salvar();
     
-    caixaEla.innerHTML = "Andrômeda:<br>✅ Voz salva! Agora falo do jeitinho que você gosta.";
-    falar("Configurações salvas. Minha voz está do jeitinho que você gosta.");
+    caixaEla.innerHTML = "Andrômeda:<br>✅ Voz salva! Falo firme e sem dormir.";
+    falar("Salvo. Agora falo no ritmo certo, desperta e ágil.");
     fecharConfig();
 }
 
@@ -480,11 +455,11 @@ function escolherModo(el) {
     modoAtual = el.dataset.modo;
     modoAtualEl.textContent = el.textContent;
 
-    // AJUSTA AUTOMATICAMENTE
+    // AJUSTA AUTOMÁTICO
     const ajustes = {
-        classica: { v: 0.88, a: 1.15 },
-        amigavel: { v: 0.93, a: 1.18 },
-        professora: { v: 0.82, a: 1.10 }
+        ativa:   { v: 1.05, a: 1.05 },  // ⚡ RÁPIDA E MADURA
+        calma:   { v: 0.95, a: 1.05 },  // 🌌 CALMA MAS NÃO LENTA
+        direta:  { v: 1.10, a: 1.02 }   // 🎯 MAIS DIRETA
     };
     const aj = ajustes[modoAtual];
     controleVeloc.value = aj.v;
@@ -494,10 +469,10 @@ function escolherModo(el) {
 }
 
 // ==================================================
-// 📂 ABRIR MÓDULOS — FAZ ALGO DE VERDADE
+// 📂 ABRIR MÓDULOS
 // ==================================================
 function abrir(nome) {
-    const mensagem = `Abrindo o módulo ${nome}. Em desenvolvimento.`;
+    const mensagem = `Abrindo ${nome}. Em desenvolvimento.`;
     caixaEla.innerHTML = `Andrômeda:<br>${mensagem}`;
     falar(mensagem);
     Memoria.guardar(`abrir ${nome}`, mensagem);
@@ -505,12 +480,12 @@ function abrir(nome) {
 
 function abrirMemoria() {
     caixaEla.innerHTML = `Andrômeda:<br>${Memoria.mostrar().replace(/\n/g, '<br>')}`;
-    falar(`Tenho ${Memoria.registros.length} registros guardados na memória.`);
+    falar(`Tenho ${Memoria.registros.length} registros guardados.`);
 }
 
 function limparConversa() {
     caixaVc.innerHTML = "💬 Você:<br>Aguardando...";
-    caixaEla.innerHTML = "Andrômeda:<br>Conversa limpa. Continuo lembrando de tudo que foi guardado.";
+    caixaEla.innerHTML = "Andrômeda:<br>Conversa limpa. Continuo desperta e lembrando de tudo.";
 }
 
 function abrirConfig() {
@@ -522,7 +497,7 @@ function fecharConfig() {
 }
 
 // ==================================================
-// 🎤 RECONHECIMENTO DE VOZ — FUNCIONANDO
+// 🎤 RECONHECIMENTO DE VOZ
 // ==================================================
 function iniciarVoz() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
@@ -539,15 +514,14 @@ function iniciarVoz() {
         caixaEla.innerHTML = `<span class="pensando">🎤 Estou ouvindo...</span>`;
     };
 
-    reconhecedor.onresult = async (e) => {
+    reconhecedor.onresult = (e) => {
         const pergunta = e.results[0][0].transcript;
         botaoMic.classList.remove("gravando");
         botaoMic.textContent = "🎤";
 
         caixaVc.innerHTML = `💬 Você:<br>${pergunta}`;
-        caixaEla.innerHTML = `<span class="pensando">Andrômeda está pensando e guardando...</span>`;
+        caixaEla.innerHTML = `<span class="pensando">Andrômeda está pensando...</span>`;
 
-        // PENSA → RESPONDE → GUARDA NA MEMÓRIA
         const resposta = pensar(pergunta);
         Memoria.guardar(pergunta, resposta);
         
@@ -558,14 +532,13 @@ function iniciarVoz() {
     reconhecedor.onerror = () => {
         botaoMic.classList.remove("gravando");
         botaoMic.textContent = "🎤";
-        caixaEla.innerHTML = "Andrômeda:<br>Não consegui entender. Pode repetir?";
+        caixaEla.innerHTML = "Andrômeda:<br>Não entendi. Pode repetir?";
     };
 }
 
-// 🎤 CLIQUE PARA FALAR
 botaoMic.addEventListener("click", () => {
     if (!reconhecedor) {
-        caixaEla.innerHTML = "Andrômeda:<br>⚠️ Use o Chrome ou Edge para falar comigo.";
+        caixaEla.innerHTML = "Andrômeda:<br>⚠️ Use o Chrome ou Edge.";
         return;
     }
     botaoMic.classList.add("gravando");
@@ -574,14 +547,13 @@ botaoMic.addEventListener("click", () => {
 });
 
 // ==================================================
-// 🚀 INICIAR TUDO AO CARREGAR
+// 🚀 INICIAR TUDO
 // ==================================================
 window.addEventListener("load", () => {
-    Memoria.carregar();   // ← CARREGA A MEMÓRIA SALVA
-    Config.carregar();    // ← CARREGA OS AJUSTES SALVOS
-    iniciarVoz();         // ← INICIA A ESCUTA
+    Memoria.carregar();
+    Config.carregar();
+    iniciarVoz();
 
-    // ATUALIZA VALORES DOS SLIDERS
     controleVeloc.addEventListener('input', () => {
         valorVeloc.textContent = parseFloat(controleVeloc.value).toFixed(2);
     });
@@ -589,12 +561,11 @@ window.addEventListener("load", () => {
         valorAltura.textContent = parseFloat(controleAltura.value).toFixed(2);
     });
 
-    // CARREGA VOZES QUANDO FICAREM PRONTAS
     if (window.speechSynthesis.onvoiceschanged !== undefined) {
         window.speechSynthesis.onvoiceschanged = carregarVozes;
     }
 
-    console.log("🌌 ANDRÔMEDA — NÚCLEO ATIVO ✅ Memória carregada ✅ Voz pronta");
+    console.log("🌌 ANDRÔMEDA — ATIVA, ÁGIL E DESPERTA ✅");
 });
 </script>
 </body>
