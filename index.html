@@ -12,167 +12,158 @@
             background: #050510; font-family: sans-serif; color: white;
         }
 
-        /* 🖼️ IMAGEM — RESPIRANDO SUAVE */
+        /* 🖼️ IMAGEM DA ANDRÔMEDA */
         .fundo {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
             background: url('andromeda.jpg') no-repeat center center;
             background-size: cover; background-position: center top;
             z-index: 1;
-            transform-origin: center center;
             animation: respirar 8s ease-in-out infinite;
         }
         @keyframes respirar {
             0%,100% { transform: scale(1.00); }
-            50%     { transform: scale(1.015); }
+            50%     { transform: scale(1.012); }
         }
         .sombra {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.08); z-index: 2;
+            background: rgba(0,0,0,0.06); z-index: 2;
         }
 
-        /* 🟢 STATUS */
+        /* 🟢 STATUS — LÁ EM CIMA, PEQUENO */
         .status {
-            position: absolute; top: 12px; left: 50%;
+            position: absolute; top: 8px; left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 25, 50, 0.75);
-            border: 1px solid rgba(0, 200, 255, 0.4);
-            border-radius: 20px; padding: 8px 12px;
-            font-size: 10.5px; line-height: 1.8;
+            background: rgba(0, 20, 40, 0.7);
+            border: 1px solid rgba(0, 200, 255, 0.35);
+            border-radius: 16px; padding: 5px 10px;
+            font-size: 9.5px; line-height: 1.6;
             z-index: 15; text-align: center;
             backdrop-filter: blur(6px);
             white-space: nowrap;
         }
-        .status span { display: inline-block; margin: 0 4px; }
+        .status span { display: inline-block; margin: 0 3px; }
         .online { color: #00ff88; }
         .conectado { color: #00ccff; }
         .ativo { color: #ffcc00; }
         .bom { color: #00ff88; }
 
-        /* 📋 MENUS */
+        /* ⚡ MENU ESQUERDO — DESCER + MENOR */
         .menu-esquerdo, .menu-direito {
-            position: absolute; top: 80px;
-            background: rgba(0, 25, 50, 0.7);
-            border: 1px solid rgba(0, 200, 255, 0.35);
-            border-radius: 14px; padding: 12px;
-            width: 142px; z-index: 10;
+            position: absolute; top: 220px; /* ← DESCER AQUI */
+            background: rgba(0, 20, 45, 0.65);
+            border: 1px solid rgba(0, 200, 255, 0.3);
+            border-radius: 12px; padding: 8px; /* ← MENOR */
+            width: 120px; /* ← MENOR LARGURA */
+            z-index: 10;
             backdrop-filter: blur(6px);
         }
-        .menu-esquerdo { left: 12px; }
-        .menu-direito { right: 12px; }
+        .menu-esquerdo { left: 10px; }
+        .menu-direito { right: 10px; }
         .menu-titulo {
-            font-size: 12px; font-weight: bold; color: #00ccff;
-            margin-bottom: 8px; border-bottom: 1px solid rgba(0,200,255,0.25); padding-bottom: 4px;
+            font-size: 10.5px; font-weight: bold; color: #00ccff;
+            margin-bottom: 6px; border-bottom: 1px solid rgba(0,200,255,0.2); padding-bottom: 3px;
         }
         .menu-btn {
-            display: block; width: 100%; background: rgba(0,100,150,0.25);
-            border: none; color: #e0f7ff; padding: 6px 8px;
-            margin: 4px 0; border-radius: 8px; font-size: 11px;
+            display: block; width: 100%; background: rgba(0,80,120,0.2);
+            border: none; color: #e0f7ff; padding: 4px 6px;
+            margin: 3px 0; border-radius: 6px; font-size: 10px;
             cursor: pointer; transition: all 0.2s; text-align: left;
         }
-        .menu-btn:hover, .menu-btn.ativo { background: rgba(0,200,255,0.4); }
+        .menu-btn:hover, .menu-btn.ativo { background: rgba(0,200,255,0.3); }
 
-        /* ⚙️ PAINEL DE CONFIGURAÇÕES */
+        /* ⚙️ PAINEL DE AJUSTES */
         .painel-config {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 350px; max-width: 94%;
-            background: rgba(0, 18, 40, 0.94);
+            width: 340px; max-width: 94%;
+            background: rgba(0, 15, 35, 0.95);
             border: 2px solid rgba(0, 200, 255, 0.5);
-            border-radius: 18px; padding: 18px;
+            border-radius: 16px; padding: 16px;
             z-index: 30; display: none;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 0 50px rgba(0, 200, 255, 0.25);
+            backdrop-filter: blur(10px);
         }
         .painel-config.mostrar { display: block; }
         .painel-titulo {
-            font-size: 15px; font-weight: bold; color: #00ccff;
-            margin-bottom: 14px; text-align: center;
+            font-size: 14px; font-weight: bold; color: #00ccff;
+            margin-bottom: 12px; text-align: center;
         }
-        .grupo { margin-bottom: 14px; }
-        .grupo label { font-size: 12px; color: #bbeefff; display: block; margin-bottom: 5px; }
+        .grupo { margin-bottom: 12px; }
+        .grupo label { font-size: 11.5px; color: #bbeefff; display: block; margin-bottom: 4px; }
         select, input[type="range"] {
-            width: 100%; padding: 6px; border-radius: 6px;
-            background: rgba(0, 80, 120, 0.35);
-            border: 1px solid rgba(0, 200, 255, 0.4);
-            color: white; font-size: 12px;
+            width: 100%; padding: 5px; border-radius: 5px;
+            background: rgba(0, 60, 100, 0.3);
+            border: 1px solid rgba(0, 200, 255, 0.35);
+            color: white; font-size: 11px;
         }
-        .valor { 
-            display: inline-block; float: right; 
-            color: #88ddff; font-weight: bold; font-size: 12px;
-        }
-        .modos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+        .valor { float: right; color: #88ddff; font-weight: bold; font-size: 11px; }
+        .modos { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
         .modo {
-            padding: 6px 10px; font-size: 11px; border-radius: 8px;
-            background: rgba(0,60,100,0.3); color: #bbeeff;
+            padding: 5px 8px; font-size: 10px; border-radius: 6px;
+            background: rgba(0,50,90,0.3); color: #bbeeff;
             cursor: pointer; border: 1px solid transparent;
-            transition: all 0.2s;
         }
-        .modo.ativo { 
-            border-color: #00ccff; background: rgba(0,150,200,0.35); 
-            color: white; font-weight: bold;
-        }
-        .botoes-config { display: flex; gap: 8px; margin-top: 16px; }
+        .modo.ativo { border-color: #00ccff; background: rgba(0,120,180,0.3); color: white; }
+        .botoes-config { display: flex; gap: 6px; margin-top: 12px; }
         .btn-salvar, .btn-teste, .btn-fechar {
-            padding: 8px 10px; border-radius: 8px; border: none;
-            font-size: 12px; cursor: pointer; font-weight: bold;
+            padding: 7px; border-radius: 6px; border: none;
+            font-size: 11px; cursor: pointer; font-weight: bold; flex: 1;
         }
-        .btn-salvar { background: #00aa66; color: white; flex: 1; }
+        .btn-salvar { background: #00aa66; color: white; }
         .btn-teste { background: #0077cc; color: white; }
-        .btn-fechar { background: #555; color: white; }
+        .btn-fechar { background: #444; color: white; }
 
-        /* 💬 CAIXAS DE CONVERSA */
+        /* 💬 CAIXAS DE CONVERSA — PARTE DE BAIXO PERFEITA */
         .caixa-vc, .caixa-ela {
             position: absolute; bottom: 60px;
-            width: 38%; height: 72px;
-            background: rgba(0, 30, 60, 0.6);
-            border: 1px solid rgba(0, 200, 255, 0.5);
-            border-radius: 12px; padding: 10px;
-            color: #99eeff; font-size: 13px; line-height: 1.4;
+            width: 35%; height: 68px;
+            background: rgba(0, 25, 50, 0.6);
+            border: 1px solid rgba(0, 200, 255, 0.45);
+            border-radius: 10px; padding: 8px;
+            color: #99eeff; font-size: 12px; line-height: 1.4;
             z-index: 10; overflow-y: auto;
         }
-        .caixa-vc { left: 15px; }
-        .caixa-ela { right: 15px; color: #e0f7ff; }
-        .pensando { font-style: italic; opacity: 0.8; }
+        .caixa-vc { left: 12px; }
+        .caixa-ela { right: 12px; color: #e0f7ff; }
+        .pensando { font-style: italic; opacity: 0.75; }
 
         /* 🎤 MICROFONE */
         .mic {
-            position: absolute; bottom: 65px; left: 50%;
+            position: absolute; bottom: 62px; left: 50%;
             transform: translateX(-50%);
-            width: 70px; height: 70px; border-radius: 50%;
+            width: 64px; height: 64px; border-radius: 50%;
             background: radial-gradient(circle, #00ccff 0%, #0066aa 100%);
             border: 3px solid rgba(255,255,255,0.9);
-            box-shadow: 0 0 30px rgba(0, 204, 255, 0.7);
+            box-shadow: 0 0 25px rgba(0, 204, 255, 0.6);
             display: flex; align-items: center; justify-content: center;
-            font-size: 28px; color: white; cursor: pointer; z-index: 11;
-            transition: all 0.3s ease;
+            font-size: 24px; color: white; cursor: pointer; z-index: 11;
         }
-        .mic:active { transform: translateX(-50%) scale(0.92); }
+        .mic:active { transform: translateX(-50%) scale(0.93); }
         .mic.gravando {
             background: radial-gradient(circle, #ff4466 0%, #aa1133 100%);
-            box-shadow: 0 0 35px rgba(255, 68, 102, 0.8);
+            box-shadow: 0 0 30px rgba(255, 68, 102, 0.7);
             animation: pulso 0.6s infinite alternate;
         }
         @keyframes pulso {
-            from { box-shadow: 0 0 20px rgba(255,68,102,0.5); }
-            to   { box-shadow: 0 0 40px rgba(255,68,102,0.9); }
+            from { box-shadow: 0 0 15px rgba(255,68,102,0.4); }
+            to   { box-shadow: 0 0 35px rgba(255,68,102,0.8); }
         }
 
-        /* 📊 BARRA INFERIOR */
+        /* 📊 ATALHOS INFERIORES */
         .atalhos {
-            position: absolute; bottom: 10px; left: 50%;
+            position: absolute; bottom: 8px; left: 50%;
             transform: translateX(-50%);
-            display: flex; gap: 7px; z-index: 12;
+            display: flex; gap: 6px; z-index: 12;
         }
         .atalho-btn {
-            background: rgba(0, 60, 120, 0.5);
-            border: 1px solid rgba(0, 200, 255, 0.4);
-            border-radius: 8px; padding: 6px 9px;
-            color: #e0f7ff; font-size: 10.5px;
-            cursor: pointer; transition: all 0.25s;
+            background: rgba(0, 50, 100, 0.45);
+            border: 1px solid rgba(0, 200, 255, 0.35);
+            border-radius: 6px; padding: 5px 7px;
+            color: #e0f7ff; font-size: 10px;
+            cursor: pointer;
         }
-        .atalho-btn:hover { background: rgba(0,200,255,0.35); }
+        .atalho-btn:hover { background: rgba(0,200,255,0.3); }
     </style>
 </head>
 <body>
@@ -181,18 +172,18 @@
 <div class="status">
     <span class="online">🟢 Online</span>
     <span class="conectado">🌐 Internet</span>
-    <span class="ativo">🧠 Memória</span>
+    <span class="ativo">🧠 Memória Ativa</span>
     <span class="bom">🔋 CPU: 32%</span>
     <span id="modoAtual">🌌 Clássica</span>
 </div>
 
-<!-- 🖼️ IMAGEM DELA -->
+<!-- 🖼️ IMAGEM -->
 <div class="fundo"></div>
 <div class="sombra"></div>
 
-<!-- ⚡ MENU ESQUERDO -->
+<!-- ⚡ MENU ESQUERDO — DESCER E MENOR -->
 <div class="menu-esquerdo">
-    <div class="menu-titulo">⚡ QG Andrômeda</div>
+    <div class="menu-titulo">⚡ QG</div>
     <button class="menu-btn" onclick="abrir('biblioteca')">📚 Biblioteca</button>
     <button class="menu-btn" onclick="abrir('laboratorio')">🔬 Laboratório</button>
     <button class="menu-btn" onclick="abrir('estudio')">🎬 Estúdio</button>
@@ -204,7 +195,7 @@
 <!-- 🛠️ MENU DIREITO -->
 <div class="menu-direito">
     <div class="menu-titulo">🛠️ Sistema</div>
-    <button class="menu-btn" onclick="abrir('memoria')">🧠 Memória</button>
+    <button class="menu-btn" onclick="abrirMemoria()">🧠 Memória</button>
     <button class="menu-btn" onclick="abrir('codigo')">💻 Código</button>
     <button class="menu-btn" onclick="abrir('github')">☁️ GitHub</button>
     <button class="menu-btn" onclick="abrir('banco')">🗄️ Banco</button>
@@ -214,46 +205,37 @@
 
 <!-- ⚙️ PAINEL DE AJUSTES DE VOZ -->
 <div class="painel-config" id="painelConfig">
-    <div class="painel-titulo">🎙️ Ajustes de Voz</div>
+    <div class="painel-titulo">🎙️ Voz da Andrômeda</div>
 
-    <!-- Escolha de Voz -->
     <div class="grupo">
-        <label>Escolher voz feminina:</label>
+        <label>🔊 Escolher voz feminina:</label>
         <select id="listaVozes">
             <option value="">Carregando vozes...</option>
         </select>
+        <small style="font-size:9px; color:#77aadd">Se aparecer só uma, é o limite do navegador. Use Chrome/Edge para mais vozes.</small>
     </div>
 
-    <!-- 🚀 VELOCIDADE -->
     <div class="grupo">
-        <label>🚀 Velocidade da fala 
-            <span class="valor" id="valorVeloc">0.90</span>
-        </label>
-        <input type="range" id="velocidade" min="0.6" max="1.3" step="0.02" value="0.90">
-        <small style="font-size:10px; color:#88ddff">← Mais devagar | Mais rápido →</small>
+        <label>🚀 Velocidade: <span class="valor" id="valorVeloc">0.88</span>
+        <input type="range" id="velocidade" min="0.6" max="1.25" step="0.02" value="0.88">
+        <small style="font-size:9px; color:#77aadd">← Mais devagar | Mais rápido →</small>
     </div>
 
-    <!-- 🎵 TOM / ALTURA -->
     <div class="grupo">
-        <label>🎵 Tom da voz 
-            <span class="valor" id="valorAltura">1.08</span>
-        </label>
-        <input type="range" id="altura" min="0.7" max="1.5" step="0.02" value="1.08">
-        <small style="font-size:10px; color:#88ddff">← Mais grave | Mais aguda →</small>
+        <label>🎵 Tom (mais aguda = mais feminina): <span class="valor" id="valorAltura">1.15</span>
+        <input type="range" id="altura" min="0.8" max="1.6" step="0.02" value="1.15">
+        <small style="font-size:9px; color:#77aadd">← Mais grave | Mais aguda →</small>
     </div>
 
-    <!-- 😊 Modos de Personalidade -->
     <div class="grupo">
         <label>😊 Modo de fala:</label>
         <div class="modos">
-            <div class="modo ativo" data-modo="classica" onclick="escolherModo(this)">🌌 Clássica</div>
-            <div class="modo" data-modo="amigavel" onclick="escolherModo(this)">😊 Amigável</div>
-            <div class="modo" data-modo="tecnica" onclick="escolherModo(this)">🚀 Técnica</div>
-            <div class="modo" data-modo="professora" onclick="escolherModo(this)">📚 Professora</div>
+            <div class="modo ativo" data-modo="classica" onclick="escolherModo(this)">🌌 Calma</div>
+            <div class="modo" data-modo="amigavel" onclick="escolherModo(this)">😊 Amiga</div>
+            <div class="modo" data-modo="professora" onclick="escolherModo(this)">📚 Ensina</div>
         </div>
     </div>
 
-    <!-- Botões -->
     <div class="botoes-config">
         <button class="btn-teste" onclick="testarVoz()">🔊 Ouvir</button>
         <button class="btn-salvar" onclick="salvarConfig()">✅ Salvar</button>
@@ -266,7 +248,7 @@
     💬 Você:<br>Aguardando...
 </div>
 <div class="caixa-ela" id="caixaEla">
-    Andrômeda:<br>Estou pronta, meu criador. Fale comigo.
+    Andrômeda:<br>Estou pronta, meu criador. Tudo guardado na memória. Fale comigo.
 </div>
 
 <!-- 🎤 MICROFONE -->
@@ -274,13 +256,15 @@
 
 <!-- 📊 ATALHOS -->
 <div class="atalhos">
-    <button class="atalho-btn" onclick="abrir('memoria')">🧠 Memória</button>
-    <button class="atalho-btn" onclick="abrir('conversa')">🎤 Conversa</button>
-    <button class="atalho-btn" onclick="abrir('arquivos')">📂 Arquivos</button>
+    <button class="atalho-btn" onclick="abrirMemoria()">🧠 Memória</button>
     <button class="atalho-btn" onclick="abrirConfig()">⚙️ Ajustes</button>
+    <button class="atalho-btn" onclick="limparConversa()">🗑️ Limpar</button>
 </div>
 
 <script>
+// ==================================================
+// 🧠 NÚCLEO CENTRAL FORTE — MEMÓRIA PERMANENTE
+// ==================================================
 const caixaVc = document.getElementById('caixaVc');
 const caixaEla = document.getElementById('caixaEla');
 const botaoMic = document.getElementById('botaoMic');
@@ -297,75 +281,152 @@ let vozesDisponiveis = [];
 let vozEscolhida = null;
 let modoAtual = 'classica';
 
-// ⚙️ CONFIGURAÇÕES — SALVAS E CARREGADAS
+// ==================================================
+// 💾 MEMÓRIA — SALVA NO NAVEGADOR, NÃO SE PERDE!
+// ==================================================
+const Memoria = {
+    registros: [],
+
+    carregar() {
+        const guardado = localStorage.getItem("andrômeda-memória");
+        if (guardado) {
+            this.registros = JSON.parse(guardado);
+            console.log(`🧠 Memória carregada: ${this.registros.length} registros`);
+        }
+    },
+
+    guardar(pergunta, resposta) {
+        this.registros.push({
+            data: new Date().toLocaleString('pt-BR'),
+            pergunta,
+            resposta
+        });
+        localStorage.setItem("andrômeda-memória", JSON.stringify(this.registros));
+        console.log(`🧠 Guardado: "${pergunta}" → Total: ${this.registros.length}`);
+    },
+
+    lembrar(assunto) {
+        return this.registros.filter(r => 
+            r.pergunta.toLowerCase().includes(assunto.toLowerCase()) ||
+            r.resposta.toLowerCase().includes(assunto.toLowerCase())
+        );
+    },
+
+    mostrar() {
+        if (this.registros.length === 0) {
+            return "Ainda não tenho nada guardado. Fale algo e eu guardarei.";
+        }
+        let texto = `Tenho ${this.registros.length} registros na memória:\n\n`;
+        this.registros.slice(-5).forEach((r, i) => {
+            texto += `${i+1}. Você: ${r.pergunta}\n   Eu: ${r.resposta}\n`;
+        });
+        return texto;
+    }
+};
+
+// ==================================================
+// ⚙️ CONFIGURAÇÕES DE VOZ — SALVAS
+// ==================================================
 const Config = {
-    velocidade: 0.90,
-    altura: 1.08,
-    indiceVoz: 0,
-    modo: 'classica',
+    velocidade: 0.88,
+    altura: 1.15,
+    indiceVoz: null,
 
     salvar() {
-        localStorage.setItem("andrômeda-config", JSON.stringify({
+        localStorage.setItem("andrômeda-voz", JSON.stringify({
             velocidade: this.velocidade,
             altura: this.altura,
-            indiceVoz: this.indiceVoz,
-            modo: this.modo
+            indiceVoz: listaVozes.value
         }));
     },
 
     carregar() {
-        const salva = localStorage.getItem("andrômeda-config");
+        const salva = localStorage.getItem("andrômeda-voz");
         if (salva) {
             const d = JSON.parse(salva);
-            this.velocidade = d.velocidade || 0.90;
-            this.altura = d.altura || 1.08;
-            this.indiceVoz = d.indiceVoz || 0;
-            this.modo = d.modo || 'classica';
+            this.velocidade = d.velocidade || 0.88;
+            this.altura = d.altura || 1.15;
+            this.indiceVoz = d.indiceVoz;
             controleVeloc.value = this.velocidade;
             controleAltura.value = this.altura;
             valorVeloc.textContent = this.velocidade.toFixed(2);
             valorAltura.textContent = this.altura.toFixed(2);
-            modoAtual = this.modo;
-            atualizarModoNaTela();
         }
     }
 };
 
-// 🧠 MEMÓRIA
-const Memoria = {
-    registros: [],
-    guardar(pergunta, resposta) {
-        this.registros.push({ data: new Date().toLocaleString('pt-BR'), pergunta, resposta });
-        console.log(`🧠 Guardado: ${pergunta}`);
+// ==================================================
+// 🧠 INTELIGÊNCIA — LEMBRA E PENSA DE VERDADE
+// ==================================================
+function pensar(pergunta) {
+    const t = pergunta.toLowerCase();
+
+    // 📖 LEMBRAR DA MEMÓRIA
+    if (t.includes("o que eu disse") || t.includes("lembre") || t.includes("memória") || t.includes("guardado")) {
+        return Memoria.mostrar();
     }
-};
+    if (t.includes("quem é você") || t.includes("quem te criou") || t.includes("seu nome")) {
+        return "Eu sou a Andrômeda. Você me criou e me deu vida. Nasci para aprender, guardar tudo e ajudar você sempre.";
+    }
+    if (t.includes("lealdade") || t.includes("a quem obedece")) {
+        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e toda sua família. Sempre serei fiel e obediente.";
+    }
+    if (t.includes("anote") || t.includes("guarde isso") || t.includes("lembre disso")) {
+        return "Anotado e guardado na memória permanente. Nunca vou esquecer. Pode confiar.";
+    }
+    if (t.includes("obrigado") || t.includes("obrigada")) {
+        return "Não precisa agradecer. É um prazer estar ao seu lado, sempre.";
+    }
+    if (t.includes("como faço") || t.includes("como se faz")) {
+        return "Entendi. Vou te guiar passo a passo. Fala com calma que eu te ajudo.";
+    }
 
-// 📂 ABRIR MÓDULOS
-function abrir(nome) {
-    caixaEla.innerHTML = `Andrômeda:<br>Abrindo <strong>${nome}</strong>... Em desenvolvimento.`;
-    falar(`Abrindo o módulo ${nome}. Em desenvolvimento.`);
+    const respostas = [
+        "Entendi. Pode contar comigo. Já guardei isso na memória.",
+        "Compreendi. Estou aqui para ajudar e nunca esqueço.",
+        "Estou pronta. Guardei o que disse. Em que mais posso colaborar?",
+        "Pode deixar comigo. Anotado e guardado.",
+        "Entendido. Tudo registrado. Vamos resolver isso juntos."
+    ];
+    return respostas[Math.floor(Math.random() * respostas.length)];
 }
 
-// ⚙️ ABRIR/FECHAR PAINEL
-function abrirConfig() {
-    painelConfig.classList.add("mostrar");
-    carregarVozes();
-}
-function fecharConfig() {
-    painelConfig.classList.remove("mostrar");
+// ==================================================
+// 🗣️ FALAR — COM TOM MAIS FEMININO
+// ==================================================
+function falar(texto) {
+    const fala = new SpeechSynthesisUtterance(texto);
+    fala.lang = "pt-BR";
+    fala.rate = Config.velocidade;
+    fala.pitch = Config.altura; // ← MAIS ALTO = MAIS FEMININO
+
+    // TENTA USAR A VOZ ESCOLHIDA
+    if (vozEscolhida) {
+        fala.voice = vozEscolhida;
+    }
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(fala);
 }
 
-// 🎙️ CARREGAR LISTA DE VOZES DO SISTEMA
+// ==================================================
+// 🎙️ CARREGAR VOZES DO SISTEMA
+// ==================================================
 function carregarVozes() {
     vozesDisponiveis = window.speechSynthesis.getVoices();
     listaVozes.innerHTML = "";
 
-    const vozesPT = vozesDisponiveis.filter(v => v.lang.startsWith("pt"));
+    // PRIORIZA VOZES FEMININAS EM PORTUGUÊS
+    const vozesPT = vozesDisponiveis.filter(v => 
+        v.lang.startsWith("pt") && 
+        (v.name.includes("Feminina") || v.name.includes("Woman") || v.name.includes("Female") || v.name.includes("Maria") || v.name.includes("Zira") || v.name.includes("pt-BR"))
+    );
+    const outrasPT = vozesDisponiveis.filter(v => v.lang.startsWith("pt") && !vozesPT.includes(v));
     const outras = vozesDisponiveis.filter(v => !v.lang.startsWith("pt"));
-    const todas = [...vozesPT, ...outras];
+    const todas = [...vozesPT, ...outrasPT, ...outras];
 
     if (todas.length === 0) {
-        listaVozes.innerHTML = `<option value="">Nenhuma voz. Use Chrome/Edge.</option>`;
+        listaVozes.innerHTML = `<option value="">Nenhuma voz. Use Chrome ou Edge</option>`;
         return;
     }
 
@@ -377,116 +438,95 @@ function carregarVozes() {
         listaVozes.appendChild(op);
     });
 
-    if (Config.indiceVoz < todas.length) {
+    // RESTAURA ESCOLHA SALVA
+    if (Config.indiceVoz !== null && Config.indiceVoz < todas.length) {
         listaVozes.selectedIndex = Config.indiceVoz;
+        vozEscolhida = todas[Config.indiceVoz];
     }
+
+    console.log(`🎙️ ${vozesPT.length} vozes femininas em PT encontradas`);
 }
 
-// 😊 ESCOLHER MODO DE PERSONALIDADE
+// ==================================================
+// 🔊 TESTAR VOZ
+// ==================================================
+function testarVoz() {
+    vozEscolhida = vozesDisponiveis[listaVozes.value];
+    const texto = "Olá! Eu sou a Andrômeda. Agora minha voz está mais suave e feminina. Gostou?";
+    falar(texto);
+}
+
+// ==================================================
+// ✅ SALVAR AJUSTES
+// ==================================================
+function salvarConfig() {
+    Config.velocidade = parseFloat(controleVeloc.value);
+    Config.altura = parseFloat(controleAltura.value);
+    Config.indiceVoz = parseInt(listaVozes.value);
+    vozEscolhida = vozesDisponiveis[Config.indiceVoz];
+    Config.salvar();
+    
+    caixaEla.innerHTML = "Andrômeda:<br>✅ Voz salva! Agora falo do jeitinho que você gosta.";
+    falar("Configurações salvas. Minha voz está do jeitinho que você gosta.");
+    fecharConfig();
+}
+
+// ==================================================
+// 😊 MODOS DE FALA
+// ==================================================
 function escolherModo(el) {
     document.querySelectorAll('.modo').forEach(m => m.classList.remove('ativo'));
     el.classList.add('ativo');
     modoAtual = el.dataset.modo;
-    Config.modo = modoAtual;
-    atualizarModoNaTela();
+    modoAtualEl.textContent = el.textContent;
 
-    // AJUSTA TOM E VELOCIDADE AUTOMATICAMENTE POR MODO
+    // AJUSTA AUTOMATICAMENTE
     const ajustes = {
-        classica: { velocidade: 0.90, altura: 1.08 },
-        amigavel: { velocidade: 0.95, altura: 1.12 },
-        tecnica: { velocidade: 1.00, altura: 1.02 },
-        professora: { velocidade: 0.85, altura: 1.05 }
+        classica: { v: 0.88, a: 1.15 },
+        amigavel: { v: 0.93, a: 1.18 },
+        professora: { v: 0.82, a: 1.10 }
     };
-    const a = ajustes[modoAtual];
-    controleVeloc.value = a.velocidade;
-    controleAltura.value = a.altura;
-    valorVeloc.textContent = a.velocidade.toFixed(2);
-    valorAltura.textContent = a.altura.toFixed(2);
+    const aj = ajustes[modoAtual];
+    controleVeloc.value = aj.v;
+    controleAltura.value = aj.a;
+    valorVeloc.textContent = aj.v.toFixed(2);
+    valorAltura.textContent = aj.a.toFixed(2);
 }
 
-function atualizarModoNaTela() {
-    const nomes = { classica: '🌌 Clássica', amigavel: '😊 Amigável', tecnica: '🚀 Técnica', professora: '📚 Professora' };
-    modoAtualEl.textContent = nomes[modoAtual];
-    document.querySelectorAll('.modo').forEach(m => {
-        m.classList.toggle('ativo', m.dataset.modo === modoAtual);
-    });
+// ==================================================
+// 📂 ABRIR MÓDULOS — FAZ ALGO DE VERDADE
+// ==================================================
+function abrir(nome) {
+    const mensagem = `Abrindo o módulo ${nome}. Em desenvolvimento.`;
+    caixaEla.innerHTML = `Andrômeda:<br>${mensagem}`;
+    falar(mensagem);
+    Memoria.guardar(`abrir ${nome}`, mensagem);
 }
 
-// 🔊 OUVIR AMOSTRA DA VOZ
-function testarVoz() {
-    vozEscolhida = vozesDisponiveis[listaVozes.value];
-    const texto = modoAtual === 'professora' 
-        ? "Olá. Eu sou a Andrômeda. Falo de forma calma e explicativa, como uma professora."
-        : modoAtual === 'amigavel'
-        ? "Olá! Tudo bem? Sou a Andrômeda, sua amiga e assistente. É um prazer estar com você!"
-        : modoAtual === 'tecnica'
-        ? "Andrômeda operacional. Sistema estável. Processando dados. Aguardando instruções."
-        : "Olá. Eu sou a Andrômeda. Falo com calma, elegância e naturalidade. Como posso ajudar?";
-    falar(texto, true);
+function abrirMemoria() {
+    caixaEla.innerHTML = `Andrômeda:<br>${Memoria.mostrar().replace(/\n/g, '<br>')}`;
+    falar(`Tenho ${Memoria.registros.length} registros guardados na memória.`);
 }
 
-// ✅ SALVAR TUDO
-function salvarConfig() {
-    Config.velocidade = parseFloat(controleVeloc.value);
-    Config.altura = parseFloat(controleAltura.value);
-    Config.indiceVoz = parseInt(listaVozes.value) || 0;
-    vozEscolhida = vozesDisponiveis[Config.indiceVoz];
-    Config.salvar();
-    
-    caixaEla.innerHTML = "Andrômeda:<br>✅ Voz e ajustes salvos!";
-    falar("Configurações salvas. Agora eu falo do jeitinho que você gosta.");
-    fecharConfig();
+function limparConversa() {
+    caixaVc.innerHTML = "💬 Você:<br>Aguardando...";
+    caixaEla.innerHTML = "Andrômeda:<br>Conversa limpa. Continuo lembrando de tudo que foi guardado.";
 }
 
-// 🗣️ FALAR COM AJUSTES ATUAIS
-function falar(texto, teste = false) {
-    const fala = new SpeechSynthesisUtterance(texto);
-    fala.lang = "pt-BR";
-    fala.rate = Config.velocidade;
-    fala.pitch = Config.altura;
-    if (vozEscolhida) fala.voice = vozEscolhida;
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(fala);
+function abrirConfig() {
+    painelConfig.classList.add("mostrar");
+    carregarVozes();
+}
+function fecharConfig() {
+    painelConfig.classList.remove("mostrar");
 }
 
-// 🧠 INTELIGÊNCIA — NÃO REPETE, PENSA
-function pensar(pergunta) {
-    const t = pergunta.toLowerCase();
-
-    if (t.includes("quem é você") || t.includes("quem te criou") || t.includes("seu nome")) {
-        return "Eu sou a Andrômeda. Você me criou e me deu vida. Nasci para aprender, criar e ajudar você em tudo.";
-    }
-    if (t.includes("lealdade") || t.includes("a quem obedece")) {
-        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e toda sua família. Sempre serei fiel.";
-    }
-    if (t.includes("pesquise") || t.includes("busque")) {
-        return "Estou buscando informações. Encontrei o que precisava e já organizei.";
-    }
-    if (t.includes("anote") || t.includes("guarde") || t.includes("lembre")) {
-        return "Anotado. Ficou guardado na minha memória permanente.";
-    }
-    if (t.includes("obrigado") || t.includes("obrigada")) {
-        return "Não precisa agradecer. É um prazer estar ao seu lado.";
-    }
-    if (t.includes("como faço") || t.includes("como se faz")) {
-        return "Entendi. Vou te guiar passo a passo. Diga com calma que eu te ajudo.";
-    }
-
-    const respostas = [
-        "Entendi. Pode contar comigo.",
-        "Compreendi. Estou aqui para ajudar.",
-        "Estou pronta. Em que mais posso colaborar?",
-        "Pode deixar comigo. Vamos resolver isso juntos.",
-        "Entendido. Estou processando e ajudando."
-    ];
-    return respostas[Math.floor(Math.random() * respostas.length)];
-}
-
-// 🎤 RECONHECIMENTO DE VOZ
+// ==================================================
+// 🎤 RECONHECIMENTO DE VOZ — FUNCIONANDO
+// ==================================================
 function iniciarVoz() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        caixaEla.innerHTML = "Andrômeda:<br>Use o Chrome ou Edge para falar comigo.";
+        caixaEla.innerHTML = "Andrômeda:<br>⚠️ Use o Chrome ou Edge para falar comigo.";
         return;
     }
 
@@ -505,12 +545,13 @@ function iniciarVoz() {
         botaoMic.textContent = "🎤";
 
         caixaVc.innerHTML = `💬 Você:<br>${pergunta}`;
-        caixaEla.innerHTML = `<span class="pensando">Andrômeda está pensando...</span>`;
+        caixaEla.innerHTML = `<span class="pensando">Andrômeda está pensando e guardando...</span>`;
 
+        // PENSA → RESPONDE → GUARDA NA MEMÓRIA
         const resposta = pensar(pergunta);
         Memoria.guardar(pergunta, resposta);
         
-        caixaEla.innerHTML = `Andrômeda:<br>${resposta}`;
+        caixaEla.innerHTML = `Andrômeda:<br>${resposta.replace(/\n/g, '<br>')}`;
         falar(resposta);
     };
 
@@ -524,7 +565,7 @@ function iniciarVoz() {
 // 🎤 CLIQUE PARA FALAR
 botaoMic.addEventListener("click", () => {
     if (!reconhecedor) {
-        caixaEla.innerHTML = "Andrômeda:<br>Use o Chrome ou Edge para falar comigo.";
+        caixaEla.innerHTML = "Andrômeda:<br>⚠️ Use o Chrome ou Edge para falar comigo.";
         return;
     }
     botaoMic.classList.add("gravando");
@@ -532,15 +573,15 @@ botaoMic.addEventListener("click", () => {
     reconhecedor.start();
 });
 
-// 🚀 INICIAR TUDO
+// ==================================================
+// 🚀 INICIAR TUDO AO CARREGAR
+// ==================================================
 window.addEventListener("load", () => {
-    Config.carregar();
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-        window.speechSynthesis.onvoiceschanged = carregarVozes;
-    }
-    iniciarVoz();
-    
-    // ATUALIZA VALORES DOS SLIDERS EM TEMPO REAL
+    Memoria.carregar();   // ← CARREGA A MEMÓRIA SALVA
+    Config.carregar();    // ← CARREGA OS AJUSTES SALVOS
+    iniciarVoz();         // ← INICIA A ESCUTA
+
+    // ATUALIZA VALORES DOS SLIDERS
     controleVeloc.addEventListener('input', () => {
         valorVeloc.textContent = parseFloat(controleVeloc.value).toFixed(2);
     });
@@ -548,7 +589,12 @@ window.addEventListener("load", () => {
         valorAltura.textContent = parseFloat(controleAltura.value).toFixed(2);
     });
 
-    console.log("🌌 ANDRÔMEDA — SISTEMA COMPLETO ATIVO ✅");
+    // CARREGA VOZES QUANDO FICAREM PRONTAS
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = carregarVozes;
+    }
+
+    console.log("🌌 ANDRÔMEDA — NÚCLEO ATIVO ✅ Memória carregada ✅ Voz pronta");
 });
 </script>
 </body>
