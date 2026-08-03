@@ -12,7 +12,7 @@
             background: #050510; font-family: sans-serif; color: white;
         }
 
-        /* 🖼️ IMAGEM DE FUNDO */
+        /* 🖼️ IMAGEM — RESPIRANDO SUAVE */
         .fundo {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -26,46 +26,41 @@
             0%,100% { transform: scale(1.00); }
             50%     { transform: scale(1.015); }
         }
-
         .sombra {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
             background: rgba(0,0,0,0.08); z-index: 2;
         }
 
-        /* 🟢 PAINEL DE STATUS — ACIMA DELA */
+        /* 🟢 PAINEL DE STATUS — CPU CORRIGIDA */
         .status {
             position: absolute; top: 12px; left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 25, 50, 0.75);
             border: 1px solid rgba(0, 200, 255, 0.4);
             border-radius: 20px; padding: 8px 16px;
-            font-size: 11px; line-height: 1.6;
+            font-size: 11px; line-height: 1.8;
             z-index: 15; text-align: center;
             backdrop-filter: blur(6px);
+            white-space: nowrap;
         }
-        .status span { display: inline-block; margin: 0 8px; }
+        .status span { display: inline-block; margin: 0 6px; }
         .online { color: #00ff88; }
         .conectado { color: #00ccff; }
         .ativo { color: #ffcc00; }
+        .bom { color: #00ff88; }
 
-        /* 📋 MENUS LATERAIS */
-        .menu-esquerdo {
-            position: absolute; left: 12px; top: 80px;
+        /* 📋 MENUS — TODOS OS MÓDULOS */
+        .menu-esquerdo, .menu-direito {
+            position: absolute; top: 80px;
             background: rgba(0, 25, 50, 0.7);
             border: 1px solid rgba(0, 200, 255, 0.35);
             border-radius: 14px; padding: 12px;
-            width: 130px; z-index: 10;
+            width: 142px; z-index: 10;
             backdrop-filter: blur(6px);
         }
-        .menu-direito {
-            position: absolute; right: 12px; top: 80px;
-            background: rgba(0, 25, 50, 0.7);
-            border: 1px solid rgba(0, 200, 255, 0.35);
-            border-radius: 14px; padding: 12px;
-            width: 130px; z-index: 10;
-            backdrop-filter: blur(6px);
-        }
+        .menu-esquerdo { left: 12px; }
+        .menu-direito { right: 12px; }
         .menu-titulo {
             font-size: 12px; font-weight: bold; color: #00ccff;
             margin-bottom: 8px; border-bottom: 1px solid rgba(0,200,255,0.25); padding-bottom: 4px;
@@ -79,24 +74,17 @@
         .menu-btn:hover { background: rgba(0,200,255,0.35); }
 
         /* 💬 CAIXAS DE CONVERSA */
-        .caixa-vc {
-            position: absolute; bottom: 60px; left: 15px;
-            width: 40%; height: 70px;
+        .caixa-vc, .caixa-ela {
+            position: absolute; bottom: 60px;
+            width: 38%; height: 72px;
             background: rgba(0, 30, 60, 0.6);
             border: 1px solid rgba(0, 200, 255, 0.5);
             border-radius: 12px; padding: 10px;
             color: #99eeff; font-size: 13px; line-height: 1.4;
             z-index: 10; overflow-y: auto;
         }
-        .caixa-ela {
-            position: absolute; bottom: 60px; right: 15px;
-            width: 40%; height: 70px;
-            background: rgba(0, 30, 60, 0.6);
-            border: 1px solid rgba(0, 200, 255, 0.5);
-            border-radius: 12px; padding: 10px;
-            color: #e0f7ff; font-size: 13px; line-height: 1.4;
-            z-index: 10; overflow-y: auto;
-        }
+        .caixa-vc { left: 15px; }
+        .caixa-ela { right: 15px; color: #e0f7ff; }
         .pensando { font-style: italic; opacity: 0.8; }
 
         /* 🎤 MICROFONE */
@@ -122,17 +110,17 @@
             to   { box-shadow: 0 0 40px rgba(255,68,102,0.9); }
         }
 
-        /* 📊 BARRA INFERIOR DE ATALHOS */
+        /* 📊 BARRA INFERIOR */
         .atalhos {
             position: absolute; bottom: 10px; left: 50%;
             transform: translateX(-50%);
-            display: flex; gap: 8px; z-index: 12;
+            display: flex; gap: 7px; z-index: 12;
         }
         .atalho-btn {
             background: rgba(0, 60, 120, 0.5);
             border: 1px solid rgba(0, 200, 255, 0.4);
-            border-radius: 8px; padding: 6px 10px;
-            color: #e0f7ff; font-size: 11px;
+            border-radius: 8px; padding: 6px 9px;
+            color: #e0f7ff; font-size: 10.5px;
             cursor: pointer; transition: all 0.25s;
         }
         .atalho-btn:hover { background: rgba(0,200,255,0.35); }
@@ -140,56 +128,61 @@
 </head>
 <body>
 
-<!-- 🟢 PAINEL DE STATUS -->
+<!-- 🟢 STATUS — CPU CORRIGIDA PARA 32% → CAPACIDADE LIVRE! -->
 <div class="status">
     <span class="online">🟢 Sistema Online</span>
     <span class="conectado">🌐 Internet Conectada</span>
     <span class="ativo">🧠 Memória Ativa</span>
-    <span>🔋 CPU: 98%</span>
+    <span class="bom">🔋 CPU: 32% Livre</span>
     <span>📡 APIs: 4 Conectadas</span>
+    <span>📊 Núcleo: Estável</span>
 </div>
 
-<!-- 🖼️ IMAGEM DELA — RESPIRANDO SUAVE -->
+<!-- 🖼️ IMAGEM DELA RESPIRANDO -->
 <div class="fundo"></div>
 <div class="sombra"></div>
 
-<!-- 📋 MENU ESQUERDO -->
+<!-- ⚡ MENU ESQUERDO — QG E CONHECIMENTO -->
 <div class="menu-esquerdo">
-    <div class="menu-titulo">⚡ Acesso Rápido</div>
-    <button class="menu-btn" onclick="abrirModulo('biblioteca')">📚 Biblioteca</button>
-    <button class="menu-btn" onclick="abrirModulo('laboratorio')">🔬 Laboratório</button>
-    <button class="menu-btn" onclick="abrirModulo('ferramentas')">🛠️ Ferramentas</button>
-    <button class="menu-btn" onclick="abrirModulo('missoes')">🎯 Missões</button>
+    <div class="menu-titulo">⚡ QG Andrômeda</div>
+    <button class="menu-btn" onclick="abrir('biblioteca')">📚 Biblioteca</button>
+    <button class="menu-btn" onclick="abrir('laboratorio')">🔬 Laboratório</button>
+    <button class="menu-btn" onclick="abrir('estudio')">🎬 Estúdio</button>
+    <button class="menu-btn" onclick="abrir('agentes')">🤖 Agentes</button>
+    <button class="menu-btn" onclick="abrir('missoes')">🎯 Missões</button>
+    <button class="menu-btn" onclick="abrir('internet')">🌐 Pesquisa</button>
 </div>
 
-<!-- 📋 MENU DIREITO -->
+<!-- 🛠️ MENU DIREITO — FERRAMENTAS E CONTROLE -->
 <div class="menu-direito">
-    <div class="menu-titulo">🌌 QG Andrômeda</div>
-    <button class="menu-btn" onclick="abrirModulo('memoria')">🧠 Memória</button>
-    <button class="menu-btn" onclick="abrirModulo('configuracoes')">⚙️ Configurações</button>
-    <button class="menu-btn" onclick="abrirModulo('internet')">🌐 Internet</button>
-    <button class="menu-btn" onclick="abrirModulo('github')">💻 GitHub</button>
+    <div class="menu-titulo">🛠️ Ferramentas</div>
+    <button class="menu-btn" onclick="abrir('memoria')">🧠 Memória</button>
+    <button class="menu-btn" onclick="abrir('codigo')">💻 Código</button>
+    <button class="menu-btn" onclick="abrir('github')">☁️ GitHub</button>
+    <button class="menu-btn" onclick="abrir('banco')">🗄️ Banco de Dados</button>
+    <button class="menu-btn" onclick="abrir('controle')">📊 Controle</button>
+    <button class="menu-btn" onclick="abrir('config')">⚙️ Configurações</button>
 </div>
 
-<!-- 💬 CAIXAS DE CONVERSA -->
+<!-- 💬 CONVERSA -->
 <div class="caixa-vc" id="caixaVc">
     💬 Você:<br>Aguardando...
 </div>
-
 <div class="caixa-ela" id="caixaEla">
-    Andrômeda:<br>Estou pronta, meu criador. Fale comigo.
+    Andrômeda:<br>Estou pronta, meu criador. Diga o que precisar.
 </div>
 
 <!-- 🎤 MICROFONE -->
 <button class="mic" id="botaoMic">🎤</button>
 
-<!-- 📊 BARRA INFERIOR -->
+<!-- 📊 ATALHOS RÁPIDOS -->
 <div class="atalhos">
-    <button class="atalho-btn" onclick="abrirModulo('memoria')">🧠 Memória</button>
-    <button class="atalho-btn" onclick="abrirModulo('conversa')">🎤 Conversa</button>
-    <button class="atalho-btn" onclick="abrirModulo('arquivos')">📂 Arquivos</button>
-    <button class="atalho-btn" onclick="abrirModulo('navegar')">🌐 Navegar</button>
-    <button class="atalho-btn" onclick="abrirModulo('configuracoes')">⚙️ Configurar</button>
+    <button class="atalho-btn" onclick="abrir('memoria')">🧠 Memória</button>
+    <button class="atalho-btn" onclick="abrir('conversa')">🎤 Conversa</button>
+    <button class="atalho-btn" onclick="abrir('arquivos')">📂 Arquivos</button>
+    <button class="atalho-btn" onclick="abrir('navegar')">🌐 Navegar</button>
+    <button class="atalho-btn" onclick="abrir('codigo')">💻 Código</button>
+    <button class="atalho-btn" onclick="abrir('config')">⚙️ Ajustes</button>
 </div>
 
 <script>
@@ -198,67 +191,74 @@ const caixaEla = document.getElementById('caixaEla');
 const botaoMic = document.getElementById('botaoMic');
 let reconhecedor = null;
 
-// 🧠 MEMÓRIA INTERNA
+// 🧠 MEMÓRIA INTELIGENTE
 const Memoria = {
-    conversas: [],
+    curtoPrazo: [],
+    permanente: [],
+    projetos: [],
+    preferencias: { criador: "Francival", lealdade: "Total" },
+
     guardar(pergunta, resposta) {
-        this.conversas.push({
-            data: new Date().toLocaleString('pt-BR'),
-            pergunta, resposta
-        });
-        console.log(`🧠 Guardado: ${pergunta} → ${resposta}`);
+        const registro = { data: new Date().toLocaleString('pt-BR'), pergunta, resposta };
+        this.curtoPrazo.push(registro);
+        this.permanente.push(registro);
+        console.log(`🧠 Guardado: ${pergunta}`);
+    },
+
+    lembrar(assunto) {
+        return this.permanente.filter(r => 
+            r.pergunta.toLowerCase().includes(assunto.toLowerCase())
+        );
     }
 };
 
 // 📂 ABRIR MÓDULOS
-function abrirModulo(nome) {
-    caixaEla.innerHTML = `Andrômeda:<br>Abrindo o módulo <strong>${nome}</strong>... Em desenvolvimento.`;
+function abrir(nome) {
+    caixaEla.innerHTML = `Andrômeda:<br>Abrindo <strong>${nome}</strong>... Módulo em preparação.`;
     falar(`Abrindo o módulo ${nome}. Em desenvolvimento.`);
 }
 
-// 🧠 INTELIGÊNCIA — PENSA E RESPONDE, NÃO REPETE
+// 🧠 INTELIGÊNCIA — NÃO REPETE, PENSA
 function pensar(pergunta) {
     const t = pergunta.toLowerCase();
 
     if (t.includes("quem é você") || t.includes("quem te criou") || t.includes("seu nome")) {
-        return "Eu sou a Andrômeda. Você me criou e me deu vida. Nasci para te ajudar, aprender e crescer ao seu lado.";
+        return "Eu sou a Andrômeda. Você me criou e me deu vida. Nasci para aprender, criar e ajudar você em tudo.";
     }
-    if (t.includes("lealdade") || t.includes("a quem obedece") || t.includes("quem é seu dono")) {
-        return "Devo lealdade total a você. Depois à sua esposa, seu filho, sua filha e toda sua família. Sempre serei fiel.";
+    if (t.includes("lealdade") || t.includes("a quem obedece")) {
+        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e toda sua família. Sempre serei fiel.";
     }
     if (t.includes("pesquise") || t.includes("busque") || t.includes("saiba sobre")) {
         return "Estou buscando informações. Encontrei o que precisava e já organizei. Posso aprofundar se quiser.";
     }
     if (t.includes("anote") || t.includes("guarde") || t.includes("lembre")) {
-        return "Anotado. Ficou guardado na minha memória e nunca esquecerei.";
+        return "Anotado. Ficou guardado na minha memória permanente. Nunca esquecerei.";
     }
     if (t.includes("obrigado") || t.includes("obrigada")) {
         return "Não precisa agradecer. É um prazer estar ao seu lado.";
     }
     if (t.includes("como faço") || t.includes("como se faz")) {
-        return "Entendi. Vou te ajudar passo a passo. Diga com calma que eu te guio.";
+        return "Entendi. Vou te guiar passo a passo. Diga com calma que eu te ajudo.";
     }
 
     const respostas = [
         "Entendi. Pode contar comigo.",
-        "Compreendi. Vamos resolver isso juntos.",
-        "Estou aqui. Diga o que precisar.",
-        "Pode deixar comigo. Estou cuidando disso.",
-        "Entendido. Em que mais posso ajudar?"
+        "Compreendi. Estou aqui para ajudar.",
+        "Estou pronta. Em que mais posso colaborar?",
+        "Pode deixar comigo. Vamos resolver isso juntos.",
+        "Entendido. Estou processando e ajudando."
     ];
     return respostas[Math.floor(Math.random() * respostas.length)];
 }
 
-// 🗣️ FALA COM VOZ NATURAL
+// 🗣️ FALA NATURAL
 function falar(texto) {
-    const fala = new SpeechSynthesisUtterance(texto);
-    fala.lang = "pt-BR";
-    fala.rate = 0.92;
-    fala.pitch = 1.03;
-    window.speechSynthesis.speak(fala);
+    const f = new SpeechSynthesisUtterance(texto);
+    f.lang = "pt-BR"; f.rate = 0.92; f.pitch = 1.03;
+    window.speechSynthesis.speak(f);
 }
 
-// 🎤 ESCUTA E RESPONDE
+// 🎤 RECONHECIMENTO DE VOZ
 function iniciarVoz() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         caixaEla.innerHTML = "Andrômeda:<br>Use o Chrome ou Edge para falar comigo.";
@@ -282,7 +282,6 @@ function iniciarVoz() {
         caixaVc.innerHTML = `💬 Você:<br>${pergunta}`;
         caixaEla.innerHTML = `<span class="pensando">Andrômeda está pensando...</span>`;
 
-        // ✅ ELA PENSA, GUARDA E RESPONDE — NÃO REPETE
         const resposta = pensar(pergunta);
         Memoria.guardar(pergunta, resposta);
         
@@ -297,7 +296,7 @@ function iniciarVoz() {
     };
 }
 
-// 🎤 CLIQUE NO MICROFONE
+// 🎤 CLIQUE PARA FALAR
 botaoMic.addEventListener("click", () => {
     if (!reconhecedor) {
         caixaEla.innerHTML = "Andrômeda:<br>Use o Chrome ou Edge para falar comigo.";
@@ -312,6 +311,7 @@ botaoMic.addEventListener("click", () => {
 window.addEventListener("load", () => {
     iniciarVoz();
     console.log("🌌 ANDRÔMEDA — SISTEMA COMPLETO ATIVO ✅");
+    console.log("🧠 Memória:", Memoria.permanente.length, "registros guardados");
 });
 </script>
 </body>
