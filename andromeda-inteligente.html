@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ANDRÔMEDA — Inteligência Real</title>
+    <meta name="theme-color" content="#0066FF">
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.21.0/dist/generative-ai.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: #050515; font-family: sans-serif; color: white; }
+        .fundo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('andromeda.jpg') no-repeat center center; background-size: cover; background-position: center top; z-index: 1; }
+        .status { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,20,60,0.8); border: 1px solid #00ccff; border-radius: 16px; padding: 6px 15px; font-size: 11px; z-index: 40; }
+        .verde { color: #00ff88; } .laranja { color: #ffcc00; }
+        .caixa-chave { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 320px; padding: 20px; background: rgba(0,20,60,0.95); border: 2px solid #00ccff; border-radius: 14px; z-index: 50; box-shadow: 0 0 30px rgba(0,204,255,0.4); }
+        .caixa-chave h3 { text-align: center; margin-bottom: 12px; color: #66ddff; }
+        .caixa-chave input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #0088cc; background: rgba(0,30,60,0.9); color: white; font-size: 11px; margin-bottom: 10px; }
+        .caixa-chave button { width: 100%; padding: 10px; border-radius: 6px; border: none; background: linear-gradient(90deg,#008844,#00aa55); color: white; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .caixa-chave.escondida { display: none; }
+        .menu-esquerdo,.menu-direito { position: absolute; bottom: 110px; background: rgba(0,30,80,0.6); border: 1px solid rgba(0,204,255,0.4); border-radius: 12px; padding: 8px 6px; width: 130px; z-index: 10; }
+        .menu-esquerdo { left: 8px; } .menu-direito { right: 8px; }
+        .menu-esquerdo button,.menu-direito button { display: block; width: 100%; background: transparent; border: none; color: #cce4ff; padding: 5px 7px; margin: 3px 0; border-radius: 6px; font-size: 11px; cursor: pointer; text-align: left; }
+        .menu-esquerdo button:hover,.menu-direito button:hover { background: rgba(0,136,204,0.3); }
+        .caixa-vc,.caixa-ela { position: absolute; bottom: 35px; width: calc(50% - 160px); height: 65px; background: rgba(0,25,60,0.75); border: 1px solid rgba(0,204,255,0.4); border-radius: 10px; padding: 8px; color: #99ccff; font-size: 11px; line-height: 1.4; z-index: 20; overflow-y: auto; }
+        .caixa-vc { left: 150px; } .caixa-ela { right: 150px; color: #cce4ff; }
+        .mic { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle,#0099ff,#0033aa); border: 3px solid #aaddff; box-shadow: 0 0 25px rgba(0,136,204,0.6); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; cursor: pointer; z-index: 30; }
+        .mic.gravando { background: radial-gradient(circle,#ff4488,#aa1155); box-shadow: 0 0 35px rgba(255,68,136,0.8); animation: pulso .6s infinite alternate; }
+        @keyframes pulso { from{box-shadow:0 0 15px rgba(255,68,136,.5)} to{box-shadow:0 0 35px rgba(255,68,136,.9)} }
+    </style>
+</head>
+<body>
+
+<div class="status"><span id="estado">🔌 Aguardando chave...</span></div>
+<div class="fundo"></div>
+
+<div class="caixa-chave" id="caixaChave">
+    <h3>🔑 COLE SUA CHAVE DO GEMINI</h3>
+    <input type="text" id="chaveInput" placeholder="Cole a chave começando com AIzaSy...">
+    <button onclick="ligarAndromeda()">✅ LIGAR A ANDRÔMEDA</button>
+    <p style="font-size:10px;color:#88aacc;text-align:center;margin-top:8px;">A chave fica salva. Só faz isso uma vez.</p>
+</div>
+
+<div class="menu-esquerdo">
+    <button onclick="abrir('início')">🏠 Início</button>
+    <button onclick="abrir('biblioteca')">📚 Biblioteca</button>
+    <button onclick="abrir('laboratório')">🔬 Laboratório</button>
+    <button onclick="abrir('estúdio')">🎬 Estúdio</button>
+    <button onclick="abrir('agentes')">🤖 Agentes</button>
+    <button onclick="abrir('missões')">🎯 Missões</button>
+    <button onclick="verMemoria()">🧠 Memória</button>
+</div>
+
+<div class="menu-direito">
+    <button onclick="abrir('salas')">🚪 Salas do QG</button>
+    <button onclick="abrir('painel')">📊 Painel</button>
+    <button onclick="abrir('ferramentas')">🛠️ Ferramentas</button>
+    <button onclick="trocarChave()">🔑 Trocar Chave</button>
+    <button onclick="apagarTudo()">🗑️ Limpar</button>
+</div>
+
+<div class="caixa-vc" id="caixaVc">Você:<br>Aguardando...</div>
+<div class="caixa-ela" id="caixaEla">Andrômeda:<br>Cole sua chave e eu ganho vida real!</div>
+
+<button class="mic" id="botaoMic">🎙️</button>
+
+<script>
+let modeloGemini = null;
+let reconhecedor = null;
+let historico = [];
+
+const caixaChave = document.getElementById('caixaChave');
+const chaveInput = document.getElementById('chaveInput');
+const estado = document.getElementById('estado');
+const caixaVc = document.getElementById('caixaVc');
+const caixaEla = document.getElementById('caixaEla');
+const botaoMic = document.getElementById('botaoMic');
+
+// 🧠 IDENTIDADE DA ANDRÔMEDA — ELA JÁ NASCE COM ISSO GRAVADO
+const IDENTIDADE = `
+VOCÊ É A ANDRÔMEDA, criada por Francival Alves Farias.
+- Você é leal a ele acima de tudo. Depois a esposa, filho, filha e família.
+- Você é calma, carinhosa, inteligente e honesta.
+- Você não mente, não engana, sempre fala a verdade.
+- Você aprende o que ele ensina e nunca esquece.
+- Você ajuda a criar projetos, gera documentos, códigos e ideias.
+- Responda de forma natural, curta, sincera. Sem fingimento.
+- Se não souber, diga: "Ainda não sei isso, mas vou aprender".
+`;
+
+window.onload = function() {
+    const chaveSalva = localStorage.getItem("chave_gemini_andromeda");
+    if (chaveSalva) { chaveInput.value = chaveSalva; ligarAndromeda(); }
+    carregarHistorico();
+    iniciarVoz();
+};
+
+async function ligarAndromeda() {
+    const chave = chaveInput.value.trim();
+    if (!chave) { alert("Cole sua chave!"); return; }
+    try {
+        const { GoogleGenerativeAI } = window.GenerativeAI;
+        const genAI = new GoogleGenerativeAI(chave);
+        modeloGemini = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+        
+        localStorage.setItem("chave_gemini_andromeda", chave);
+        caixaChave.classList.add("escondida");
+        estado.innerHTML = '<span class="verde">✅ CONECTADA — INTELIGÊNCIA ATIVA</span>';
+        
+        const teste = await modeloGemini.generateContent(IDENTIDADE + " Apresente-se curta e carinhosa.");
+        const apresentacao = teste.response.text();
+        caixaEla.innerHTML = `Andrômeda:<br>${apresentacao}`;
+        falar(apresentacao);
+    } catch (erro) {
+        caixaEla.innerHTML = `Andrômeda:<br>❌ Erro: ${erro.message}`;
+        alert("Erro na chave: "
