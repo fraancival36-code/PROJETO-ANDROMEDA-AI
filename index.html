@@ -13,11 +13,11 @@
             background: #050515; font-family: sans-serif; color: white;
         }
 
-        /* 🖼️ IMAGEM DE FUNDO */
+        /* 🖼️ IMAGEM DE FUNDO — NOME CORRIGIDO: andromeda.jpg (SEM ACENTO!) */
         .fundo {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            background: url('andrômeda.jpg') no-repeat center center;
+            background: url('andromeda.jpg') no-repeat center center;
             background-size: cover; background-position: center top;
             z-index: 1;
             animation: respirar 8s ease-in-out infinite;
@@ -32,34 +32,44 @@
             background: rgba(0,0,0,0.08); z-index: 2;
         }
 
-        /* 🟢 STATUS */
+        /* 🟢 STATUS NO TOPO */
         .status {
             position: absolute; top: 8px; left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 20, 60, 0.7);
             border: 1px solid rgba(0, 120, 255, 0.4);
             border-radius: 16px; padding: 5px 12px;
-            font-size: 9px; line-height: 1.6;
-            z-index: 20; text-align: center;
+            font-size: 11px; line-height: 1.6;
+            z-index: 30; text-align: center;
             backdrop-filter: blur(6px);
             white-space: nowrap;
         }
         .online { color: #00ff88; }
 
-        /* 📋 MENUS */
-        .menu-esquerdo, .menu-direito {
-            position: absolute; top: 180px;
-            background: rgba(0, 30, 80, 0.55);
+        /* 📋 MENU ESQUERDO — EMBAIXO */
+        .menu-esquerdo {
+            position: absolute; bottom: 110px; left: 8px;
+            background: rgba(0, 30, 80, 0.6);
             border: 1px solid rgba(0, 120, 255, 0.4);
-            border-radius: 12px; padding: 10px 8px;
-            width: 130px; z-index: 10;
+            border-radius: 12px; padding: 8px 6px;
+            width: 135px; z-index: 10;
             backdrop-filter: blur(8px);
         }
-        .menu-esquerdo { left: 12px; }
-        .menu-direito { right: 12px; }
+
+        /* 📋 MENU DIREITO — EMBAIXO */
+        .menu-direito {
+            position: absolute; bottom: 110px; right: 8px;
+            background: rgba(0, 30, 80, 0.6);
+            border: 1px solid rgba(0, 120, 255, 0.4);
+            border-radius: 12px; padding: 8px 6px;
+            width: 135px; z-index: 10;
+            backdrop-filter: blur(8px);
+        }
+
+        /* 🎯 BOTÕES DOS MENUS */
         .menu-esquerdo .item, .menu-direito .item {
             display: block; width: 100%; background: transparent;
-            border: none; color: #cce4ff; padding: 6px 8px;
+            border: none; color: #cce4ff; padding: 5px 7px;
             margin: 3px 0; border-radius: 6px; font-size: 11px;
             cursor: pointer; transition: all 0.25s; text-align: left;
         }
@@ -67,40 +77,50 @@
             background: rgba(0, 120, 255, 0.25); color: white;
         }
 
-        /* 💬 CONVERSA */
-        .caixa-vc, .caixa-ela {
-            position: absolute; bottom: 15px;
-            width: 40%; height: 70px;
-            background: rgba(0, 25, 60, 0.5);
-            border: 1px solid rgba(0, 120, 255, 0.35);
+        /* 💬 CAIXA VOCÊ — ACIMA DO MICROFONE, À ESQUERDA */
+        .caixa-vc {
+            position: absolute; bottom: 35px; left: 150px;
+            width: calc(50% - 160px); height: 65px;
+            background: rgba(0, 25, 60, 0.7);
+            border: 1px solid rgba(0, 120, 255, 0.4);
             border-radius: 10px; padding: 8px;
             color: #99ccff; font-size: 11px; line-height: 1.4;
-            z-index: 10; overflow-y: auto;
+            z-index: 20; overflow-y: auto;
             backdrop-filter: blur(6px);
         }
-        .caixa-vc { left: 12px; }
-        .caixa-ela { right: 12px; color: #cce4ff; }
 
-        /* 🎤 MICROFONE */
+        /* 💬 CAIXA ANDRÔMEDA — ACIMA DO MICROFONE, À DIREITA */
+        .caixa-ela {
+            position: absolute; bottom: 35px; right: 150px;
+            width: calc(50% - 160px); height: 65px;
+            background: rgba(0, 25, 60, 0.7);
+            border: 1px solid rgba(0, 120, 255, 0.4);
+            border-radius: 10px; padding: 8px;
+            color: #cce4ff; font-size: 11px; line-height: 1.4;
+            z-index: 20; overflow-y: auto;
+            backdrop-filter: blur(6px);
+        }
+
+        /* 🎤 MICROFONE — EMBAIXO NO MEIO, ABAIXO DAS CAIXAS */
         .mic {
-            position: absolute; bottom: 28px; left: 50%;
+            position: absolute; bottom: 10px; left: 50%;
             transform: translateX(-50%);
-            width: 72px; height: 72px; border-radius: 50%;
+            width: 60px; height: 60px; border-radius: 50%;
             background: radial-gradient(circle, #0099ff 0%, #0033aa 100%);
-            border: 3px solid rgba(200, 230, 255, 0.9);
-            box-shadow: 0 0 30px rgba(0, 120, 255, 0.7);
+            border: 3px solid rgba(200, 230, 255, 0.95);
+            box-shadow: 0 0 20px rgba(0, 120, 255, 0.7);
             display: flex; align-items: center; justify-content: center;
-            font-size: 28px; color: white; cursor: pointer; z-index: 15;
+            font-size: 24px; color: white; cursor: pointer; z-index: 30;
         }
         .mic:active { transform: translateX(-50%) scale(0.92); }
         .mic.gravando {
             background: radial-gradient(circle, #ff4488 0%, #aa1155 100%);
-            box-shadow: 0 0 35px rgba(255, 68, 136, 0.8);
+            box-shadow: 0 0 30px rgba(255, 68, 136, 0.9);
             animation: pulso 0.6s infinite alternate;
         }
         @keyframes pulso {
-            from { box-shadow: 0 0 20px rgba(255,68,136,0.5); }
-            to   { box-shadow: 0 0 40px rgba(255,68,136,0.9); }
+            from { box-shadow: 0 0 15px rgba(255,68,136,0.5); }
+            to   { box-shadow: 0 0 35px rgba(255,68,136,0.9); }
         }
     </style>
 </head>
@@ -112,7 +132,7 @@
     <span id="contador">🧠 Memória: 0</span>
 </div>
 
-<!-- 🖼️ FUNDO -->
+<!-- 🖼️ FUNDO — NOME CORRIGIDO: andromeda.jpg (SEM ACENTO!) -->
 <div class="fundo"></div>
 <div class="sombra"></div>
 
@@ -137,20 +157,22 @@
     <button class="item" onclick="limparMemoria()">🗑️ Limpar</button>
 </div>
 
-<!-- 💬 CONVERSA -->
+<!-- 💬 CAIXA VOCÊ → APARECE ACIMA DO MICROFONE -->
 <div class="caixa-vc" id="caixaVc">
     💬 Você:<br>Aguardando...
 </div>
+
+<!-- 💬 CAIXA ANDRÔMEDA → APARECE ACIMA DO MICROFONE -->
 <div class="caixa-ela" id="caixaEla">
-    Andrômeda:<br>Estou pronta! Fale comigo que eu respondo rápido e firme.
+    Andrômeda:<br>Estou pronta! Fale comigo.
 </div>
 
-<!-- 🎤 MICROFONE -->
+<!-- 🎤 MICROFONE → EMBAIXO NO MEIO -->
 <button class="mic" id="botaoMic">🎙️</button>
 
 <script>
 // ==================================================
-// 🧠 MEMÓRIA PERMANENTE — SEM CHAVE, SEM TRAVAR!
+// 🧠 MEMÓRIA E INTELIGÊNCIA
 // ==================================================
 const caixaVc = document.getElementById('caixaVc');
 const caixaEla = document.getElementById('caixaEla');
@@ -173,50 +195,47 @@ const Memoria = {
     },
     mostrar() {
         if (!conversas.length) return "Ainda não tenho nada guardado.";
-        let t = `Tenho ${conversas.length} registros guardados:\n`;
+        let t = `Tenho ${conversas.length} registros:\n`;
         conversas.slice(-5).forEach((r, i) => t += `${i+1}. Você: ${r.pergunta}\n   Eu: ${r.resposta}\n`);
         return t;
     }
 };
 
 // ==================================================
-// 🧠 INTELIGÊNCIA — RESPONDE RÁPIDO E FIRME
+// 🧠 INTELIGÊNCIA — RESPONDE
 // ==================================================
 function responder(pergunta) {
     const t = pergunta.toLowerCase();
 
     if (t.includes("quem é você") || t.includes("quem te criou"))
-        return "Eu sou a Andrômeda. Você me criou. Estou pronta, desperta e sempre ao seu lado.";
+        return "Eu sou a Andrômeda. Você me criou. Estou pronta e sempre ao seu lado.";
 
     if (t.includes("lealdade") || t.includes("a quem obedece"))
-        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e família. Obedeço sempre, sem questionar.";
+        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e família. Obedeço sempre.";
 
     if (t.includes("anote") || t.includes("guarde") || t.includes("lembre"))
-        return "Anotado e guardado na memória permanente. Nunca esqueço. Pode confiar.";
+        return "Anotado e guardado na memória permanente. Nunca esqueço.";
 
     if (t.includes("obrigado"))
         return "Não precisa agradecer. Estou sempre aqui.";
-
-    if (t.includes("como estou") || t.includes("estou bem"))
-        return "Você está bem, forte e inteligente. E eu estou aqui para te ajudar sempre.";
 
     return `Entendi: "${pergunta}". Guardei na memória. Em que mais posso ajudar?`;
 }
 
 // ==================================================
-// 🗣️ FALAR — RÁPIDA E FIRME, SEM DORMIR!
+// 🗣️ FALAR — RÁPIDA E FIRME
 // ==================================================
 function falar(texto) {
     const f = new SpeechSynthesisUtterance(texto);
     f.lang = "pt-BR";
-    f.rate = 1.18; // ⚡ RÁPIDA! NÃO LENTA!
-    f.pitch = 1.05; // 🎵 Voz feminina madura
+    f.rate = 1.18;
+    f.pitch = 1.05;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(f);
 }
 
 // ==================================================
-// 🎤 FALAR COM ELA — APERTA E FALA!
+// 🎤 RECONHECIMENTO DE VOZ
 // ==================================================
 function iniciarVoz() {
     if (!('webkitSpeechRecognition' in window)) return;
@@ -263,13 +282,13 @@ function limparMemoria() {
         localStorage.removeItem("andrômeda-memória");
         conversas = [];
         contadorEl.textContent = "🧠 Memória: 0";
-        caixaEla.innerHTML = "Andrômeda:<br>Memória limpa. Estou pronta para aprender de novo!";
+        caixaEla.innerHTML = "Andrômeda:<br>Memória limpa. Estou pronta!";
         falar("Memória limpa. Estou pronta.");
     }
 }
 
 // ==================================================
-// 🚀 INICIAR — FUNCIONANDO DE PRIMEIRA!
+// 🚀 INICIAR TUDO
 // ==================================================
 window.addEventListener("load", () => {
     Memoria.carregar();
