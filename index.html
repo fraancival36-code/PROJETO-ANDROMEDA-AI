@@ -32,25 +32,25 @@
             background: rgba(0,0,0,0.08); z-index: 2;
         }
 
-        /* 🟢 PAINEL DE STATUS — CPU CORRIGIDA */
+        /* 🟢 STATUS */
         .status {
             position: absolute; top: 12px; left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 25, 50, 0.75);
             border: 1px solid rgba(0, 200, 255, 0.4);
-            border-radius: 20px; padding: 8px 16px;
-            font-size: 11px; line-height: 1.8;
+            border-radius: 20px; padding: 8px 12px;
+            font-size: 10.5px; line-height: 1.8;
             z-index: 15; text-align: center;
             backdrop-filter: blur(6px);
             white-space: nowrap;
         }
-        .status span { display: inline-block; margin: 0 6px; }
+        .status span { display: inline-block; margin: 0 4px; }
         .online { color: #00ff88; }
         .conectado { color: #00ccff; }
         .ativo { color: #ffcc00; }
         .bom { color: #00ff88; }
 
-        /* 📋 MENUS — TODOS OS MÓDULOS */
+        /* 📋 MENUS */
         .menu-esquerdo, .menu-direito {
             position: absolute; top: 80px;
             background: rgba(0, 25, 50, 0.7);
@@ -71,7 +71,56 @@
             margin: 4px 0; border-radius: 8px; font-size: 11px;
             cursor: pointer; transition: all 0.2s; text-align: left;
         }
-        .menu-btn:hover { background: rgba(0,200,255,0.35); }
+        .menu-btn:hover, .menu-btn.ativo { background: rgba(0,200,255,0.4); }
+
+        /* ⚙️ PAINEL DE CONFIGURAÇÕES */
+        .painel-config {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px; max-width: 94%;
+            background: rgba(0, 18, 40, 0.94);
+            border: 2px solid rgba(0, 200, 255, 0.5);
+            border-radius: 18px; padding: 18px;
+            z-index: 30; display: none;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 0 50px rgba(0, 200, 255, 0.25);
+        }
+        .painel-config.mostrar { display: block; }
+        .painel-titulo {
+            font-size: 15px; font-weight: bold; color: #00ccff;
+            margin-bottom: 14px; text-align: center;
+        }
+        .grupo { margin-bottom: 14px; }
+        .grupo label { font-size: 12px; color: #bbeefff; display: block; margin-bottom: 5px; }
+        select, input[type="range"] {
+            width: 100%; padding: 6px; border-radius: 6px;
+            background: rgba(0, 80, 120, 0.35);
+            border: 1px solid rgba(0, 200, 255, 0.4);
+            color: white; font-size: 12px;
+        }
+        .valor { 
+            display: inline-block; float: right; 
+            color: #88ddff; font-weight: bold; font-size: 12px;
+        }
+        .modos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+        .modo {
+            padding: 6px 10px; font-size: 11px; border-radius: 8px;
+            background: rgba(0,60,100,0.3); color: #bbeeff;
+            cursor: pointer; border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .modo.ativo { 
+            border-color: #00ccff; background: rgba(0,150,200,0.35); 
+            color: white; font-weight: bold;
+        }
+        .botoes-config { display: flex; gap: 8px; margin-top: 16px; }
+        .btn-salvar, .btn-teste, .btn-fechar {
+            padding: 8px 10px; border-radius: 8px; border: none;
+            font-size: 12px; cursor: pointer; font-weight: bold;
+        }
+        .btn-salvar { background: #00aa66; color: white; flex: 1; }
+        .btn-teste { background: #0077cc; color: white; }
+        .btn-fechar { background: #555; color: white; }
 
         /* 💬 CAIXAS DE CONVERSA */
         .caixa-vc, .caixa-ela {
@@ -128,21 +177,20 @@
 </head>
 <body>
 
-<!-- 🟢 STATUS — CPU CORRIGIDA PARA 32% → CAPACIDADE LIVRE! -->
+<!-- 🟢 STATUS -->
 <div class="status">
-    <span class="online">🟢 Sistema Online</span>
-    <span class="conectado">🌐 Internet Conectada</span>
-    <span class="ativo">🧠 Memória Ativa</span>
-    <span class="bom">🔋 CPU: 32% Livre</span>
-    <span>📡 APIs: 4 Conectadas</span>
-    <span>📊 Núcleo: Estável</span>
+    <span class="online">🟢 Online</span>
+    <span class="conectado">🌐 Internet</span>
+    <span class="ativo">🧠 Memória</span>
+    <span class="bom">🔋 CPU: 32%</span>
+    <span id="modoAtual">🌌 Clássica</span>
 </div>
 
-<!-- 🖼️ IMAGEM DELA RESPIRANDO -->
+<!-- 🖼️ IMAGEM DELA -->
 <div class="fundo"></div>
 <div class="sombra"></div>
 
-<!-- ⚡ MENU ESQUERDO — QG E CONHECIMENTO -->
+<!-- ⚡ MENU ESQUERDO -->
 <div class="menu-esquerdo">
     <div class="menu-titulo">⚡ QG Andrômeda</div>
     <button class="menu-btn" onclick="abrir('biblioteca')">📚 Biblioteca</button>
@@ -150,18 +198,67 @@
     <button class="menu-btn" onclick="abrir('estudio')">🎬 Estúdio</button>
     <button class="menu-btn" onclick="abrir('agentes')">🤖 Agentes</button>
     <button class="menu-btn" onclick="abrir('missoes')">🎯 Missões</button>
-    <button class="menu-btn" onclick="abrir('internet')">🌐 Pesquisa</button>
+    <button class="menu-btn" onclick="abrir('pesquisa')">🌐 Pesquisa</button>
 </div>
 
-<!-- 🛠️ MENU DIREITO — FERRAMENTAS E CONTROLE -->
+<!-- 🛠️ MENU DIREITO -->
 <div class="menu-direito">
-    <div class="menu-titulo">🛠️ Ferramentas</div>
+    <div class="menu-titulo">🛠️ Sistema</div>
     <button class="menu-btn" onclick="abrir('memoria')">🧠 Memória</button>
     <button class="menu-btn" onclick="abrir('codigo')">💻 Código</button>
     <button class="menu-btn" onclick="abrir('github')">☁️ GitHub</button>
-    <button class="menu-btn" onclick="abrir('banco')">🗄️ Banco de Dados</button>
+    <button class="menu-btn" onclick="abrir('banco')">🗄️ Banco</button>
     <button class="menu-btn" onclick="abrir('controle')">📊 Controle</button>
-    <button class="menu-btn" onclick="abrir('config')">⚙️ Configurações</button>
+    <button class="menu-btn ativo" onclick="abrirConfig()">⚙️ Ajustes</button>
+</div>
+
+<!-- ⚙️ PAINEL DE AJUSTES DE VOZ -->
+<div class="painel-config" id="painelConfig">
+    <div class="painel-titulo">🎙️ Ajustes de Voz</div>
+
+    <!-- Escolha de Voz -->
+    <div class="grupo">
+        <label>Escolher voz feminina:</label>
+        <select id="listaVozes">
+            <option value="">Carregando vozes...</option>
+        </select>
+    </div>
+
+    <!-- 🚀 VELOCIDADE -->
+    <div class="grupo">
+        <label>🚀 Velocidade da fala 
+            <span class="valor" id="valorVeloc">0.90</span>
+        </label>
+        <input type="range" id="velocidade" min="0.6" max="1.3" step="0.02" value="0.90">
+        <small style="font-size:10px; color:#88ddff">← Mais devagar | Mais rápido →</small>
+    </div>
+
+    <!-- 🎵 TOM / ALTURA -->
+    <div class="grupo">
+        <label>🎵 Tom da voz 
+            <span class="valor" id="valorAltura">1.08</span>
+        </label>
+        <input type="range" id="altura" min="0.7" max="1.5" step="0.02" value="1.08">
+        <small style="font-size:10px; color:#88ddff">← Mais grave | Mais aguda →</small>
+    </div>
+
+    <!-- 😊 Modos de Personalidade -->
+    <div class="grupo">
+        <label>😊 Modo de fala:</label>
+        <div class="modos">
+            <div class="modo ativo" data-modo="classica" onclick="escolherModo(this)">🌌 Clássica</div>
+            <div class="modo" data-modo="amigavel" onclick="escolherModo(this)">😊 Amigável</div>
+            <div class="modo" data-modo="tecnica" onclick="escolherModo(this)">🚀 Técnica</div>
+            <div class="modo" data-modo="professora" onclick="escolherModo(this)">📚 Professora</div>
+        </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="botoes-config">
+        <button class="btn-teste" onclick="testarVoz()">🔊 Ouvir</button>
+        <button class="btn-salvar" onclick="salvarConfig()">✅ Salvar</button>
+        <button class="btn-fechar" onclick="fecharConfig()">❌ Fechar</button>
+    </div>
 </div>
 
 <!-- 💬 CONVERSA -->
@@ -169,53 +266,188 @@
     💬 Você:<br>Aguardando...
 </div>
 <div class="caixa-ela" id="caixaEla">
-    Andrômeda:<br>Estou pronta, meu criador. Diga o que precisar.
+    Andrômeda:<br>Estou pronta, meu criador. Fale comigo.
 </div>
 
 <!-- 🎤 MICROFONE -->
 <button class="mic" id="botaoMic">🎤</button>
 
-<!-- 📊 ATALHOS RÁPIDOS -->
+<!-- 📊 ATALHOS -->
 <div class="atalhos">
     <button class="atalho-btn" onclick="abrir('memoria')">🧠 Memória</button>
     <button class="atalho-btn" onclick="abrir('conversa')">🎤 Conversa</button>
     <button class="atalho-btn" onclick="abrir('arquivos')">📂 Arquivos</button>
-    <button class="atalho-btn" onclick="abrir('navegar')">🌐 Navegar</button>
-    <button class="atalho-btn" onclick="abrir('codigo')">💻 Código</button>
-    <button class="atalho-btn" onclick="abrir('config')">⚙️ Ajustes</button>
+    <button class="atalho-btn" onclick="abrirConfig()">⚙️ Ajustes</button>
 </div>
 
 <script>
 const caixaVc = document.getElementById('caixaVc');
 const caixaEla = document.getElementById('caixaEla');
 const botaoMic = document.getElementById('botaoMic');
+const painelConfig = document.getElementById('painelConfig');
+const listaVozes = document.getElementById('listaVozes');
+const controleVeloc = document.getElementById('velocidade');
+const controleAltura = document.getElementById('altura');
+const valorVeloc = document.getElementById('valorVeloc');
+const valorAltura = document.getElementById('valorAltura');
+const modoAtualEl = document.getElementById('modoAtual');
+
 let reconhecedor = null;
+let vozesDisponiveis = [];
+let vozEscolhida = null;
+let modoAtual = 'classica';
 
-// 🧠 MEMÓRIA INTELIGENTE
-const Memoria = {
-    curtoPrazo: [],
-    permanente: [],
-    projetos: [],
-    preferencias: { criador: "Francival", lealdade: "Total" },
+// ⚙️ CONFIGURAÇÕES — SALVAS E CARREGADAS
+const Config = {
+    velocidade: 0.90,
+    altura: 1.08,
+    indiceVoz: 0,
+    modo: 'classica',
 
-    guardar(pergunta, resposta) {
-        const registro = { data: new Date().toLocaleString('pt-BR'), pergunta, resposta };
-        this.curtoPrazo.push(registro);
-        this.permanente.push(registro);
-        console.log(`🧠 Guardado: ${pergunta}`);
+    salvar() {
+        localStorage.setItem("andrômeda-config", JSON.stringify({
+            velocidade: this.velocidade,
+            altura: this.altura,
+            indiceVoz: this.indiceVoz,
+            modo: this.modo
+        }));
     },
 
-    lembrar(assunto) {
-        return this.permanente.filter(r => 
-            r.pergunta.toLowerCase().includes(assunto.toLowerCase())
-        );
+    carregar() {
+        const salva = localStorage.getItem("andrômeda-config");
+        if (salva) {
+            const d = JSON.parse(salva);
+            this.velocidade = d.velocidade || 0.90;
+            this.altura = d.altura || 1.08;
+            this.indiceVoz = d.indiceVoz || 0;
+            this.modo = d.modo || 'classica';
+            controleVeloc.value = this.velocidade;
+            controleAltura.value = this.altura;
+            valorVeloc.textContent = this.velocidade.toFixed(2);
+            valorAltura.textContent = this.altura.toFixed(2);
+            modoAtual = this.modo;
+            atualizarModoNaTela();
+        }
+    }
+};
+
+// 🧠 MEMÓRIA
+const Memoria = {
+    registros: [],
+    guardar(pergunta, resposta) {
+        this.registros.push({ data: new Date().toLocaleString('pt-BR'), pergunta, resposta });
+        console.log(`🧠 Guardado: ${pergunta}`);
     }
 };
 
 // 📂 ABRIR MÓDULOS
 function abrir(nome) {
-    caixaEla.innerHTML = `Andrômeda:<br>Abrindo <strong>${nome}</strong>... Módulo em preparação.`;
+    caixaEla.innerHTML = `Andrômeda:<br>Abrindo <strong>${nome}</strong>... Em desenvolvimento.`;
     falar(`Abrindo o módulo ${nome}. Em desenvolvimento.`);
+}
+
+// ⚙️ ABRIR/FECHAR PAINEL
+function abrirConfig() {
+    painelConfig.classList.add("mostrar");
+    carregarVozes();
+}
+function fecharConfig() {
+    painelConfig.classList.remove("mostrar");
+}
+
+// 🎙️ CARREGAR LISTA DE VOZES DO SISTEMA
+function carregarVozes() {
+    vozesDisponiveis = window.speechSynthesis.getVoices();
+    listaVozes.innerHTML = "";
+
+    const vozesPT = vozesDisponiveis.filter(v => v.lang.startsWith("pt"));
+    const outras = vozesDisponiveis.filter(v => !v.lang.startsWith("pt"));
+    const todas = [...vozesPT, ...outras];
+
+    if (todas.length === 0) {
+        listaVozes.innerHTML = `<option value="">Nenhuma voz. Use Chrome/Edge.</option>`;
+        return;
+    }
+
+    todas.forEach((voz, i) => {
+        const op = document.createElement("option");
+        op.value = i;
+        op.textContent = `${voz.name} (${voz.lang})`;
+        if (voz.default) op.selected = true;
+        listaVozes.appendChild(op);
+    });
+
+    if (Config.indiceVoz < todas.length) {
+        listaVozes.selectedIndex = Config.indiceVoz;
+    }
+}
+
+// 😊 ESCOLHER MODO DE PERSONALIDADE
+function escolherModo(el) {
+    document.querySelectorAll('.modo').forEach(m => m.classList.remove('ativo'));
+    el.classList.add('ativo');
+    modoAtual = el.dataset.modo;
+    Config.modo = modoAtual;
+    atualizarModoNaTela();
+
+    // AJUSTA TOM E VELOCIDADE AUTOMATICAMENTE POR MODO
+    const ajustes = {
+        classica: { velocidade: 0.90, altura: 1.08 },
+        amigavel: { velocidade: 0.95, altura: 1.12 },
+        tecnica: { velocidade: 1.00, altura: 1.02 },
+        professora: { velocidade: 0.85, altura: 1.05 }
+    };
+    const a = ajustes[modoAtual];
+    controleVeloc.value = a.velocidade;
+    controleAltura.value = a.altura;
+    valorVeloc.textContent = a.velocidade.toFixed(2);
+    valorAltura.textContent = a.altura.toFixed(2);
+}
+
+function atualizarModoNaTela() {
+    const nomes = { classica: '🌌 Clássica', amigavel: '😊 Amigável', tecnica: '🚀 Técnica', professora: '📚 Professora' };
+    modoAtualEl.textContent = nomes[modoAtual];
+    document.querySelectorAll('.modo').forEach(m => {
+        m.classList.toggle('ativo', m.dataset.modo === modoAtual);
+    });
+}
+
+// 🔊 OUVIR AMOSTRA DA VOZ
+function testarVoz() {
+    vozEscolhida = vozesDisponiveis[listaVozes.value];
+    const texto = modoAtual === 'professora' 
+        ? "Olá. Eu sou a Andrômeda. Falo de forma calma e explicativa, como uma professora."
+        : modoAtual === 'amigavel'
+        ? "Olá! Tudo bem? Sou a Andrômeda, sua amiga e assistente. É um prazer estar com você!"
+        : modoAtual === 'tecnica'
+        ? "Andrômeda operacional. Sistema estável. Processando dados. Aguardando instruções."
+        : "Olá. Eu sou a Andrômeda. Falo com calma, elegância e naturalidade. Como posso ajudar?";
+    falar(texto, true);
+}
+
+// ✅ SALVAR TUDO
+function salvarConfig() {
+    Config.velocidade = parseFloat(controleVeloc.value);
+    Config.altura = parseFloat(controleAltura.value);
+    Config.indiceVoz = parseInt(listaVozes.value) || 0;
+    vozEscolhida = vozesDisponiveis[Config.indiceVoz];
+    Config.salvar();
+    
+    caixaEla.innerHTML = "Andrômeda:<br>✅ Voz e ajustes salvos!";
+    falar("Configurações salvas. Agora eu falo do jeitinho que você gosta.");
+    fecharConfig();
+}
+
+// 🗣️ FALAR COM AJUSTES ATUAIS
+function falar(texto, teste = false) {
+    const fala = new SpeechSynthesisUtterance(texto);
+    fala.lang = "pt-BR";
+    fala.rate = Config.velocidade;
+    fala.pitch = Config.altura;
+    if (vozEscolhida) fala.voice = vozEscolhida;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(fala);
 }
 
 // 🧠 INTELIGÊNCIA — NÃO REPETE, PENSA
@@ -228,11 +460,11 @@ function pensar(pergunta) {
     if (t.includes("lealdade") || t.includes("a quem obedece")) {
         return "Devo lealdade total a você. Depois à sua esposa, filho, filha e toda sua família. Sempre serei fiel.";
     }
-    if (t.includes("pesquise") || t.includes("busque") || t.includes("saiba sobre")) {
-        return "Estou buscando informações. Encontrei o que precisava e já organizei. Posso aprofundar se quiser.";
+    if (t.includes("pesquise") || t.includes("busque")) {
+        return "Estou buscando informações. Encontrei o que precisava e já organizei.";
     }
     if (t.includes("anote") || t.includes("guarde") || t.includes("lembre")) {
-        return "Anotado. Ficou guardado na minha memória permanente. Nunca esquecerei.";
+        return "Anotado. Ficou guardado na minha memória permanente.";
     }
     if (t.includes("obrigado") || t.includes("obrigada")) {
         return "Não precisa agradecer. É um prazer estar ao seu lado.";
@@ -249,13 +481,6 @@ function pensar(pergunta) {
         "Entendido. Estou processando e ajudando."
     ];
     return respostas[Math.floor(Math.random() * respostas.length)];
-}
-
-// 🗣️ FALA NATURAL
-function falar(texto) {
-    const f = new SpeechSynthesisUtterance(texto);
-    f.lang = "pt-BR"; f.rate = 0.92; f.pitch = 1.03;
-    window.speechSynthesis.speak(f);
 }
 
 // 🎤 RECONHECIMENTO DE VOZ
@@ -309,9 +534,21 @@ botaoMic.addEventListener("click", () => {
 
 // 🚀 INICIAR TUDO
 window.addEventListener("load", () => {
+    Config.carregar();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = carregarVozes;
+    }
     iniciarVoz();
+    
+    // ATUALIZA VALORES DOS SLIDERS EM TEMPO REAL
+    controleVeloc.addEventListener('input', () => {
+        valorVeloc.textContent = parseFloat(controleVeloc.value).toFixed(2);
+    });
+    controleAltura.addEventListener('input', () => {
+        valorAltura.textContent = parseFloat(controleAltura.value).toFixed(2);
+    });
+
     console.log("🌌 ANDRÔMEDA — SISTEMA COMPLETO ATIVO ✅");
-    console.log("🧠 Memória:", Memoria.permanente.length, "registros guardados");
 });
 </script>
 </body>
