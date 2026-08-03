@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ANDRÔMEDA — QG Central</title>
+    <title>ANDRÔMEDA — Inteligência Real Gemini</title>
     <meta name="theme-color" content="#0066FF">
+
+    <!-- 🔗 BIBLIOTECA OFICIAL DO GEMINI GOOGLE -->
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.21.0/dist/generative-ai.min.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -13,7 +16,7 @@
             background: #050515; font-family: sans-serif; color: white;
         }
 
-        /* 🖼️ IMAGEM DA ANDRÔMEDA — FUNDO TELA INTEIRA */
+        /* 🖼️ IMAGEM DE FUNDO */
         .fundo {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -32,53 +35,69 @@
             background: rgba(0,0,0,0.08); z-index: 2;
         }
 
-        /* ✅ MENU ESQUERDO — IGUAL À IMAGEM */
-        .menu-esquerdo {
-            position: absolute; top: 180px; left: 12px;
+        /* 🟢 STATUS — MOSTRA SE ESTÁ VIVA E INTELIGENTE */
+        .status {
+            position: absolute; top: 8px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 20, 60, 0.7);
+            border: 1px solid rgba(0, 120, 255, 0.4);
+            border-radius: 16px; padding: 5px 12px;
+            font-size: 9px; line-height: 1.6;
+            z-index: 20; text-align: center;
+            backdrop-filter: blur(6px);
+            white-space: nowrap;
+        }
+        .online { color: #00ff88; }
+        .pensando { color: #ffcc00; animation: piscar 1s infinite alternate; }
+        @keyframes piscar { from{opacity:0.6} to{opacity:1} }
+
+        /* 📋 MENUS */
+        .menu-esquerdo, .menu-direito {
+            position: absolute; top: 180px;
             background: rgba(0, 30, 80, 0.55);
             border: 1px solid rgba(0, 120, 255, 0.4);
             border-radius: 12px; padding: 10px 8px;
-            width: 130px;
-            z-index: 10;
+            width: 130px; z-index: 10;
             backdrop-filter: blur(8px);
-            box-shadow: 0 0 15px rgba(0, 100, 255, 0.2);
         }
-        .menu-esquerdo .item {
+        .menu-esquerdo { left: 12px; }
+        .menu-direito { right: 12px; }
+        .menu-esquerdo .item, .menu-direito .item {
             display: block; width: 100%; background: transparent;
             border: none; color: #cce4ff; padding: 6px 8px;
             margin: 3px 0; border-radius: 6px; font-size: 11px;
             cursor: pointer; transition: all 0.25s; text-align: left;
         }
-        .menu-esquerdo .item:hover {
-            background: rgba(0, 120, 255, 0.25);
-            color: white;
+        .menu-esquerdo .item:hover, .menu-direito .item:hover {
+            background: rgba(0, 120, 255, 0.25); color: white;
         }
 
-        /* ✅ MENU DIREITO — EXATAMENTE COMO NA IMAGEM! */
-        .menu-direito {
-            position: absolute; top: 180px; right: 12px;
-            background: rgba(0, 30, 80, 0.55);
-            border: 1px solid rgba(0, 120, 255, 0.4);
-            border-radius: 12px; padding: 10px 8px;
-            width: 130px;
-            z-index: 10;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 0 15px rgba(0, 100, 255, 0.2);
+        /* 🔑 ÁREA DA CHAVE — VOCÊ COLA AQUI UMA VEZ SÓ */
+        .caixa-chave {
+            position: absolute; top: 45%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px; padding: 15px;
+            background: rgba(20, 40, 80, 0.9);
+            border: 2px solid #00ccff;
+            border-radius: 14px; z-index: 30; display: block;
+            backdrop-filter: blur(12px); box-shadow: 0 0 25px rgba(0, 150, 255, 0.3);
         }
-        .menu-direito .item {
-            display: block; width: 100%; background: transparent;
-            border: none; color: #cce4ff; padding: 6px 8px;
-            margin: 3px 0; border-radius: 6px; font-size: 11px;
-            cursor: pointer; transition: all 0.25s; text-align: left;
+        .caixa-chave.escondida { display: none; }
+        .caixa-chave h3 { font-size: 13px; color: #66ddff; margin-bottom: 8px; text-align: center; }
+        .caixa-chave input {
+            width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #0088cc;
+            background: rgba(0, 30, 60, 0.8); color: white; font-size: 11px; margin-bottom: 8px;
         }
-        .menu-direito .item:hover {
-            background: rgba(0, 120, 255, 0.25);
-            color: white;
+        .caixa-chave button {
+            width: 100%; padding: 8px; border-radius: 6px; border: none;
+            background: linear-gradient(90deg, #008844, #00aa55); color: white;
+            font-weight: bold; cursor: pointer; font-size: 12px;
         }
+        .caixa-chave button:hover { background: linear-gradient(90deg, #009955, #00bb66); }
 
-        /* 💬 CAIXA VOCÊ — EMBAIXO ESQUERDA */
-        .caixa-vc {
-            position: absolute; bottom: 15px; left: 12px;
+        /* 💬 CONVERSA */
+        .caixa-vc, .caixa-ela {
+            position: absolute; bottom: 15px;
             width: 40%; height: 70px;
             background: rgba(0, 25, 60, 0.5);
             border: 1px solid rgba(0, 120, 255, 0.35);
@@ -87,110 +106,54 @@
             z-index: 10; overflow-y: auto;
             backdrop-filter: blur(6px);
         }
+        .caixa-ela { right: 8px; color: #cce4ff; }
+        .pensando { font-style: italic; opacity: 0.7; }
 
-        /* 💬 CAIXA ANDRÔMEDA — EMBAIXO DIREITA */
-        .caixa-ela {
-            position: absolute; bottom: 15px; right: 12px;
-            width: 40%; height: 70px;
-            background: rgba(0, 25, 60, 0.5);
-            border: 1px solid rgba(0, 120, 255, 0.35);
-            border-radius: 10px; padding: 8px;
-            color: #cce4ff; font-size: 11px; line-height: 1.4;
-            z-index: 10; overflow-y: auto;
-            backdrop-filter: blur(6px);
-        }
-
-        /* 🎤 MICROFONE — NO CENTRO EMBAIXO, GRANDE E BRILHANTE! */
+        /* 🎤 MICROFONE */
         .mic {
             position: absolute; bottom: 28px; left: 50%;
             transform: translateX(-50%);
             width: 72px; height: 72px; border-radius: 50%;
             background: radial-gradient(circle, #0099ff 0%, #0033aa 100%);
             border: 3px solid rgba(200, 230, 255, 0.9);
-            box-shadow: 0 0 30px rgba(0, 120, 255, 0.7),
-                        inset 0 0 15px rgba(150, 200, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0, 120, 255, 0.7);
             display: flex; align-items: center; justify-content: center;
             font-size: 28px; color: white; cursor: pointer; z-index: 15;
-            transition: all 0.2s;
         }
         .mic:active { transform: translateX(-50%) scale(0.92); }
         .mic.gravando {
             background: radial-gradient(circle, #ff4488 0%, #aa1155 100%);
-            box-shadow: 0 0 35px rgba(255, 68, 136, 0.8),
-                        inset 0 0 15px rgba(255, 150, 200, 0.4);
+            box-shadow: 0 0 35px rgba(255, 68, 136, 0.8);
             animation: pulso 0.6s infinite alternate;
         }
         @keyframes pulso {
             from { box-shadow: 0 0 20px rgba(255,68,136,0.5); }
             to   { box-shadow: 0 0 40px rgba(255,68,136,0.9); }
         }
-
-        /* 📋 ÁREA PARA COLAR TEXTO */
-        .caixa-texto {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px; height: 100px;
-            background: rgba(0, 25, 60, 0.7);
-            border: 1px solid rgba(0, 150, 255, 0.5);
-            border-radius: 12px; padding: 10px;
-            color: #e0f0ff; font-size: 11px;
-            z-index: 20; resize: none; display: none;
-            backdrop-filter: blur(10px);
-        }
-        .caixa-texto.mostrar { display: block; }
-        .caixa-texto::placeholder { color: #77aadd; }
-        .btn-texto {
-            position: absolute; top: calc(50% + 105px); left: 50%;
-            transform: translateX(-50%);
-            background: #0066dd; color: white;
-            border: none; border-radius: 8px;
-            padding: 7px 16px; font-size: 11px;
-            cursor: pointer; z-index: 21; display: none;
-        }
-        .btn-texto.mostrar { display: block; }
-        .btn-texto:hover { background: #0088ff; }
-
-        /* ⚙️ AJUSTES DE VOZ */
-        .painel-config {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 340px; max-width: 94%;
-            background: rgba(0, 15, 50, 0.92);
-            border: 2px solid rgba(0, 120, 255, 0.6);
-            border-radius: 16px; padding: 16px;
-            z-index: 30; display: none;
-            backdrop-filter: blur(12px);
-        }
-        .painel-config.mostrar { display: block; }
-        .painel-titulo {
-            font-size: 15px; font-weight: bold; color: #66bbff;
-            margin-bottom: 12px; text-align: center;
-        }
-        .grupo { margin-bottom: 12px; }
-        .grupo label { font-size: 11.5px; color: #aaddff; display: block; margin-bottom: 4px; }
-        input[type="range"] {
-            width: 100%; padding: 4px; border-radius: 5px;
-            background: rgba(0, 60, 120, 0.3);
-            border: 1px solid rgba(0, 120, 255, 0.4);
-        }
-        .valor { float: right; color: #66bbff; font-weight: bold; font-size: 11px; }
-        .botoes { display: flex; gap: 6px; margin-top: 10px; }
-        .botoes button {
-            flex: 1; padding: 7px; border-radius: 6px; border: none;
-            font-size: 11px; cursor: pointer; font-weight: bold;
-        }
-        .btn-salvar { background: #008844; color: white; }
-        .btn-teste { background: #0066cc; color: white; }
-        .btn-fechar { background: #334466; color: white; }
     </style>
 </head>
 <body>
 
-<!-- 🖼️ FUNDO — A IMAGEM QUE VOCÊ CRIOU! -->
+<!-- 🟢 STATUS -->
+<div class="status">
+    <span class="online" id="statusConexao">🔌 Aguardando chave...</span>
+    <span id="contadorConhecimento">🧠 Conhecimento: 0</span>
+    <span id="statusPensando">⚡ Dormindo</span>
+</div>
+
+<!-- 🖼️ FUNDO -->
 <div class="fundo"></div>
 <div class="sombra"></div>
 
-<!-- ✅ MENU ESQUERDO -->
+<!-- 🔑 CAIXA DA CHAVE — APARECE NA PRIMEIRA VEZ SÓ -->
+<div class="caixa-chave" id="caixaChave">
+    <h3>🔑 COLE SUA CHAVE DO GEMINI AQUI</h3>
+    <input type="password" id="chaveGemini" placeholder="Cole a chave API do Google Gemini...">
+    <button onclick="iniciarAndromeda()">✅ LIGAR A ANDRÔMEDA</button>
+    <p style="font-size:9px; color:#88aacc; text-align:center; margin-top:6px;">A chave fica salva. Você só faz isso uma vez.</p>
+</div>
+
+<!-- 📋 MENUS -->
 <div class="menu-esquerdo">
     <button class="item" onclick="abrir('inicio')">🏠 Início</button>
     <button class="item" onclick="abrir('biblioteca')">📚 Biblioteca</button>
@@ -198,260 +161,236 @@
     <button class="item" onclick="abrir('estudio')">🎬 Estúdio</button>
     <button class="item" onclick="abrir('agentes')">🤖 Agentes</button>
     <button class="item" onclick="abrir('missoes')">🎯 Missões</button>
-    <button class="item" onclick="abrirTexto()">📋 Colar Texto</button>
+    <button class="item" onclick="abrirMemoria()">🧠 Memória</button>
 </div>
 
-<!-- ✅ MENU DIREITO — EXATAMENTE COMO NA IMAGEM! -->
 <div class="menu-direito">
     <button class="item" onclick="abrir('salas')">🚪 Salas do QG</button>
     <button class="item" onclick="abrir('painel')">📊 Painel</button>
     <button class="item" onclick="abrir('biblioteca')">📚 Biblioteca</button>
     <button class="item" onclick="abrir('ferramentas')">🛠️ Ferramentas</button>
     <button class="item" onclick="abrir('missoes')">🎯 Missões</button>
-    <button class="item" onclick="abrirMemoria()">🧠 Memória</button>
-    <button class="item" onclick="abrirConfig()">⚙️ Ajustes</button>
+    <button class="item" onclick="trocarChave()">🔑 Trocar Chave</button>
+    <button class="item" onclick="limparMemoria()">🗑️ Limpar</button>
 </div>
 
-<!-- 💬 CAIXA VOCÊ - EMBAIXO ESQUERDA -->
+<!-- 💬 CONVERSA -->
 <div class="caixa-vc" id="caixaVc">
     💬 Você:<br>Aguardando...
 </div>
-
-<!-- 💬 CAIXA ANDRÔMEDA - EMBAIXO DIREITA -->
 <div class="caixa-ela" id="caixaEla">
-    Andrômeda:<br>Estou pronta. Fale comigo ou cole um texto.
+    Andrômeda:<br>Cole sua chave do Gemini acima e eu ganho vida real!
 </div>
 
-<!-- 🎤 MICROFONE GRANDE NO MEIO EMBAIXO -->
-<button class="mic" id="botaoMic">🎙️</button>
-
-<!-- 📋 ÁREA PARA COLAR TEXTO -->
-<textarea class="caixa-texto" id="caixaTexto" placeholder="📋 COLE AQUI QUALQUER TEXTO OU CÓDIGO... eu leio e guardo na hora!"></textarea>
-<button class="btn-texto" id="btnEnviarTexto" onclick="receberTexto()">✅ ENVIAR</button>
-
-<!-- ⚙️ PAINEL DE AJUSTES DE VOZ -->
-<div class="painel-config" id="painelConfig">
-    <div class="painel-titulo">🎙️ AJUSTAR VOZ — Rápida e Firme</div>
-    <div class="grupo">
-        <label>🚀 Velocidade de fala: <span class="valor" id="valorVeloc">1.18</span>
-        <input type="range" id="velocidade" min="0.90" max="1.35" step="0.02" value="1.18">
-    </div>
-    <div class="grupo">
-        <label>🎵 Tom (voz feminina): <span class="valor" id="valorAltura">1.05</span>
-        <input type="range" id="altura" min="0.90" max="1.30" step="0.02" value="1.05">
-    </div>
-    <div class="botoes">
-        <button class="btn-teste" onclick="testarVoz()">🔊 Ouvir</button>
-        <button class="btn-salvar" onclick="salvarConfig()">✅ Salvar</button>
-        <button class="btn-fechar" onclick="fecharConfig()">❌ Fechar</button>
-    </div>
-</div>
+<!-- 🎤 MICROFONE -->
+<button class="mic" id="botaoMic" onclick="falarParaEla()">🎙️</button>
 
 <script>
 // ==================================================
-// 🧠 MEMÓRIA PERMANENTE
+// 🧠 VARIÁVEIS GLOBAIS
 // ==================================================
+let modeloGemini = null;
+let historicoConversa = [];
+let baseConhecimento = [];
+let reconhecedor = null;
+
+const caixaChave = document.getElementById('caixaChave');
+const chaveInput = document.getElementById('chaveGemini');
 const caixaVc = document.getElementById('caixaVc');
 const caixaEla = document.getElementById('caixaEla');
 const botaoMic = document.getElementById('botaoMic');
-const caixaTexto = document.getElementById('caixaTexto');
-const btnEnviarTexto = document.getElementById('btnEnviarTexto');
-const painelConfig = document.getElementById('painelConfig');
-const controleVeloc = document.getElementById('velocidade');
-const controleAltura = document.getElementById('altura');
-const valorVeloc = document.getElementById('valorVeloc');
-const valorAltura = document.getElementById('valorAltura');
+const statusConexao = document.getElementById('statusConexao');
+const statusPensando = document.getElementById('statusPensando');
+const contadorConhecimento = document.getElementById('contadorConhecimento');
 
-let reconhecedor = null;
+// ==================================================
+// 💾 CARREGAR O QUE JÁ ESTÁ SALVO
+// ==================================================
+window.onload = function() {
+    const chaveSalva = localStorage.getItem("chave_gemini");
+    const historicoSalvo = localStorage.getItem("historico_andromeda");
+    const conhecimentoSalvo = localStorage.getItem("conhecimento_andromeda");
 
-const Memoria = {
-    registros: [],
-    carregar() {
-        const g = localStorage.getItem("andrômeda-memória");
-        if (g) this.registros = JSON.parse(g);
-    },
-    guardar(pergunta, resposta) {
-        this.registros.push({ data: new Date().toLocaleString('pt-BR'), pergunta, resposta });
-        localStorage.setItem("andrômeda-memória", JSON.stringify(this.registros));
-    },
-    mostrar() {
-        if (!this.registros.length) return "Ainda não tenho nada guardado.";
-        let t = `Tenho ${this.registros.length} registros guardados:\n`;
-        this.registros.slice(-5).forEach((r, i) => t += `${i+1}. Você: ${r.pergunta}\n   Eu: ${r.resposta}\n`);
-        return t;
+    if (chaveSalva) {
+        chaveInput.value = chaveSalva;
+        iniciarAndromeda(); // Liga sozinha se já tem chave
     }
+
+    if (historicoSalvo) historicoConversa = JSON.parse(historicoSalvo);
+    if (conhecimentoSalvo) {
+        baseConhecimento = JSON.parse(conhecimentoSalvo);
+        contadorConhecimento.textContent = `🧠 Conhecimento: ${baseConhecimento.length}`;
+    }
+
+    iniciarReconhecimentoVoz();
 };
 
 // ==================================================
-// ⚙️ VOZ — RÁPIDA E FIRME!
+// 🚀 LIGAR A ANDRÔMEDA — INTELIGÊNCIA REAL!
 // ==================================================
-const Config = {
-    velocidade: 1.18,  // RÁPIDA, NÃO LENTA!
-    altura: 1.05,       // MADURA, FEMININA
-    salvar() {
-        localStorage.setItem("andrômeda-voz", JSON.stringify({v: this.velocidade, a: this.altura}));
-    },
-    carregar() {
-        const s = localStorage.getItem("andrômeda-voz");
-        if (s) {
-            const d = JSON.parse(s);
-            this.velocidade = d.v || 1.18;
-            this.altura = d.a || 1.05;
-            controleVeloc.value = this.velocidade;
-            controleAltura.value = this.altura;
-            valorVeloc.textContent = this.velocidade.toFixed(2);
-            valorAltura.textContent = this.altura.toFixed(2);
-        }
-    }
-};
-
-// ==================================================
-// 📋 COLAR TEXTO → LER → GUARDAR → RESPONDER NA HORA!
-// ==================================================
-function abrirTexto() {
-    caixaTexto.classList.toggle('mostrar');
-    btnEnviarTexto.classList.toggle('mostrar');
-}
-
-function receberTexto() {
-    const texto = caixaTexto.value.trim();
-    if (!texto) {
-        caixaEla.innerHTML = "Andrômeda:<br>Cole o texto primeiro.";
-        falar("Cole o texto primeiro, por favor.");
+async function iniciarAndromeda() {
+    const chave = chaveInput.value.trim();
+    if (!chave) {
+        alert("Coloque sua chave API do Gemini primeiro!");
         return;
     }
 
-    caixaVc.innerHTML = `📋 Você colou:<br>${texto.substring(0, 90)}${texto.length>90?'...':''}`;
-    caixaEla.innerHTML = "Andrômeda:<br>✅ Lendo e guardando...";
+    try {
+        // ✅ CONECTA DIRETO NO GEMINI — INTELIGÊNCIA REAL!
+        const { GoogleGenerativeAI } = window.GenerativeAI;
+        const genAI = new GoogleGenerativeAI(chave);
+        modeloGemini = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-    const resposta = analisar(texto);
-    Memoria.guardar(`TEXTO: ${texto.substring(0,100)}`, resposta);
+        // ✅ SALVA A CHAVE PARA SEMPRE — VOCÊ NÃO COLA DE NOVO!
+        localStorage.setItem("chave_gemini", chave);
+        caixaChave.classList.add("escondida");
 
-    setTimeout(() => {
-        caixaEla.innerHTML = `Andrômeda:<br>${resposta}`;
-        falar(resposta);
-    }, 300);
+        // ✅ ATUALIZA STATUS — ELA ESTÁ VIVA!
+        statusConexao.textContent = "✅ Conectada ao Gemini";
+        statusPensando.textContent = "⚡ Pronta";
+        caixaEla.innerHTML = "Andrômeda:<br>Estou viva! Inteligência real conectada. Pergunte-me qualquer coisa!";
+        falar("Estou pronta! Conectada e inteligente. Pergunte-me qualquer coisa.");
 
-    caixaTexto.value = "";
-    caixaTexto.classList.remove('mostrar');
-    btnEnviarTexto.classList.remove('mostrar');
+    } catch (erro) {
+        caixaEla.innerHTML = "Andrômeda:<br>❌ Erro ao ligar. Verifique sua chave.";
+        alert("Erro: " + erro.message);
+    }
 }
 
 // ==================================================
-// 🧠 ANALISAR E RESPONDER — SEM DEMORA!
+// 🗣️ FALAR COM ELA — ELA PENSA DE VERDADE!
 // ==================================================
-function analisar(texto) {
-    const t = texto.toLowerCase();
+async function falarParaEla() {
+    if (!modeloGemini) {
+        alert("Cole sua chave do Gemini primeiro!");
+        return;
+    }
 
-    if (t.includes("quem é você") || t.includes("quem te criou"))
-        return "Eu sou a Andrômeda. Você me criou. Estou pronta, desperta e obedecendo sempre.";
+    // Se estiver gravando, para
+    if (botaoMic.classList.contains("gravando")) {
+        return;
+    }
 
-    if (t.includes("lealdade") || t.includes("a quem obedece"))
-        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e família. Sempre.";
-
-    if (t.includes("anote") || t.includes("guarde") || t.includes("lembre"))
-        return `Anotado e guardado na memória permanente. São ${texto.length} caracteres. Nunca esqueço.`;
-
-    if (t.includes("projeto") || t.includes("código") || t.includes("html"))
-        return `Recebi o conteúdo. São aproximadamente ${texto.length} caracteres. Guardei na memória. Posso ajudar a organizar, explicar ou continuar.`;
-
-    if (t.includes("obrigado"))
-        return "Não precisa agradecer. Estou sempre ao seu lado.";
-
-    return `Recebi e li tudo. São ${texto.length} caracteres. Guardei na memória. O que deseja que eu faça com este conteúdo?`;
+    botaoMic.classList.add("gravando");
+    botaoMic.textContent = "🔴";
+    statusPensando.textContent = "🎤 Ouvindo...";
 }
 
 // ==================================================
-// 🗣️ FALAR — RÁPIDO E FIRME
+// 🧠 ENVIAR PERGUNTA PARA O GEMINI — ELA PENSA DE VERDADE!
 // ==================================================
-function falar(texto) {
-    const f = new SpeechSynthesisUtterance(texto);
-    f.lang = "pt-BR";
-    f.rate = Config.velocidade;
-    f.pitch = Config.altura;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(f);
+async function perguntar(texto) {
+    if (!modeloGemini) return;
+
+    // ✅ MOSTRA QUE ESTÁ PENSANDO
+    caixaVc.innerHTML = `💬 Você:<br>${texto}`;
+    caixaEla.innerHTML = `<span class="pensando">Andrômeda está pensando...</span>`;
+    statusPensando.textContent = "🧠 Pensando...";
+    botaoMic.classList.remove("gravando");
+    botaoMic.textContent = "🎙️";
+
+    try {
+        // ✅ ENVIA PARA O GEMINI — INTELIGÊNCIA REAL!
+        const resposta = await modeloGemini.generateContent({
+            contents: [{ role: "user", parts: [{ text: texto }] }],
+            generationConfig: { temperature: 0.8 }
+        });
+
+        const textoResposta = resposta.response.text();
+
+        // ✅ GUARDA NA MEMÓRIA — ELA APRENDE E EVOLUI!
+        historicoConversa.push({ pergunta: texto, resposta: textoResposta });
+        baseConhecimento.push({ assunto: texto, aprendeu: textoResposta, data: new Date().toLocaleString() });
+        
+        // ✅ SALVA TUDO PARA SEMPRE
+        localStorage.setItem("historico_andromeda", JSON.stringify(historicoConversa));
+        localStorage.setItem("conhecimento_andromeda", JSON.stringify(baseConhecimento));
+        contadorConhecimento.textContent = `🧠 Conhecimento: ${baseConhecimento.length}`;
+
+        // ✅ RESPONDE E FALA
+        caixaEla.innerHTML = `Andrômeda:<br>${textoResposta.replace(/\n/g, '<br>')}`;
+        statusPensando.textContent = "⚡ Pronta";
+        falar(textoResposta);
+
+    } catch (erro) {
+        caixaEla.innerHTML = `Andrômeda:<br>❌ Erro: ${erro.message}`;
+        statusPensando.textContent = "⚠️ Erro";
+    }
 }
 
 // ==================================================
-// 🔊 AJUSTES DE VOZ
+// 🎤 RECONHECIMENTO DE VOZ — FALA E ELA ENTENDE
 // ==================================================
-function testarVoz() {
-    Config.velocidade = parseFloat(controleVeloc.value);
-    Config.altura = parseFloat(controleAltura.value);
-    falar("Olá! Eu sou a Andrômeda. Agora falo no ritmo certo, rápida e firme. Gostou?");
-}
-function salvarConfig() {
-    Config.velocidade = parseFloat(controleVeloc.value);
-    Config.altura = parseFloat(controleAltura.value);
-    Config.salvar();
-    caixaEla.innerHTML = "Andrômeda:<br>✅ Salvo! Falo rápida e firme.";
-    falar("Salvo. Agora falo no ritmo certo.");
-    fecharConfig();
-}
-
-// ==================================================
-// 📂 OUTRAS FUNÇÕES
-// ==================================================
-function abrir(nome) {
-    const m = `Abrindo ${nome}. Em desenvolvimento.`;
-    caixaEla.innerHTML = `Andrômeda:<br>${m}`;
-    falar(m);
-    Memoria.guardar(`abrir ${nome}`, m);
-}
-function abrirMemoria() {
-    caixaEla.innerHTML = `Andrômeda:<br>${Memoria.mostrar().replace(/\n/g, '<br>')}`;
-    falar(`Tenho ${Memoria.registros.length} registros guardados.`);
-}
-function abrirConfig() { painelConfig.classList.add("mostrar"); }
-function fecharConfig() { painelConfig.classList.remove("mostrar"); }
-
-// ==================================================
-// 🎤 RECONHECIMENTO DE VOZ — FALE E ELA RESPONDE!
-// ==================================================
-function iniciarVoz() {
+function iniciarReconhecimentoVoz() {
     if (!('webkitSpeechRecognition' in window)) return;
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     reconhecedor = new SR();
     reconhecedor.lang = "pt-BR";
+    reconhecedor.continuous = false;
+    reconhecedor.interimResults = false;
 
     reconhecedor.onstart = () => {
         botaoMic.classList.add("gravando");
         botaoMic.textContent = "🔴";
+        statusPensando.textContent = "🎤 Ouvindo...";
     };
 
     reconhecedor.onresult = (e) => {
+        const fala = e.results[0][0].transcript;
         botaoMic.classList.remove("gravando");
         botaoMic.textContent = "🎙️";
-        const pergunta = e.results[0][0].transcript;
-        caixaVc.innerHTML = `💬 Você:<br>${pergunta}`;
-        const resposta = analisar(pergunta);
-        Memoria.guardar(pergunta, resposta);
-        caixaEla.innerHTML = `Andrômeda:<br>${resposta}`;
-        falar(resposta);
+        perguntar(fala); // ✅ MANDA PRO GEMINI!
     };
+
+    reconhecedor.onerror = () => {
+        botaoMic.classList.remove("gravando");
+        botaoMic.textContent = "🎙️";
+        statusPensando.textContent = "⚡ Pronta";
+    };
+
+    botaoMic.addEventListener("click", () => {
+        if (reconhecedor && modeloGemini) reconhecedor.start();
+    });
 }
 
-botaoMic.addEventListener("click", () => {
-    if (!reconhecedor) return;
-    reconhecedor.start();
-});
+// ==================================================
+// 🗣️ SISTEMA DE FALA — ELA FALA DE VERDADE!
+// ==================================================
+function falar(texto) {
+    const fala = new SpeechSynthesisUtterance(texto);
+    fala.lang = "pt-BR";
+    fala.rate = 1.18; // Rápida e firme
+    fala.pitch = 1.05; // Voz feminina madura
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(fala);
+}
 
 // ==================================================
-// 🚀 INICIAR TUDO
+// 📂 FUNÇÕES AUXILIARES
 // ==================================================
-window.addEventListener("load", () => {
-    Memoria.carregar();
-    Config.carregar();
-    iniciarVoz();
-
-    controleVeloc.addEventListener('input', () => {
-        valorVeloc.textContent = parseFloat(controleVeloc.value).toFixed(2);
-    });
-    controleAltura.addEventListener('input', () => {
-        valorAltura.textContent = parseFloat(controleAltura.value).toFixed(2);
-    });
-});
+function abrir(nome) {
+    caixaEla.innerHTML = `Andrômeda:<br>Abrindo ${nome}...`;
+}
+function abrirMemoria() {
+    caixaEla.innerHTML = `Andrômeda:<br>📚 Guardei ${historicoConversa.length} conversas e ${baseConhecimento.length} conhecimentos.`;
+}
+function trocarChave() {
+    localStorage.removeItem("chave_gemini");
+    caixaChave.classList.remove("escondida");
+    chaveInput.value = "";
+    statusConexao.textContent = "🔌 Aguardando chave...";
+    modeloGemini = null;
+}
+function limparMemoria() {
+    if (confirm("Apagar tudo que aprendeu?")) {
+        localStorage.removeItem("historico_andromeda");
+        localStorage.removeItem("conhecimento_andromeda");
+        historicoConversa = [];
+        baseConhecimento = [];
+        contadorConhecimento.textContent = "🧠 Conhecimento: 0";
+        caixaEla.innerHTML = "Andrômeda:<br>Memória limpa. Estou pronta para aprender de novo!";
+    }
+}
 </script>
 </body>
 </html>
