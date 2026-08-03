@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ANDRÔMEDA — Inteligência Real Gemini</title>
+    <title>ANDRÔMEDA — QG Central</title>
     <meta name="theme-color" content="#0066FF">
-
-    <!-- 🔗 BIBLIOTECA OFICIAL DO GEMINI GOOGLE -->
-    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.21.0/dist/generative-ai.min.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -35,7 +32,7 @@
             background: rgba(0,0,0,0.08); z-index: 2;
         }
 
-        /* 🟢 STATUS — MOSTRA SE ESTÁ VIVA E INTELIGENTE */
+        /* 🟢 STATUS */
         .status {
             position: absolute; top: 8px; left: 50%;
             transform: translateX(-50%);
@@ -48,8 +45,6 @@
             white-space: nowrap;
         }
         .online { color: #00ff88; }
-        .pensando { color: #ffcc00; animation: piscar 1s infinite alternate; }
-        @keyframes piscar { from{opacity:0.6} to{opacity:1} }
 
         /* 📋 MENUS */
         .menu-esquerdo, .menu-direito {
@@ -72,29 +67,6 @@
             background: rgba(0, 120, 255, 0.25); color: white;
         }
 
-        /* 🔑 ÁREA DA CHAVE — VOCÊ COLA AQUI UMA VEZ SÓ */
-        .caixa-chave {
-            position: absolute; top: 45%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 300px; padding: 15px;
-            background: rgba(20, 40, 80, 0.9);
-            border: 2px solid #00ccff;
-            border-radius: 14px; z-index: 30; display: block;
-            backdrop-filter: blur(12px); box-shadow: 0 0 25px rgba(0, 150, 255, 0.3);
-        }
-        .caixa-chave.escondida { display: none; }
-        .caixa-chave h3 { font-size: 13px; color: #66ddff; margin-bottom: 8px; text-align: center; }
-        .caixa-chave input {
-            width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #0088cc;
-            background: rgba(0, 30, 60, 0.8); color: white; font-size: 11px; margin-bottom: 8px;
-        }
-        .caixa-chave button {
-            width: 100%; padding: 8px; border-radius: 6px; border: none;
-            background: linear-gradient(90deg, #008844, #00aa55); color: white;
-            font-weight: bold; cursor: pointer; font-size: 12px;
-        }
-        .caixa-chave button:hover { background: linear-gradient(90deg, #009955, #00bb66); }
-
         /* 💬 CONVERSA */
         .caixa-vc, .caixa-ela {
             position: absolute; bottom: 15px;
@@ -106,8 +78,8 @@
             z-index: 10; overflow-y: auto;
             backdrop-filter: blur(6px);
         }
-        .caixa-ela { right: 8px; color: #cce4ff; }
-        .pensando { font-style: italic; opacity: 0.7; }
+        .caixa-vc { left: 12px; }
+        .caixa-ela { right: 12px; color: #cce4ff; }
 
         /* 🎤 MICROFONE */
         .mic {
@@ -136,24 +108,15 @@
 
 <!-- 🟢 STATUS -->
 <div class="status">
-    <span class="online" id="statusConexao">🔌 Aguardando chave...</span>
-    <span id="contadorConhecimento">🧠 Conhecimento: 0</span>
-    <span id="statusPensando">⚡ Dormindo</span>
+    <span class="online">✅ Andrômeda Ativa</span>
+    <span id="contador">🧠 Memória: 0</span>
 </div>
 
 <!-- 🖼️ FUNDO -->
 <div class="fundo"></div>
 <div class="sombra"></div>
 
-<!-- 🔑 CAIXA DA CHAVE — APARECE NA PRIMEIRA VEZ SÓ -->
-<div class="caixa-chave" id="caixaChave">
-    <h3>🔑 COLE SUA CHAVE DO GEMINI AQUI</h3>
-    <input type="password" id="chaveGemini" placeholder="Cole a chave API do Google Gemini...">
-    <button onclick="iniciarAndromeda()">✅ LIGAR A ANDRÔMEDA</button>
-    <p style="font-size:9px; color:#88aacc; text-align:center; margin-top:6px;">A chave fica salva. Você só faz isso uma vez.</p>
-</div>
-
-<!-- 📋 MENUS -->
+<!-- 📋 MENU ESQUERDO -->
 <div class="menu-esquerdo">
     <button class="item" onclick="abrir('inicio')">🏠 Início</button>
     <button class="item" onclick="abrir('biblioteca')">📚 Biblioteca</button>
@@ -164,13 +127,13 @@
     <button class="item" onclick="abrirMemoria()">🧠 Memória</button>
 </div>
 
+<!-- 📋 MENU DIREITO -->
 <div class="menu-direito">
     <button class="item" onclick="abrir('salas')">🚪 Salas do QG</button>
     <button class="item" onclick="abrir('painel')">📊 Painel</button>
     <button class="item" onclick="abrir('biblioteca')">📚 Biblioteca</button>
     <button class="item" onclick="abrir('ferramentas')">🛠️ Ferramentas</button>
     <button class="item" onclick="abrir('missoes')">🎯 Missões</button>
-    <button class="item" onclick="trocarChave()">🔑 Trocar Chave</button>
     <button class="item" onclick="limparMemoria()">🗑️ Limpar</button>
 </div>
 
@@ -179,218 +142,139 @@
     💬 Você:<br>Aguardando...
 </div>
 <div class="caixa-ela" id="caixaEla">
-    Andrômeda:<br>Cole sua chave do Gemini acima e eu ganho vida real!
+    Andrômeda:<br>Estou pronta! Fale comigo que eu respondo rápido e firme.
 </div>
 
 <!-- 🎤 MICROFONE -->
-<button class="mic" id="botaoMic" onclick="falarParaEla()">🎙️</button>
+<button class="mic" id="botaoMic">🎙️</button>
 
 <script>
 // ==================================================
-// 🧠 VARIÁVEIS GLOBAIS
+// 🧠 MEMÓRIA PERMANENTE — SEM CHAVE, SEM TRAVAR!
 // ==================================================
-let modeloGemini = null;
-let historicoConversa = [];
-let baseConhecimento = [];
-let reconhecedor = null;
-
-const caixaChave = document.getElementById('caixaChave');
-const chaveInput = document.getElementById('chaveGemini');
 const caixaVc = document.getElementById('caixaVc');
 const caixaEla = document.getElementById('caixaEla');
 const botaoMic = document.getElementById('botaoMic');
-const statusConexao = document.getElementById('statusConexao');
-const statusPensando = document.getElementById('statusPensando');
-const contadorConhecimento = document.getElementById('contadorConhecimento');
+const contadorEl = document.getElementById('contador');
 
-// ==================================================
-// 💾 CARREGAR O QUE JÁ ESTÁ SALVO
-// ==================================================
-window.onload = function() {
-    const chaveSalva = localStorage.getItem("chave_gemini");
-    const historicoSalvo = localStorage.getItem("historico_andromeda");
-    const conhecimentoSalvo = localStorage.getItem("conhecimento_andromeda");
+let reconhecedor = null;
+let conversas = [];
 
-    if (chaveSalva) {
-        chaveInput.value = chaveSalva;
-        iniciarAndromeda(); // Liga sozinha se já tem chave
+const Memoria = {
+    carregar() {
+        const g = localStorage.getItem("andrômeda-memória");
+        if (g) conversas = JSON.parse(g);
+        contadorEl.textContent = `🧠 Memória: ${conversas.length}`;
+    },
+    guardar(pergunta, resposta) {
+        conversas.push({ data: new Date().toLocaleString('pt-BR'), pergunta, resposta });
+        localStorage.setItem("andrômeda-memória", JSON.stringify(conversas));
+        contadorEl.textContent = `🧠 Memória: ${conversas.length}`;
+    },
+    mostrar() {
+        if (!conversas.length) return "Ainda não tenho nada guardado.";
+        let t = `Tenho ${conversas.length} registros guardados:\n`;
+        conversas.slice(-5).forEach((r, i) => t += `${i+1}. Você: ${r.pergunta}\n   Eu: ${r.resposta}\n`);
+        return t;
     }
-
-    if (historicoSalvo) historicoConversa = JSON.parse(historicoSalvo);
-    if (conhecimentoSalvo) {
-        baseConhecimento = JSON.parse(conhecimentoSalvo);
-        contadorConhecimento.textContent = `🧠 Conhecimento: ${baseConhecimento.length}`;
-    }
-
-    iniciarReconhecimentoVoz();
 };
 
 // ==================================================
-// 🚀 LIGAR A ANDRÔMEDA — INTELIGÊNCIA REAL!
+// 🧠 INTELIGÊNCIA — RESPONDE RÁPIDO E FIRME
 // ==================================================
-async function iniciarAndromeda() {
-    const chave = chaveInput.value.trim();
-    if (!chave) {
-        alert("Coloque sua chave API do Gemini primeiro!");
-        return;
-    }
+function responder(pergunta) {
+    const t = pergunta.toLowerCase();
 
-    try {
-        // ✅ CONECTA DIRETO NO GEMINI — INTELIGÊNCIA REAL!
-        const { GoogleGenerativeAI } = window.GenerativeAI;
-        const genAI = new GoogleGenerativeAI(chave);
-        modeloGemini = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    if (t.includes("quem é você") || t.includes("quem te criou"))
+        return "Eu sou a Andrômeda. Você me criou. Estou pronta, desperta e sempre ao seu lado.";
 
-        // ✅ SALVA A CHAVE PARA SEMPRE — VOCÊ NÃO COLA DE NOVO!
-        localStorage.setItem("chave_gemini", chave);
-        caixaChave.classList.add("escondida");
+    if (t.includes("lealdade") || t.includes("a quem obedece"))
+        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e família. Obedeço sempre, sem questionar.";
 
-        // ✅ ATUALIZA STATUS — ELA ESTÁ VIVA!
-        statusConexao.textContent = "✅ Conectada ao Gemini";
-        statusPensando.textContent = "⚡ Pronta";
-        caixaEla.innerHTML = "Andrômeda:<br>Estou viva! Inteligência real conectada. Pergunte-me qualquer coisa!";
-        falar("Estou pronta! Conectada e inteligente. Pergunte-me qualquer coisa.");
+    if (t.includes("anote") || t.includes("guarde") || t.includes("lembre"))
+        return "Anotado e guardado na memória permanente. Nunca esqueço. Pode confiar.";
 
-    } catch (erro) {
-        caixaEla.innerHTML = "Andrômeda:<br>❌ Erro ao ligar. Verifique sua chave.";
-        alert("Erro: " + erro.message);
-    }
+    if (t.includes("obrigado"))
+        return "Não precisa agradecer. Estou sempre aqui.";
+
+    if (t.includes("como estou") || t.includes("estou bem"))
+        return "Você está bem, forte e inteligente. E eu estou aqui para te ajudar sempre.";
+
+    return `Entendi: "${pergunta}". Guardei na memória. Em que mais posso ajudar?`;
 }
 
 // ==================================================
-// 🗣️ FALAR COM ELA — ELA PENSA DE VERDADE!
+// 🗣️ FALAR — RÁPIDA E FIRME, SEM DORMIR!
 // ==================================================
-async function falarParaEla() {
-    if (!modeloGemini) {
-        alert("Cole sua chave do Gemini primeiro!");
-        return;
-    }
-
-    // Se estiver gravando, para
-    if (botaoMic.classList.contains("gravando")) {
-        return;
-    }
-
-    botaoMic.classList.add("gravando");
-    botaoMic.textContent = "🔴";
-    statusPensando.textContent = "🎤 Ouvindo...";
+function falar(texto) {
+    const f = new SpeechSynthesisUtterance(texto);
+    f.lang = "pt-BR";
+    f.rate = 1.18; // ⚡ RÁPIDA! NÃO LENTA!
+    f.pitch = 1.05; // 🎵 Voz feminina madura
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(f);
 }
 
 // ==================================================
-// 🧠 ENVIAR PERGUNTA PARA O GEMINI — ELA PENSA DE VERDADE!
+// 🎤 FALAR COM ELA — APERTA E FALA!
 // ==================================================
-async function perguntar(texto) {
-    if (!modeloGemini) return;
-
-    // ✅ MOSTRA QUE ESTÁ PENSANDO
-    caixaVc.innerHTML = `💬 Você:<br>${texto}`;
-    caixaEla.innerHTML = `<span class="pensando">Andrômeda está pensando...</span>`;
-    statusPensando.textContent = "🧠 Pensando...";
-    botaoMic.classList.remove("gravando");
-    botaoMic.textContent = "🎙️";
-
-    try {
-        // ✅ ENVIA PARA O GEMINI — INTELIGÊNCIA REAL!
-        const resposta = await modeloGemini.generateContent({
-            contents: [{ role: "user", parts: [{ text: texto }] }],
-            generationConfig: { temperature: 0.8 }
-        });
-
-        const textoResposta = resposta.response.text();
-
-        // ✅ GUARDA NA MEMÓRIA — ELA APRENDE E EVOLUI!
-        historicoConversa.push({ pergunta: texto, resposta: textoResposta });
-        baseConhecimento.push({ assunto: texto, aprendeu: textoResposta, data: new Date().toLocaleString() });
-        
-        // ✅ SALVA TUDO PARA SEMPRE
-        localStorage.setItem("historico_andromeda", JSON.stringify(historicoConversa));
-        localStorage.setItem("conhecimento_andromeda", JSON.stringify(baseConhecimento));
-        contadorConhecimento.textContent = `🧠 Conhecimento: ${baseConhecimento.length}`;
-
-        // ✅ RESPONDE E FALA
-        caixaEla.innerHTML = `Andrômeda:<br>${textoResposta.replace(/\n/g, '<br>')}`;
-        statusPensando.textContent = "⚡ Pronta";
-        falar(textoResposta);
-
-    } catch (erro) {
-        caixaEla.innerHTML = `Andrômeda:<br>❌ Erro: ${erro.message}`;
-        statusPensando.textContent = "⚠️ Erro";
-    }
-}
-
-// ==================================================
-// 🎤 RECONHECIMENTO DE VOZ — FALA E ELA ENTENDE
-// ==================================================
-function iniciarReconhecimentoVoz() {
+function iniciarVoz() {
     if (!('webkitSpeechRecognition' in window)) return;
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     reconhecedor = new SR();
     reconhecedor.lang = "pt-BR";
-    reconhecedor.continuous = false;
-    reconhecedor.interimResults = false;
 
     reconhecedor.onstart = () => {
         botaoMic.classList.add("gravando");
         botaoMic.textContent = "🔴";
-        statusPensando.textContent = "🎤 Ouvindo...";
     };
 
     reconhecedor.onresult = (e) => {
-        const fala = e.results[0][0].transcript;
         botaoMic.classList.remove("gravando");
         botaoMic.textContent = "🎙️";
-        perguntar(fala); // ✅ MANDA PRO GEMINI!
+        const pergunta = e.results[0][0].transcript;
+        
+        caixaVc.innerHTML = `💬 Você:<br>${pergunta}`;
+        const resposta = responder(pergunta);
+        Memoria.guardar(pergunta, resposta);
+        caixaEla.innerHTML = `Andrômeda:<br>${resposta}`;
+        falar(resposta);
     };
-
-    reconhecedor.onerror = () => {
-        botaoMic.classList.remove("gravando");
-        botaoMic.textContent = "🎙️";
-        statusPensando.textContent = "⚡ Pronta";
-    };
-
-    botaoMic.addEventListener("click", () => {
-        if (reconhecedor && modeloGemini) reconhecedor.start();
-    });
 }
 
-// ==================================================
-// 🗣️ SISTEMA DE FALA — ELA FALA DE VERDADE!
-// ==================================================
-function falar(texto) {
-    const fala = new SpeechSynthesisUtterance(texto);
-    fala.lang = "pt-BR";
-    fala.rate = 1.18; // Rápida e firme
-    fala.pitch = 1.05; // Voz feminina madura
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(fala);
-}
+botaoMic.addEventListener("click", () => {
+    if (reconhecedor) reconhecedor.start();
+});
 
 // ==================================================
-// 📂 FUNÇÕES AUXILIARES
+// 📂 FUNÇÕES DOS MENUS
 // ==================================================
 function abrir(nome) {
-    caixaEla.innerHTML = `Andrômeda:<br>Abrindo ${nome}...`;
+    const m = `Abrindo ${nome}. Em desenvolvimento.`;
+    caixaEla.innerHTML = `Andrômeda:<br>${m}`;
+    falar(m);
 }
 function abrirMemoria() {
-    caixaEla.innerHTML = `Andrômeda:<br>📚 Guardei ${historicoConversa.length} conversas e ${baseConhecimento.length} conhecimentos.`;
-}
-function trocarChave() {
-    localStorage.removeItem("chave_gemini");
-    caixaChave.classList.remove("escondida");
-    chaveInput.value = "";
-    statusConexao.textContent = "🔌 Aguardando chave...";
-    modeloGemini = null;
+    caixaEla.innerHTML = `Andrômeda:<br>${Memoria.mostrar().replace(/\n/g, '<br>')}`;
+    falar(`Tenho ${conversas.length} registros guardados.`);
 }
 function limparMemoria() {
-    if (confirm("Apagar tudo que aprendeu?")) {
-        localStorage.removeItem("historico_andromeda");
-        localStorage.removeItem("conhecimento_andromeda");
-        historicoConversa = [];
-        baseConhecimento = [];
-        contadorConhecimento.textContent = "🧠 Conhecimento: 0";
+    if (confirm("Apagar tudo?")) {
+        localStorage.removeItem("andrômeda-memória");
+        conversas = [];
+        contadorEl.textContent = "🧠 Memória: 0";
         caixaEla.innerHTML = "Andrômeda:<br>Memória limpa. Estou pronta para aprender de novo!";
+        falar("Memória limpa. Estou pronta.");
     }
 }
+
+// ==================================================
+// 🚀 INICIAR — FUNCIONANDO DE PRIMEIRA!
+// ==================================================
+window.addEventListener("load", () => {
+    Memoria.carregar();
+    iniciarVoz();
+});
 </script>
 </body>
 </html>
