@@ -1,12 +1,16 @@
 {
   "name": "QG Andrômeda",
   "short_name": "Andrômeda",
-  "description": "Inteligência exclusiva",
+  "description": "Seu ecossistema exclusivo",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#05071a",
   "theme_color": "#4f46e5",
   "icons": [
-    { "src": "andromeda.jpg", "sizes": "512x512", "type": "image/jpeg" }
+    {
+      "src": "andromeda.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
   ]
 }
