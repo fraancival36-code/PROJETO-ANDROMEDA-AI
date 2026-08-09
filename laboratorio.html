@@ -1,1 +1,122 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório Andrômeda — Raiz de Testes</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #05050a 0%, #0b0f19 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .topo {
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+        }
+        .btn-voltar {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            color: #818cf8;
+            text-decoration: none;
+            font-size: 14px;
+            border: 1px solid #312e81;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(17, 24, 39, 0.5);
+        }
+        .btn-voltar:hover { background: #1e1b4b; border-color: #6366f1; }
+        h1 {
+            font-size: 30px;
+            color: #a78bfa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .subtitulo { color: #94a3b8; font-size: 15px; }
+        .grade {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            width: 100%;
+            max-width: 900px;
+        }
+        .area {
+            background: rgba(11, 13, 22, 0.8);
+            border: 1px solid #4c1d95;
+            border-radius: 12px;
+            padding: 22px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s ease;
+        }
+        .area:hover {
+            border-color: #8b5cf6;
+            background: rgba(79, 70, 229, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+        }
+        .area span { font-size: 28px; display: block; margin-bottom: 10px; }
+        .area strong { display: block; font-size: 16px; color: #c7d2fe; margin-bottom: 5px; }
+        .area p { font-size: 13px; color: #7888a8; }
+        .rodape { margin-top: 40px; font-size: 12px; color: #475569; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="topo">
+        <a href="../index.html" class="btn-voltar">← Voltar ao QG</a>
+        <h1>🧪 Laboratório Andrômeda</h1>
+        <p class="subtitulo">Raiz de Testes — Cada área no seu caminho</p>
+    </div>
+
+    <div class="grade">
+        <a href="01-VIDEO/gerador-video.html" class="area">
+            <span>🎬</span>
+            <strong>Gerador de Vídeo</strong>
+            <p>Livro → Texto → Vídeo animado</p>
+        </a>
+
+        <a href="02-AUDIO-VOZ/gerador-voz.html" class="area">
+            <span>🎙️</span>
+            <strong>Voz e Áudio</strong>
+            <p>Texto em fala natural</p>
+        </a>
+
+        <a href="03-SIMULADOR/simulador.html" class="area">
+            <span>🔬</span>
+            <strong>Simulador</strong>
+            <p>Projetos e testes virtuais</p>
+        </a>
+
+        <a href="04-IMAGENS/gerador-imagem.html" class="area">
+            <span>🖼️</span>
+            <strong>Imagens</strong>
+            <p>Criar ilustrações e cenas</p>
+        </a>
+
+        <a href="05-CODIGO/testes.html" class="area">
+            <span>💻</span>
+            <strong>Códigos</strong>
+            <p>Testes e procedimentos</p>
+        </a>
+    </div>
+
+    <div class="rodape">
+        "Do Laboratório nascem as criações." — Andrômeda
+    </div>
+
+</body>
+</html>
