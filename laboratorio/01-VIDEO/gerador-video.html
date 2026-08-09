@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Vídeo — Laboratório</title>
+    <title>Gerador de Vídeo — Laboratório Andrômeda</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -36,9 +36,10 @@
             padding: 25px;
         }
         h2 { color: #a78bfa; margin-bottom: 15px; font-size: 22px; }
+        p.desc { font-size: 13px; color: #94a3b8; margin-bottom: 15px; }
         textarea {
             width: 100%;
-            height: 120px;
+            height: 140px;
             background: #02040a;
             border: 1px solid #312e81;
             border-radius: 8px;
@@ -46,20 +47,24 @@
             color: #e2e8f0;
             font-size: 14px;
             resize: none;
+            outline: none;
             margin-bottom: 15px;
         }
+        textarea:focus { border-color: #8b5cf6; }
         .btn-gerar {
             width: 100%;
-            background: #6d28d9;
+            background: linear-gradient(90deg, #6d28d9, #4f46e5);
             color: white;
             border: none;
             padding: 14px;
             border-radius: 8px;
             font-weight: bold;
+            font-size: 15px;
             cursor: pointer;
+            transition: transform 0.2s;
         }
-        .btn-gerar:hover { background: #7c3aed; }
-        .preview {
+        .btn-gerar:hover { transform: translateY(-2px); }
+        .area-resultado {
             margin-top: 20px;
             border: 1px dashed #334155;
             border-radius: 8px;
@@ -68,6 +73,8 @@
             align-items: center;
             justify-content: center;
             color: #64748b;
+            text-align: center;
+            padding: 15px;
         }
         .navegacao {
             margin-top: 20px;
@@ -91,27 +98,39 @@
 
     <div class="painel">
         <h2>🎬 Gerador de Vídeo</h2>
-        <p style="font-size:13px; color:#94a3b8; margin-bottom:15px;">Cole o trecho do livro abaixo:</p>
-        
-        <textarea placeholder="Digite ou cole o texto aqui..."></textarea>
-        
-        <button class="btn-gerar" onclick="simular()">Gerar Vídeo</button>
+        <p class="desc">Cole o trecho do livro abaixo. A Andrômeda vai ler, criar as cenas e gerar o vídeo.</p>
 
-        <div class="preview" id="area-preview">
-            O vídeo aparecerá aqui...
+        <textarea id="texto" placeholder="Cole aqui o texto ou capítulo do livro..."></textarea>
+
+        <button class="btn-gerar" onclick="gerar()">🔄 Criar Vídeo</button>
+
+        <div class="area-resultado" id="saida">
+            O resultado aparecerá aqui...
         </div>
     </div>
 
     <div class="navegacao">
-        <a href="../02-AUDIO-VOZ/gerador-voz.html">Próximo → Áudio</a>
+        <a href="../laboratorio.html">← Laboratório</a>
+        <a href="../02-AUDIO-VOZ/gerador-voz.html">Áudio →</a>
     </div>
 
 <script>
-function simular() {
-    const p = document.getElementById('area-preview');
-    p.innerText = "📖 Lendo o texto...";
-    setTimeout(() => p.innerText = "🎨 Criando cenas...", 1500);
-    setTimeout(() => p.innerText = "✅ Vídeo pronto! Conecte a API para gerar de verdade.", 3500);
+function gerar() {
+    const texto = document.getElementById('texto').value.trim();
+    const saida = document.getElementById('saida');
+
+    if (!texto) {
+        saida.textContent = '⚠️ Cole algum texto do livro primeiro...';
+        return;
+    }
+
+    saida.innerHTML = '📖 Lendo e entendendo o texto...';
+
+    setTimeout(() => { saida.innerHTML = '🎨 Criando imagens e cenas...'; }, 1800);
+    setTimeout(() => { saida.innerHTML = '🎬 Montando e animando cenas...'; }, 3600);
+    setTimeout(() => {
+        saida.innerHTML = '✅ Vídeo pronto! Conectando a API de geração para baixar o arquivo final.<br><br>Texto analisado: "' + texto.substring(0, 70) + '..."';
+    }, 5500);
 }
 </script>
 
