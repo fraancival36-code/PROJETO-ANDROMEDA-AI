@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Andromeda — Seus Livros</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #03050d 0%, #08071a 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .topo {
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+        }
+        .btn-voltar {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            color: #a78bfa;
+            text-decoration: none;
+            font-size: 14px;
+            border: 1px solid #4c1d95;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(17, 24, 39, 0.5);
+        }
+        .btn-voltar:hover { background: #2e1065; border-color: #8b5cf6; }
+        h1 {
+            font-size: 32px;
+            color: #c084fc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(192, 132, 252, 0.4);
+        }
+        .subtitulo { color: #94a3b8; font-size: 15px; }
+        .grade-livros {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .card-livro {
+            background: rgba(15, 12, 38, 0.6);
+            border: 1px solid #4c1d95;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card-livro:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
+            border-color: #8b5cf6;
+        }
+        .capa {
+            width: 120px;
+            height: 180px;
+            background: linear-gradient(135deg, #1e1b4b, #311042);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            border: 1px solid #6d28d9;
+        }
+        h3 {
+            font-size: 16px;
+            color: #f1f5f9;
+            margin-bottom: 5px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+        .autor { font-size: 12px; color: #a78bfa; margin-bottom: 15px; }
+        .botoes {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-acao {
+            background: #111322;
+            border: 1px solid #312e81;
+            color: #e2e8f0;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 16px;
+            text-decoration: none;
+            flex: 1;
+            transition: all 0.2s;
+        }
+        .btn-acao:hover { background: #6d28d9; border-color: #8b5cf6; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="topo">
+        <a href="../index.html" class="btn-voltar">← Voltar ao QG</a>
+        <h1>📖 Biblioteca Andromeda</h1>
+        <p class="subtitulo">Seus livros — Ler, Ouvir ou Assistir</p>
+    </div>
+
+    <div class="grade-livros">
+        <!-- Livro 1 -->
+        <div class="card-livro">
+            <div class="capa">🌌</div>
+            <h3>A Origem de Andromeda</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 2 -->
+        <div class="card-livro">
+            <div class="capa">🚀</div>
+            <h3>O Despertar do QG</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 3 -->
+        <div class="card-livro">
+            <div class="capa">☄️</div>
+            <h3>As Cronicas do Espaco</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 4 -->
+        <div class="card-livro">
+            <div class="capa">🔬</div>
+            <h3>O Segredo do Laboratorio</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 5 -->
+        <div class="card-livro">
+            <div class="capa">📡</div>
+            <h3>A Voz do Amanha</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 6 -->
+        <div class="card-livro">
+            <div class="capa">💻</div>
+            <h3>Algoritmos de Luz</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 7 -->
+        <div class="card-livro">
+            <div class="capa">🔑</div>
+            <h3>O Ultimo Codigo</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 8 -->
+        <div class="card-livro">
+            <div class="capa">☁️</div>
+            <h3>Nebulosa de Prata</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 9 -->
+        <div class="card-livro">
+            <div class="capa">🛡️</div>
+            <h3>Estrelas de Ferro</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 10 -->
+        <div class="card-livro">
+            <div class="capa">🏛️</div>
+            <h3>O Imperio Digital</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 11 -->
+        <div class="card-livro">
+            <div class="capa">🌐</div>
+            <h3>Mundos Conectados</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+
+        <!-- Livro 12 -->
+        <div class="card-livro">
+            <div class="capa">👑</div>
+            <h3>A Era da Andromeda</h3>
+            <p class="autor">Francival Alves Farias</p>
+            <div class="botoes">
+                <a href="../laboratorio/03-SIMULADOR/simulador.html" class="btn-acao" title="Ler">📱</a>
+                <a href="../laboratorio/02-AUDIO/gerador-voz.html" class="btn-acao" title="Ouvir">🎙️</a>
+                <a href="../laboratorio/01-VIDEO/gerador-video.html" class="btn-acao" title="Ver">🎬</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
