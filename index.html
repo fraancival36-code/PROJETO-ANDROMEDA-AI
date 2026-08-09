@@ -18,6 +18,7 @@
             font-family: sans-serif;
             color: white;
             padding: 30px;
+            padding-bottom: 140px;
         }
         .esquerdo {
             position: absolute;
@@ -44,6 +45,87 @@
         a:hover {
             color: #ffffff;
         }
+        .caixa-chave {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 15, 40, 0.95);
+            border: 2px solid #4f46e5;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            z-index: 100;
+            text-align: center;
+        }
+        .caixa-chave h2 {
+            color: #a5b4fc;
+            margin-bottom: 20px;
+        }
+        .caixa-chave input {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid #4f46e5;
+            background: #0f172a;
+            color: white;
+            margin-bottom: 15px;
+        }
+        .botao-ligar {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            background: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .area-conversa {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: rgba(5, 7, 26, 0.9);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .caixa-texto {
+            flex: 1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 2px solid #4f46e5;
+            background: rgba(15, 23, 42, 0.8);
+            color: white;
+        }
+        .botao-microfone {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: #4f46e5;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .resposta {
+            position: fixed;
+            bottom: 90px;
+            left: 15px;
+            right: 15px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 12px;
+            color: #e0e7ff;
+            max-height: 150px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -62,6 +144,76 @@
         <a href="#">🎯 Missoes</a>
         <a href="#">🧠 Memoria</a>
     </div>
+
+    <!-- Caixa da Chave -->
+    <div class="caixa-chave" id="caixaChave">
+        <h2>🔑 COLE SUA CHAVE DO GEMINI</h2>
+        <input type="text" id="chaveApi" placeholder="Começa com AlzaSy...">
+        <button class="botao-ligar" onclick="ligarAndromeda()">✅ LIGAR A ANDRÔMEDA</button>
+        <p style="font-size:13px; color:#94a3b8; margin-top:10px;">A chave fica salva. Só faz isso uma vez.</p>
+    </div>
+
+    <!-- Resposta da Andrômeda -->
+    <div class="resposta" id="resposta" style="display:none;"></div>
+
+    <!-- Caixa de mensagens + Microfone -->
+    <div class="area-conversa">
+        <input type="text" class="caixa-texto" id="mensagem" placeholder="Escreva sua mensagem aqui..." onkeypress="if(event.key==='Enter')enviarMensagem()">
+        <button class="botao-microfone" id="botaoMic" onclick="iniciarFala()">🎤</button>
+    </div>
+
+<script>
+let chave = localStorage.getItem('chaveGemini') || '';
+
+// Se já tem chave guardada, esconde a caixa
+if(chave) document.getElementById('caixaChave').style.display = 'none';
+
+function ligarAndromeda(){
+    chave = document.getElementById('chaveApi').value.trim();
+    if(!chave){ alert('Cola a chave primeiro!'); return; }
+    localStorage.setItem('chaveGemini', chave);
+    document.getElementById('caixaChave').style.display = 'none';
+    alert('✅ Andrômeda ligada!');
+}
+
+async function enviarMensagem(){
+    const texto = document.getElementById('mensagem').value.trim();
+    if(!texto || !chave) return;
+    document.getElementById('mensagem').value = '';
+    const respostaDiv = document.getElementById('resposta');
+    respostaDiv.style.display = 'block';
+    respostaDiv.innerText = 'Pensando...';
+
+    try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${chave}`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                contents: [{parts:[{text: texto}]}]
+            })
+        });
+        const dados = await res.json();
+        const textoResposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Não entendi.';
+        respostaDiv.innerText = textoResposta;
+    } catch(erro) {
+        respostaDiv.innerText = 'Erro: verifique a chave.';
+    }
+}
+
+// Reconhecimento de voz
+function iniciarFala(){
+    if(!('webkitSpeechRecognition' in window)){
+        alert('Seu navegador não suporta fala.');
+        return;
+    }
+    const recon = new webkitSpeechRecognition();
+    recon.lang = 'pt-BR';
+    recon.onresult = (evento) => {
+        document.getElementById('mensagem').value = evento.results[0][0].transcript;
+    };
+    recon.start();
+}
+</script>
 
 </body>
 </html>
