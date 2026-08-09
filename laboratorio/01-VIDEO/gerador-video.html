@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Vídeo — Laboratório</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #05050a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .btn-voltar {
+            align-self: flex-start;
+            color: #818cf8;
+            text-decoration: none;
+            font-size: 14px;
+            border: 1px solid #312e81;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .btn-voltar:hover { background: #1e1b4b; }
+        .painel {
+            width: 100%;
+            max-width: 600px;
+            background: #0b0f19;
+            border: 1px solid #4c1d95;
+            border-radius: 16px;
+            padding: 25px;
+        }
+        h2 { color: #a78bfa; margin-bottom: 15px; font-size: 22px; }
+        textarea {
+            width: 100%;
+            height: 120px;
+            background: #02040a;
+            border: 1px solid #312e81;
+            border-radius: 8px;
+            padding: 12px;
+            color: #e2e8f0;
+            font-size: 14px;
+            resize: none;
+            margin-bottom: 15px;
+        }
+        .btn-gerar {
+            width: 100%;
+            background: #6d28d9;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-gerar:hover { background: #7c3aed; }
+        .preview {
+            margin-top: 20px;
+            border: 1px dashed #334155;
+            border-radius: 8px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+        .navegacao {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .navegacao a {
+            color: #818cf8;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 6px 12px;
+            border: 1px solid #312e81;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="../laboratorio.html" class="btn-voltar">← Voltar ao Laboratório</a>
+
+    <div class="painel">
+        <h2>🎬 Gerador de Vídeo</h2>
+        <p style="font-size:13px; color:#94a3b8; margin-bottom:15px;">Cole o trecho do livro abaixo:</p>
+        
+        <textarea placeholder="Digite ou cole o texto aqui..."></textarea>
+        
+        <button class="btn-gerar" onclick="simular()">Gerar Vídeo</button>
+
+        <div class="preview" id="area-preview">
+            O vídeo aparecerá aqui...
+        </div>
+    </div>
+
+    <div class="navegacao">
+        <a href="../02-AUDIO-VOZ/gerador-voz.html">Próximo → Áudio</a>
+    </div>
+
+<script>
+function simular() {
+    const p = document.getElementById('area-preview');
+    p.innerText = "📖 Lendo o texto...";
+    setTimeout(() => p.innerText = "🎨 Criando cenas...", 1500);
+    setTimeout(() => p.innerText = "✅ Vídeo pronto! Conecte a API para gerar de verdade.", 3500);
+}
+</script>
+
+</body>
+</html>
