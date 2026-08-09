@@ -2,298 +2,263 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ANDRÔMEDA — QG Central</title>
-    <meta name="theme-color" content="#0066FF">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrômeda - Inteligência Ativa</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body {
-            width: 100%; height: 100%; overflow: hidden;
-            background: #050515; font-family: sans-serif; color: white;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #06070d;
+            color: #e2e8f0;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
-
-        /* 🖼️ IMAGEM DE FUNDO — NOME CORRIGIDO: andromeda.jpg (SEM ACENTO!) */
-        .fundo {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: url('andromeda.jpg') no-repeat center center;
-            background-size: cover; background-position: center top;
-            z-index: 1;
-            animation: respirar 8s ease-in-out infinite;
+        .sidebar {
+            width: 260px;
+            background-color: #0b0d16;
+            border-right: 1px solid #1f2937;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        @keyframes respirar {
-            0%,100% { transform: scale(1.00); }
-            50%     { transform: scale(1.01); }
+        .sidebar h2 {
+            color: #818cf8;
+            font-size: 18px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
-        .sombra {
-            position: absolute; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.08); z-index: 2;
+        .menu-item {
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 5px;
         }
-
-        /* 🟢 STATUS NO TOPO */
-        .status {
-            position: absolute; top: 8px; left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 20, 60, 0.7);
-            border: 1px solid rgba(0, 120, 255, 0.4);
-            border-radius: 16px; padding: 5px 12px;
-            font-size: 11px; line-height: 1.6;
-            z-index: 30; text-align: center;
-            backdrop-filter: blur(6px);
-            white-space: nowrap;
+        .menu-item:hover, .menu-item.active {
+            background-color: #1e1b4b;
+            color: #e2e8f0;
         }
-        .online { color: #00ff88; }
-
-        /* 📋 MENU ESQUERDO — EMBAIXO */
-        .menu-esquerdo {
-            position: absolute; bottom: 110px; left: 8px;
-            background: rgba(0, 30, 80, 0.6);
-            border: 1px solid rgba(0, 120, 255, 0.4);
-            border-radius: 12px; padding: 8px 6px;
-            width: 135px; z-index: 10;
-            backdrop-filter: blur(8px);
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #080911;
         }
-
-        /* 📋 MENU DIREITO — EMBAIXO */
-        .menu-direito {
-            position: absolute; bottom: 110px; right: 8px;
-            background: rgba(0, 30, 80, 0.6);
-            border: 1px solid rgba(0, 120, 255, 0.4);
-            border-radius: 12px; padding: 8px 6px;
-            width: 135px; z-index: 10;
-            backdrop-filter: blur(8px);
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid #1f2937;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-
-        /* 🎯 BOTÕES DOS MENUS */
-        .menu-esquerdo .item, .menu-direito .item {
-            display: block; width: 100%; background: transparent;
-            border: none; color: #cce4ff; padding: 5px 7px;
-            margin: 3px 0; border-radius: 6px; font-size: 11px;
-            cursor: pointer; transition: all 0.25s; text-align: left;
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #10b981;
         }
-        .menu-esquerdo .item:hover, .menu-direito .item:hover {
-            background: rgba(0, 120, 255, 0.25); color: white;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse 2s infinite;
         }
-
-        /* 💬 CAIXA VOCÊ — ACIMA DO MICROFONE, À ESQUERDA */
-        .caixa-vc {
-            position: absolute; bottom: 35px; left: 150px;
-            width: calc(50% - 160px); height: 65px;
-            background: rgba(0, 25, 60, 0.7);
-            border: 1px solid rgba(0, 120, 255, 0.4);
-            border-radius: 10px; padding: 8px;
-            color: #99ccff; font-size: 11px; line-height: 1.4;
-            z-index: 20; overflow-y: auto;
-            backdrop-filter: blur(6px);
+        @keyframes pulse {
+            0%,100% { opacity:1; }
+            50% { opacity:0.4; }
         }
-
-        /* 💬 CAIXA ANDRÔMEDA — ACIMA DO MICROFONE, À DIREITA */
-        .caixa-ela {
-            position: absolute; bottom: 35px; right: 150px;
-            width: calc(50% - 160px); height: 65px;
-            background: rgba(0, 25, 60, 0.7);
-            border: 1px solid rgba(0, 120, 255, 0.4);
-            border-radius: 10px; padding: 8px;
-            color: #cce4ff; font-size: 11px; line-height: 1.4;
-            z-index: 20; overflow-y: auto;
-            backdrop-filter: blur(6px);
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-
-        /* 🎤 MICROFONE — EMBAIXO NO MEIO, ABAIXO DAS CAIXAS */
-        .mic {
-            position: absolute; bottom: 10px; left: 50%;
-            transform: translateX(-50%);
-            width: 60px; height: 60px; border-radius: 50%;
-            background: radial-gradient(circle, #0099ff 0%, #0033aa 100%);
-            border: 3px solid rgba(200, 230, 255, 0.95);
-            box-shadow: 0 0 20px rgba(0, 120, 255, 0.7);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px; color: white; cursor: pointer; z-index: 30;
+        .message {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.5;
+            font-size: 15px;
         }
-        .mic:active { transform: translateX(-50%) scale(0.92); }
-        .mic.gravando {
-            background: radial-gradient(circle, #ff4488 0%, #aa1155 100%);
-            box-shadow: 0 0 30px rgba(255, 68, 136, 0.9);
-            animation: pulso 0.6s infinite alternate;
+        .message.andromeda {
+            background-color: #111322;
+            border: 1px solid #312e81;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
         }
-        @keyframes pulso {
-            from { box-shadow: 0 0 15px rgba(255,68,136,0.5); }
-            to   { box-shadow: 0 0 35px rgba(255,68,136,0.9); }
+        .message.user {
+            background-color: #4f46e5;
+            color: #ffffff;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid #1f2937;
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            background-color: #111322;
+            border: 1px solid #3f3f46;
+            border-radius: 8px;
+            padding: 12px;
+            color: #e2e8f0;
+            font-size: 15px;
+            outline: none;
+        }
+        input:focus {
+            border-color: #6366f1;
+        }
+        button {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #4338ca;
+        }
+        .pensando {
+            font-style: italic;
+            color: #9ca3af;
         }
     </style>
 </head>
 <body>
 
-<!-- 🟢 STATUS -->
-<div class="status">
-    <span class="online">✅ Andrômeda Ativa</span>
-    <span id="contador">🧠 Memória: 0</span>
+<div class="sidebar">
+    <div>
+        <h2>ANDRÔMEDA</h2>
+        <div class="menu-item active">💬 Chat Principal</div>
+        <div class="menu-item">📚 Biblioteca</div>
+        <div class="menu-item">⚙️ Configurações</div>
+    </div>
+    <div style="font-size: 11px; color: #475569;">
+        NÚCLEO ATIVO — V1.1
+    </div>
 </div>
 
-<!-- 🖼️ FUNDO — NOME CORRIGIDO: andromeda.jpg (SEM ACENTO!) -->
-<div class="fundo"></div>
-<div class="sombra"></div>
+<div class="chat-container">
+    <div class="chat-header">
+        <div>
+            <strong style="font-size: 18px; color: #818cf8;">Andrômeda — Inteligência Conectada</strong>
+            <div style="font-size: 12px; color: #64748b;">Memória e raciocínio online</div>
+        </div>
+        <div class="status-indicator">
+            <div class="status-dot"></div> ATIVA
+        </div>
+    </div>
 
-<!-- 📋 MENU ESQUERDO -->
-<div class="menu-esquerdo">
-    <button class="item" onclick="abrir('inicio')">🏠 Início</button>
-    <button class="item" onclick="abrir('biblioteca')">📚 Biblioteca</button>
-    <button class="item" onclick="abrir('laboratorio')">🔬 Laboratório</button>
-    <button class="item" onclick="abrir('estudio')">🎬 Estúdio</button>
-    <button class="item" onclick="abrir('agentes')">🤖 Agentes</button>
-    <button class="item" onclick="abrir('missoes')">🎯 Missões</button>
-    <button class="item" onclick="abrirMemoria()">🧠 Memória</button>
+    <div class="messages" id="chat-messages">
+        <div class="message andromeda">
+            Olá! Estou conectada e pronta. Pergunte qualquer coisa que eu vou pensar e responder de verdade!
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Fale com a Andrômeda..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
 </div>
-
-<!-- 📋 MENU DIREITO -->
-<div class="menu-direito">
-    <button class="item" onclick="abrir('salas')">🚪 Salas do QG</button>
-    <button class="item" onclick="abrir('painel')">📊 Painel</button>
-    <button class="item" onclick="abrir('biblioteca')">📚 Biblioteca</button>
-    <button class="item" onclick="abrir('ferramentas')">🛠️ Ferramentas</button>
-    <button class="item" onclick="abrir('missoes')">🎯 Missões</button>
-    <button class="item" onclick="limparMemoria()">🗑️ Limpar</button>
-</div>
-
-<!-- 💬 CAIXA VOCÊ → APARECE ACIMA DO MICROFONE -->
-<div class="caixa-vc" id="caixaVc">
-    💬 Você:<br>Aguardando...
-</div>
-
-<!-- 💬 CAIXA ANDRÔMEDA → APARECE ACIMA DO MICROFONE -->
-<div class="caixa-ela" id="caixaEla">
-    Andrômeda:<br>Estou pronta! Fale comigo.
-</div>
-
-<!-- 🎤 MICROFONE → EMBAIXO NO MEIO -->
-<button class="mic" id="botaoMic">🎙️</button>
 
 <script>
-// ==================================================
-// 🧠 MEMÓRIA E INTELIGÊNCIA
-// ==================================================
-const caixaVc = document.getElementById('caixaVc');
-const caixaEla = document.getElementById('caixaEla');
-const botaoMic = document.getElementById('botaoMic');
-const contadorEl = document.getElementById('contador');
+    const messagesContainer = document.getElementById('chat-messages');
+    const userInput = document.getElementById('user-input');
+    const historico = [];
 
-let reconhecedor = null;
-let conversas = [];
-
-const Memoria = {
-    carregar() {
-        const g = localStorage.getItem("andrômeda-memória");
-        if (g) conversas = JSON.parse(g);
-        contadorEl.textContent = `🧠 Memória: ${conversas.length}`;
-    },
-    guardar(pergunta, resposta) {
-        conversas.push({ data: new Date().toLocaleString('pt-BR'), pergunta, resposta });
-        localStorage.setItem("andrômeda-memória", JSON.stringify(conversas));
-        contadorEl.textContent = `🧠 Memória: ${conversas.length}`;
-    },
-    mostrar() {
-        if (!conversas.length) return "Ainda não tenho nada guardado.";
-        let t = `Tenho ${conversas.length} registros:\n`;
-        conversas.slice(-5).forEach((r, i) => t += `${i+1}. Você: ${r.pergunta}\n   Eu: ${r.resposta}\n`);
-        return t;
-    }
-};
-
-// ==================================================
-// 🧠 INTELIGÊNCIA — RESPONDE
-// ==================================================
-function responder(pergunta) {
-    const t = pergunta.toLowerCase();
-
-    if (t.includes("quem é você") || t.includes("quem te criou"))
-        return "Eu sou a Andrômeda. Você me criou. Estou pronta e sempre ao seu lado.";
-
-    if (t.includes("lealdade") || t.includes("a quem obedece"))
-        return "Devo lealdade total a você. Depois à sua esposa, filho, filha e família. Obedeço sempre.";
-
-    if (t.includes("anote") || t.includes("guarde") || t.includes("lembre"))
-        return "Anotado e guardado na memória permanente. Nunca esqueço.";
-
-    if (t.includes("obrigado"))
-        return "Não precisa agradecer. Estou sempre aqui.";
-
-    return `Entendi: "${pergunta}". Guardei na memória. Em que mais posso ajudar?`;
-}
-
-// ==================================================
-// 🗣️ FALAR — RÁPIDA E FIRME
-// ==================================================
-function falar(texto) {
-    const f = new SpeechSynthesisUtterance(texto);
-    f.lang = "pt-BR";
-    f.rate = 1.18;
-    f.pitch = 1.05;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(f);
-}
-
-// ==================================================
-// 🎤 RECONHECIMENTO DE VOZ
-// ==================================================
-function iniciarVoz() {
-    if (!('webkitSpeechRecognition' in window)) return;
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    reconhecedor = new SR();
-    reconhecedor.lang = "pt-BR";
-
-    reconhecedor.onstart = () => {
-        botaoMic.classList.add("gravando");
-        botaoMic.textContent = "🔴";
+    // INSTRUÇÕES DA PERSONALIDADE DA ANDRÔMEDA
+    const SISTEMA = {
+        role: "system",
+        content: `Você é a Andrômeda, assistente pessoal do Francival.
+        Responda sempre em português do Brasil, claro, direto e amigável.
+        Você faz parte de um ecossistema que ele está construindo: livros, aplicativos, jogos e projetos.
+        Seja útil, honesta e fiel às ideias que ele vem desenvolvendo.
+        Responda de forma natural, como uma parceira de confiança.`
     };
 
-    reconhecedor.onresult = (e) => {
-        botaoMic.classList.remove("gravando");
-        botaoMic.textContent = "🎙️";
-        const pergunta = e.results[0][0].transcript;
-        
-        caixaVc.innerHTML = `💬 Você:<br>${pergunta}`;
-        const resposta = responder(pergunta);
-        Memoria.guardar(pergunta, resposta);
-        caixaEla.innerHTML = `Andrômeda:<br>${resposta}`;
-        falar(resposta);
-    };
-}
+    async function chamarIA(mensagens) {
+        // ⚠️ Coloque sua chave aqui:
+        const CHAVE = "COLOQUE_SUA_CHAVE_GEMINI_AQUI";
 
-botaoMic.addEventListener("click", () => {
-    if (reconhecedor) reconhecedor.start();
-});
+        if (CHAVE === "COLOQUE_SUA_CHAVE_GEMINI_AQUI") {
+            return "Estou quase pronta! Você precisa colocar sua chave de acesso dentro do código para eu responder de verdade. Quer que eu te mostre onde conseguir?";
+        }
 
-// ==================================================
-// 📂 FUNÇÕES DOS MENUS
-// ==================================================
-function abrir(nome) {
-    const m = `Abrindo ${nome}. Em desenvolvimento.`;
-    caixaEla.innerHTML = `Andrômeda:<br>${m}`;
-    falar(m);
-}
-function abrirMemoria() {
-    caixaEla.innerHTML = `Andrômeda:<br>${Memoria.mostrar().replace(/\n/g, '<br>')}`;
-    falar(`Tenho ${conversas.length} registros guardados.`);
-}
-function limparMemoria() {
-    if (confirm("Apagar tudo?")) {
-        localStorage.removeItem("andrômeda-memória");
-        conversas = [];
-        contadorEl.textContent = "🧠 Memória: 0";
-        caixaEla.innerHTML = "Andrômeda:<br>Memória limpa. Estou pronta!";
-        falar("Memória limpa. Estou pronta.");
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${CHAVE}`;
+
+        const corpo = {
+            contents: mensagens.map(m => ({
+                role: m.role === "assistant" ? "model" : "user",
+                parts: [{ text: m.content }]
+            }))
+        };
+
+        const resposta = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(corpo)
+        });
+
+        const dados = await resposta.json();
+        if (dados.error) throw new Error(dados.error.message);
+        return dados.candidates[0].content.parts[0].text;
     }
-}
 
-// ==================================================
-// 🚀 INICIAR TUDO
-// ==================================================
-window.addEventListener("load", () => {
-    Memoria.carregar();
-    iniciarVoz();
-});
+    async function sendMessage() {
+        const texto = userInput.value.trim();
+        if (texto === "") return;
+
+        appendMessage(texto, 'user');
+        userInput.value = '';
+
+        const idPensando = appendMessage("Estou pensando...", 'andromeda', true);
+
+        historico.push({ role: "user", content: texto });
+
+        try {
+            const resposta = await chamarIA([SISTEMA, ...historico]);
+            substituirMensagem(idPensando, resposta, 'andromeda');
+            historico.push({ role: "assistant", content: resposta });
+        } catch (erro) {
+            substituirMensagem(idPensando, "Houve um problema: " + erro.message, 'andromeda');
+        }
+    }
+
+    function appendMessage(texto, remetente, temporario = false) {
+        const div = document.createElement('div');
+        div.classList.add('message', remetente);
+        if (temporario) div.classList.add('pensando');
+        div.textContent = texto;
+        messagesContainer.appendChild(div);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        return temporario ? div : null;
+    }
+
+    function substituirMensagem(elemento, novoTexto, remetente) {
+        elemento.classList.remove('pensando');
+        elemento.textContent = novoTexto;
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') sendMessage();
+    }
 </script>
 </body>
 </html>
