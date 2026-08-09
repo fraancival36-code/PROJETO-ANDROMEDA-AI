@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criador de Apps de Livros — Laboratorio Andromeda</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #03050d, #080b16);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .btn-voltar {
+            align-self: flex-start;
+            color: #fbbf24;
+            text-decoration: none;
+            font-size: 13px;
+            border: 1px solid #d97706;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .btn-voltar:hover { background: #451a03; }
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            background: rgba(10, 12, 26, 0.95);
+            border: 1px solid #d97706;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(217, 119, 6, 0.15);
+        }
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+        }
+        .topo {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #451a03;
+            padding-bottom: 15px;
+        }
+        h1 { color: #fbbf24; font-size: 20px; text-transform: uppercase; }
+        .painel-config { display: flex; flex-direction: column; gap: 15px; }
+        label { font-size: 12px; color: #f59e0b; text-transform: uppercase; font-weight: bold; }
+        input, textarea {
+            width: 100%;
+            background: #02040a;
+            border: 1px solid #d97706;
+            border-radius: 8px;
+            padding: 10px;
+            color: #e2e8f0;
+            outline: none;
+        }
+        textarea { height: 80px; resize: none; }
+        .btn-gerar {
+            background: linear-gradient(90deg, #d97706, #f59e0b);
+            color: #000;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+        .painel-celular {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .smartphone {
+            width: 300px;
+            height: 600px;
+            border: 12px solid #334155;
+            border-radius: 36px;
+            background: #090d16;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+        }
+        .tela-app {
+            flex: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+        }
+        .app-header {
+            text-align: center;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 10px;
+        }
+        .app-titulo { color: #fbbf24; font-size: 18px; font-weight: bold; }
+        .app-autor { color: #94a3b8; font-size: 11px; }
+        .app-player {
+            background: #1e1b4b;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #c7d2fe;
+        }
+        .app-texto {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+        .codigo-saida { margin-top: 10px; }
+        .codigo-saida textarea { height: 140px; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="topo">
+            <h1>📱 Criador de Apps de Livros</h1>
+            <a href="../laboratorio.html" class="btn-voltar">← Voltar</a>
+        </div>
+
+        <div class="painel-config">
+            <div>
+                <label>Titulo do Livro</label>
+                <input type="text" id="titulo" value="A Jornada de Andromeda" oninput="atualizarSimulador()">
+            </div>
+            <div>
+                <label>Autor</label>
+                <input type="text" id="autor" value="Francival Alves Farias" oninput="atualizarSimulador()">
+            </div>
+            <div>
+                <label>Texto do Capitulo</label>
+                <textarea id="conteudo" oninput="atualizarSimulador()">No ano de 2026, a inteligencia artificial Andromeda despertou, pronta para transformar historias em mundos...</textarea>
+            </div>
+            <div>
+                <label>Link do Audio (Opcional)</label>
+                <input type="text" id="link-audio" placeholder="URL do arquivo de audio">
+            </div>
+            <div>
+                <label>Link do Video (Opcional)</label>
+                <input type="text" id="link-video" placeholder="URL do arquivo de video">
+            </div>
+
+            <button class="btn-gerar" onclick="exportarCodigo()">Gerar App</button>
+
+            <div class="codigo-saida">
+                <label>Codigo Gerado</label>
+                <textarea id="codigo-gerado" readonly placeholder="Aqui aparecera o codigo do app..."></textarea>
+            </div>
+        </div>
+
+        <div class="painel-celular">
+            <label style="margin-bottom: 10px;">Pre-visualizacao</label>
+            <div class="smartphone">
+                <div class="tela-app">
+                    <div class="app-header">
+                        <div class="app-titulo" id="sim-titulo">A Jornada de Andromeda</div>
+                        <div class="app-autor" id="sim-autor">por Francival Alves Farias</div>
+                    </div>
+                    <div class="app-player">🎵 Audiolivro Ativo</div>
+                    <div class="app-texto" id="sim-texto">No ano de 2026, a inteligencia artificial Andromeda despertou, pronta para transformar historias em mundos...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+function atualizarSimulador() {
+    document.getElementById('sim-titulo').innerText = document.getElementById('titulo').value;
+    document.getElementById('sim-autor').innerText = 'por ' + document.getElementById('autor').value;
+    document.getElementById('sim-texto').innerText = document.getElementById('conteudo').value;
+}
+
+function exportarCodigo() {
+    const tit = document.getElementById('titulo').value;
+    const aut = document.getElementById('autor').value;
+    const cont = document.getElementById('conteudo').value;
+
+    const app = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${tit}</title>
+    <style>
+        body { font-family: sans-serif; background: #090d16; color: #fff; padding: 20px; }
+        .card { max-width: 420px; margin: auto; background: #111827; padding: 25px; border-radius: 16px; border: 1px solid #f59e0b; }
+        h1 { color: #fbbf24; font-size: 22px; text-align: center; }
+        .autor { text-align: center; color: #9ca3af; font-style: italic; margin-bottom: 15px; }
+        .texto { line-height: 1.7; color: #e5e7eb; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>${tit}</h1>
+        <p class="autor">${aut}</p>
+        <hr style="border:0; border-top:1px solid #374151; margin:15px 0;">
+        <p class="texto">${cont}</p>
+    </div>
+</body>
+</html>`;
+
+    document.getElementById('codigo-gerado').value = app;
+    alert('✅ App gerado! Copie o codigo, salve como nome-do-livro.html e suba no GitHub!');
+}
+</script>
+
+</body>
+</html>
