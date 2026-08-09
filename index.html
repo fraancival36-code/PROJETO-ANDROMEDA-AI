@@ -104,27 +104,38 @@
             color: white;
         }
         .botao-microfone {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: none;
             background: #4f46e5;
             color: white;
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
+        }
+        .botao-microfone.gravando {
+            background: #dc2626;
+            animation: pulsar 1s infinite;
+        }
+        @keyframes pulsar {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
         .resposta {
             position: fixed;
-            bottom: 90px;
+            bottom: 95px;
             left: 15px;
             right: 15px;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid #374151;
-            border-radius: 12px;
-            padding: 12px;
-            color: #e0e7ff;
-            max-height: 150px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid #4f46e5;
+            border-radius: 16px;
+            padding: 15px;
+            color: #e0f7ff;
+            max-height: 200px;
             overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -145,7 +156,6 @@
         <a href="#">🧠 Memoria</a>
     </div>
 
-    <!-- Caixa da Chave -->
     <div class="caixa-chave" id="caixaChave">
         <h2>🔑 COLE SUA CHAVE DO GEMINI</h2>
         <input type="text" id="chaveApi" placeholder="Começa com AlzaSy...">
@@ -153,19 +163,17 @@
         <p style="font-size:13px; color:#94a3b8; margin-top:10px;">A chave fica salva. Só faz isso uma vez.</p>
     </div>
 
-    <!-- Resposta da Andrômeda -->
     <div class="resposta" id="resposta" style="display:none;"></div>
 
-    <!-- Caixa de mensagens + Microfone -->
     <div class="area-conversa">
-        <input type="text" class="caixa-texto" id="mensagem" placeholder="Escreva sua mensagem aqui..." onkeypress="if(event.key==='Enter')enviarMensagem()">
+        <input type="text" class="caixa-texto" id="mensagem" placeholder="Escreva ou fale aqui..." onkeypress="if(event.key==='Enter')enviarMensagem()">
         <button class="botao-microfone" id="botaoMic" onclick="iniciarFala()">🎤</button>
     </div>
 
 <script>
 let chave = localStorage.getItem('chaveGemini') || '';
+let reconhecimento = null;
 
-// Se já tem chave guardada, esconde a caixa
 if(chave) document.getElementById('caixaChave').style.display = 'none';
 
 function ligarAndromeda(){
@@ -178,40 +186,69 @@ function ligarAndromeda(){
 
 async function enviarMensagem(){
     const texto = document.getElementById('mensagem').value.trim();
-    if(!texto || !chave) return;
+    if(!texto) return;
+    if(!chave) { alert('Cole a chave e ligue primeiro!'); return; }
+    
     document.getElementById('mensagem').value = '';
     const respostaDiv = document.getElementById('resposta');
     respostaDiv.style.display = 'block';
-    respostaDiv.innerText = 'Pensando...';
+    respostaDiv.innerText = '🧠 Pensando...';
 
     try {
         const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${chave}`, {
             method: 'POST',
-            headers: {'Content-Type':'application/json'},
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                contents: [{parts:[{text: texto}]}]
+                contents: [{ parts: [{ text: texto }] }]
             })
         });
+
+        if(!res.ok) throw new Error('Erro na conexão');
+        
         const dados = await res.json();
-        const textoResposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Não entendi.';
+        const textoResposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não consegui entender.';
+        
         respostaDiv.innerText = textoResposta;
+        falaResposta(textoResposta);
+
     } catch(erro) {
-        respostaDiv.innerText = 'Erro: verifique a chave.';
+        respostaDiv.innerText = '⚠️ Erro: verifique a chave ou a internet.';
     }
 }
 
-// Reconhecimento de voz
+function falaResposta(texto){
+    if(!('speechSynthesis' in window)) return;
+    const fala = new SpeechSynthesisUtterance(texto);
+    fala.lang = 'pt-BR';
+    fala.rate = 1.0;
+    fala.pitch = 1.0;
+    speechSynthesis.speak(fala);
+}
+
 function iniciarFala(){
-    if(!('webkitSpeechRecognition' in window)){
-        alert('Seu navegador não suporta fala.');
+    const botao = document.getElementById('botaoMic');
+    
+    if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
+        alert('Seu navegador não suporta reconhecimento de voz.');
         return;
     }
-    const recon = new webkitSpeechRecognition();
-    recon.lang = 'pt-BR';
-    recon.onresult = (evento) => {
-        document.getElementById('mensagem').value = evento.results[0][0].transcript;
+
+    const Recon = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!reconhecimento) reconhecimento = new Recon();
+    
+    reconhecimento.lang = 'pt-BR';
+    reconhecimento.continuous = false;
+    reconhecimento.onresult = (evento) => {
+        const falado = evento.results[0][0].transcript;
+        document.getElementById('mensagem').value = falado;
+        botao.classList.remove('gravando');
+        enviarMensagem();
     };
-    recon.start();
+    reconhecimento.onend = () => botao.classList.remove('gravando');
+    reconhecimento.onerror = () => botao.classList.remove('gravando');
+    
+    botao.classList.add('gravando');
+    reconhecimento.start();
 }
 </script>
 
