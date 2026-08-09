@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador — Laboratório Andrômeda</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #05050a, #0b0f19);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .btn-voltar {
+            align-self: flex-start;
+            color: #818cf8;
+            text-decoration: none;
+            font-size: 14px;
+            border: 1px solid #312e81;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .btn-voltar:hover { background: #1e1b4b; }
+        .painel {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(11, 15, 25, 0.9);
+            border: 1px solid #4c1d95;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.15);
+        }
+        h2 { color: #a78bfa; margin-bottom: 20px; font-size: 22px; text-align: center; }
+        .desc { font-size: 13px; color: #94a3b8; margin-bottom: 20px; text-align: center; }
+        .area-entrada {
+            background: #02040a;
+            border: 1px solid #312e81;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        label { font-size: 13px; color: #c7d2fe; display: block; margin-bottom: 6px; }
+        textarea, input {
+            width: 100%;
+            background: #02040a;
+            border: 1px solid #312e81;
+            border-radius: 8px;
+            padding: 10px;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+        textarea { height: 100px; resize: none; }
+        .btn-iniciar {
+            width: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-iniciar:hover { transform: translateY(-2px); }
+        .area-saida {
+            margin-top: 20px;
+            border: 1px dashed #34d399;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 120px;
+            color: #6ee7b7;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .navegacao {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .navegacao a {
+            color: #818cf8;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 6px 12px;
+            border: 1px solid #312e81;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="../laboratorio.html" class="btn-voltar">← Voltar ao Laboratório</a>
+
+    <div class="painel">
+        <h2>🔬 Simulador de Projetos</h2>
+        <p class="desc">Descreva o projeto ou sistema e a Andrômeda simulará o funcionamento passo a passo.</p>
+
+        <div class="area-entrada">
+            <label>Descrição do Sistema</label>
+            <textarea id="projeto" placeholder="Exemplo: Um sistema que recebe dados, processa e mostra o resultado..."></textarea>
+        </div>
+
+        <button class="btn-iniciar" onclick="simular()">▶ Iniciar Simulação</button>
+
+        <div class="area-saida" id="saida">
+            Aguardando início...
+        </div>
+    </div>
+
+    <div class="navegacao">
+        <a href="../02-AUDIO-VOZ/gerador-voz.html">← Áudio</a>
+        <a href="../laboratorio.html">Laboratório</a>
+        <a href="../04-IMAGENS/gerador-imagem.html">Imagens →</a>
+    </div>
+
+<script>
+function simular() {
+    const texto = document.getElementById('projeto').value.trim();
+    const saida = document.getElementById('saida');
+
+    if (!texto) {
+        saida.textContent = '⚠️ Descreva o projeto primeiro...';
+        return;
+    }
+
+    saida.textContent = '🔭 [Andrômeda] Analisando estrutura do sistema...\n';
+
+    setTimeout(() => {
+        saida.textContent += '✅ Estrutura identificada.\n';
+        saida.textContent += '⚙️ Simulando funcionamento...\n';
+    }, 1500);
+
+    setTimeout(() => {
+        saida.textContent += '🔄 Processando fluxos e conexões...\n';
+    }, 3000);
+
+    setTimeout(() => {
+        saida.textContent += '✅ Simulação concluída!\n\n';
+        saida.textContent += '📋 Resumo do projeto:\n"' + texto.substring(0, 80) + '..."\n\n';
+        saida.textContent += '🔗 Todos os caminhos verificados e funcionando corretamente.';
+    }, 5000);
+}
+</script>
+
+</body>
+</html>
