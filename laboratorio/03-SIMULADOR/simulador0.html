@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador — Laboratorio Andromeda</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #05050a, #0b0f19);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .btn-voltar {
+            align-self: flex-start;
+            color: #818cf8;
+            text-decoration: none;
+            font-size: 14px;
+            border: 1px solid #312e81;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .btn-voltar:hover { background: #1e1b4b; }
+        .painel {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(11, 15, 25, 0.9);
+            border: 1px solid #4c1d95;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.15);
+        }
+        h2 {
+            color: #a78bfa;
+            margin-bottom: 15px;
+            font-size: 22px;
+            text-align: center;
+        }
+        .desc {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            background: #02040a;
+            border: 1px solid #312e81;
+            border-radius: 10px;
+            padding: 12px;
+            color: #e2e8f0;
+            font-size: 14px;
+            resize: none;
+            margin-bottom: 15px;
+        }
+        .btn-iniciar {
+            width: 100%;
+            background: linear-gradient(90deg, #d97706, #b45309);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .btn-iniciar:hover { transform: translateY(-2px); }
+        .area-saida {
+            margin-top: 20px;
+            border: 1px dashed #f59e0b;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 120px;
+            color: #fcd34d;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .navegacao {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .navegacao a {
+            color: #818cf8;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 6px 12px;
+            border: 1px solid #312e81;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="../laboratorio.html" class="btn-voltar">← Voltar ao Laboratorio</a>
+
+    <div class="painel">
+        <h2>🤖 Simulador de Movimento</h2>
+        <p class="desc">Descreva o movimento ou acao e veja como seria a resposta.</p>
+
+        <textarea id="entrada" placeholder="Exemplo: Andar devagar, virar a cabeca para a direita, sorrir..."></textarea>
+
+        <button class="btn-iniciar" onclick="simular()">▶ Iniciar Simulacao</button>
+
+        <div class="area-saida" id="saida">
+            Aguardando instrucao...
+        </div>
+    </div>
+
+    <div class="navegacao">
+        <a href="../02-AUDIO/gerador-voz.html">← Audio</a>
+        <a href="../laboratorio.html">Laboratorio</a>
+    </div>
+
+<script>
+function simular() {
+    const texto = document.getElementById('entrada').value.trim();
+    const saida = document.getElementById('saida');
+
+    if (!texto) {
+        saida.textContent = '⚠️ Descreva o movimento primeiro...';
+        return;
+    }
+
+    saida.textContent = '🤖 [Simulador] Processando instrucao...\n';
+
+    setTimeout(() => {
+        saida.textContent += '✅ Movimento interpretado: "' + texto.substring(0,50) + '..."\n';
+    }, 1200);
+
+    setTimeout(() => {
+        saida.textContent += '⚙️ Aplicando coordenadas e expressao...\n';
+    }, 2500);
+
+    setTimeout(() => {
+        saida.textContent += '✅ Simulacao concluida!\n\n';
+        saida.textContent += '📋 Sequencia de movimentos gerada com sucesso.\n';
+        saida.textContent += '🔄 Todos os movimentos sincronizados.';
+    }, 4000);
+}
+</script>
+
+</body>
+</html>
