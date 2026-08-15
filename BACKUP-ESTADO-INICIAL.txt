@@ -1,0 +1,24 @@
+BACKUP - ESTADO INICIAL
+
+Data: 2026-08-15T15:02:00Z
+Commit atual (HEAD da branch feat/android-build): 9a7c331d4f870b1a82d9becd2937bc7244a84deb
+
+Arquivos top-level (visão inicial):
+- README.md
+- andromeda-config.js
+- andromeda-core.js
+- andromeda-inteligente.html
+- andromeda.jpg
+- index.html
+- manifest.json
+- talento-andromeda.js
+- voz.js
+- biblioteca/ (diretório)
+- laboratorio/ (diretório)
+- area de projetos.html
+- caderno-inteligente.html
+- raiz
+
+Observações:
+- Commit criado para preservar o estado atual antes de alterações.
+- Não foram alterados arquivos de lógica neste passo.
