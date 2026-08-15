@@ -173,13 +173,14 @@ async function enviarMensagem() {
             const fala = new SpeechSynthesisUtterance(textoResposta);
             fala.lang = 'pt-BR';
             fala.rate = 1.05;
+            fala.height = 1.1;
             speechSynthesis.cancel();
             speechSynthesis.speak(fala);
         }
 
     } catch(erro) {
         console.error(erro);
-        document.getElementById('textoResposta').innerHTML = `⚠️ Erro: ${erro.message}<br><br>💡 Dica: Se estiver no GitHub Pages, tente abrir o arquivo direto do celular (arquivo .html). O GitHub bloqueia às vezes.`;
+        document.getElementById('textoResposta').innerHTML = `⚠️ Erro: ${erro.message}<br><br>💡 Dica: Se estiver no GitHub Pages, tente abrir o arquivo direto do celular (arquivo .html). O[...]`;
         document.getElementById('status').innerHTML = '<span class="erro">❌ Erro de conexão</span>';
     }
 }
@@ -190,6 +191,15 @@ document.addEventListener('keypress', (e) => {
         enviarMensagem();
     }
 });
+</script>
+
+<!-- Service Worker registration -->
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then(reg => console.log('Service Worker registrado:', reg.scope))
+    .catch(err => console.warn('Falha ao registrar SW:', err));
+}
 </script>
 </body>
 </html>
