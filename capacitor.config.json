@@ -1,0 +1,6 @@
+{
+  "appId": "com.fraancival.andromeda",
+  "appName": "Andrômeda",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}
