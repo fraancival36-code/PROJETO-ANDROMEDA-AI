@@ -4,489 +4,192 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QG Andrômeda</title>
-    <link rel="manifest" href="manifest.json">
     <style>
-        :root {
-            --bg: #05071a;
-            --indigo: #4f46e5;
-            --indigo-soft: #a5b4fc;
-            --cyan: #22d3ee;
-            --violet: #8b5cf6;
-            --ember: #fbbf24;
-            --alert: #dc2626;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: linear-gradient(135deg, #05071a 0%, #1a1045 100%); 
+            color: white; 
+            font-family: sans-serif; 
+            padding: 20px; 
+            min-height: 100vh;
         }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background-color: var(--bg);
-            overflow-x: hidden;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            color: white;
-            padding: 30px;
-            padding-bottom: 140px;
-            position: relative;
-        }
-
-        #nucleo {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            display: block;
-        }
-
-        .esquerdo {
-            position: absolute;
-            top: 180px;
-            left: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .direito {
-            position: absolute;
-            top: 220px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        a {
-            color: #e0f0ff;
-            font-size: 16px;
-            text-decoration: none;
-            padding: 6px 10px;
-            text-shadow: 0 0 8px rgba(0,0,0,0.8);
-        }
-        a:hover {
-            color: #ffffff;
-        }
-
-        .status-vivo {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 13px;
-            letter-spacing: 1px;
-            color: var(--indigo-soft);
-            text-transform: uppercase;
-            opacity: 0.85;
-            text-shadow: 0 0 10px rgba(79,70,229,0.8);
-            pointer-events: none;
-            transition: color 0.4s ease;
-        }
-
-        .caixa-chave {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(10, 15, 40, 0.95);
-            border: 2px solid #4f46e5;
-            border-radius: 20px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            z-index: 100;
-            text-align: center;
-            box-shadow: 0 0 60px rgba(79,70,229,0.35);
-        }
-        .caixa-chave h2 {
-            color: #a5b4fc;
+        .container { max-width: 500px; margin: 0 auto; }
+        h1 { text-align: center; color: #a5b4fc; margin-bottom: 20px; font-size: 22px; }
+        
+        .caixa-chave { 
+            background: rgba(15,23,42,0.9); 
+            border: 2px solid #4f46e5; 
+            border-radius: 16px; 
+            padding: 25px; 
             margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(79,70,229,0.2);
         }
-        .caixa-chave input {
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            font-size: 16px; 
+            border-radius: 10px; 
+            border: 1px solid #4f46e5; 
+            background: #05071a; 
+            color: white; 
+            margin: 10px 0;
+        }
+        button { 
+            background: #4f46e5; 
+            color: white; 
+            border: none; 
+            padding: 14px 20px; 
+            font-size: 16px; 
+            border-radius: 10px; 
+            cursor: pointer; 
             width: 100%;
-            padding: 12px;
-            font-size: 14px;
-            border-radius: 8px;
-            border: 1px solid #4f46e5;
-            background: #0f172a;
-            color: white;
-            margin-bottom: 15px;
-            box-sizing: border-box;
+            margin-top: 10px;
+            transition: all 0.2s;
         }
-        .botao-ligar {
-            width: 100%;
-            padding: 14px;
-            font-size: 18px;
-            background: #16a34a;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-        .area-conversa {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 15px;
-            background: rgba(5, 7, 26, 0.9);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .caixa-texto {
-            flex: 1;
-            padding: 12px 15px;
-            font-size: 16px;
-            border-radius: 25px;
-            border: 2px solid #4f46e5;
-            background: rgba(15, 23, 42, 0.8);
-            color: white;
-        }
-        .botao-microfone {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            background: #4f46e5;
-            color: white;
-            font-size: 26px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        .botao-microfone.gravando {
-            background: #dc2626;
-            animation: pulsar 1s infinite;
-        }
-        @keyframes pulsar {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        .resposta {
-            position: fixed;
-            bottom: 95px;
-            left: 15px;
-            right: 15px;
-            background: rgba(15, 23, 42, 0.92);
-            border: 1px solid #4f46e5;
-            border-radius: 16px;
-            padding: 15px;
-            color: #e0f7ff;
-            max-height: 200px;
-            overflow-y: auto;
-            font-size: 16px;
+        button:hover { background: #4338ca; }
+        
+        .resposta { 
+            background: rgba(15,23,42,0.9); 
+            border: 1px solid #4f46e5; 
+            border-radius: 16px; 
+            padding: 20px; 
+            margin: 20px 0; 
+            min-height: 100px;
             line-height: 1.6;
+            font-size: 16px;
         }
+        .area-envio { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            padding: 15px; 
+            background: rgba(5,7,26,0.95); 
+            display: flex; 
+            gap: 10px;
+            border-top: 1px solid #333;
+        }
+        .area-envio input { flex: 1; margin: 0; }
+        .botao-envio { width: auto; padding: 14px 25px; margin: 0; }
+        .status { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
+        .erro { color: #f87171; }
+        .sucesso { color: #4ade80; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>🌌 Andrômeda</h1>
+        
+        <div class="status" id="status">Aguardando chave...</div>
+        
+        <!-- CAIXA DE CHAVE -->
+        <div class="caixa-chave" id="caixaChave">
+            <h3>🔑 Coloque sua chave</h3>
+            <input type="text" id="entradaChave" placeholder="Cole sua chave aqui..." value="">
+            <button onclick="salvarChave()">✅ Salvar e Ligar</button>
+            <p style="font-size:12px; color:#94a3b8; margin-top:10px;">Pegue grátis em: aistudio.google.com → "Criar chave de API"</p>
+        </div>
 
-    <canvas id="nucleo"></canvas>
-    <div class="status-vivo" id="statusVivo">em repouso</div>
-
-    <div class="esquerdo">
-        <a href="index.html">🏠 Inicio</a>
-        <a href="biblioteca/biblioteca.html">📚 Biblioteca</a>
-        <a href="laboratorio/laboratorio.html">🧪 Laboratorio</a>
-        <a href="area-de-projetos.html">📂 Projetos</a>
-        <a href="andromeda-inteligente.html">🧠 Andromeda</a>
+        <!-- RESPOSTA -->
+        <div class="resposta" id="resposta" style="display:none;">
+            <strong>Andrômeda:</strong><br><br>
+            <span id="textoResposta"></span>
+        </div>
     </div>
 
-    <div class="direito">
-        <a href="constituicao.html">⚖️ Constituicao</a>
-        <a href="manifesto.html">📜 Manifesto</a>
-        <a href="#">🎯 Missoes</a>
-        <a href="#">🧠 Memoria</a>
-    </div>
-
-    <div class="caixa-chave" id="caixaChave">
-        <h2>🔑 COLE SUA CHAVE DO GEMINI</h2>
-        <input type="text" id="chaveApi" placeholder="Começa com AlzaSy...">
-        <button class="botao-ligar" onclick="ligarAndromeda()">✅ LIGAR A ANDRÔMEDA</button>
-        <p style="font-size:13px; color:#94a3b8; margin-top:10px;">A chave fica salva. Só faz isso uma vez.</p>
-    </div>
-
-    <div class="resposta" id="resposta" style="display:none;"></div>
-
-    <div class="area-conversa">
-        <input type="text" class="caixa-texto" id="mensagem" placeholder="Escreva ou fale aqui..." onkeypress="if(event.key==='Enter')enviarMensagem()">
-        <button class="botao-microfone" id="botaoMic" onclick="iniciarFala()">🎤</button>
+    <!-- ÁREA DE DIGITAÇÃO -->
+    <div class="area-envio" id="areaEnvio" style="display:none;">
+        <input type="text" id="mensagem" placeholder="Escreva aqui...">
+        <button class="botao-envio" onclick="enviarMensagem()">Enviar</button>
     </div>
 
 <script>
-/* ============================================================
-   NÚCLEO VIVO — nebulosa de partículas que respira e reage
-   Estados: idle | acordando | pensando | ouvindo | falando
-   ============================================================ */
-(function(){
-    const canvas = document.getElementById('nucleo');
-    const ctx = canvas.getContext('2d');
-    const statusEl = document.getElementById('statusVivo');
-    let w, h, cx, cy;
+let CHAVE_GEMINI = localStorage.getItem('chaveGemini') || '';
 
-    function resize(){
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-        cx = w / 2;
-        cy = h / 2;
+// Inicializa
+window.addEventListener('load', () => {
+    if(CHAVE_GEMINI) {
+        usarChave(CHAVE_GEMINI);
+    } else {
+        document.getElementById('entradaChave').value = '';
     }
-    window.addEventListener('resize', resize);
-    resize();
+});
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const PALETAS = {
-        idle:      { hue: 245, hue2: 265, speed: 1,   pulso: 1,   ligacoes: true  },
-        acordando: { hue: 255, hue2: 190, speed: 2.6, pulso: 2.2, ligacoes: true  },
-        pensando:  { hue: 40,  hue2: 260, speed: 2.2, pulso: 1.5, ligacoes: true  },
-        ouvindo:   { hue: 355, hue2: 15,  speed: 1.8, pulso: 1.7, ligacoes: false },
-        falando:   { hue: 190, hue2: 260, speed: 1.6, pulso: 2.0, ligacoes: false }
-    };
-
-    const NOMES_ESTADO = {
-        idle: 'em repouso',
-        acordando: 'acordando',
-        pensando: 'pensando…',
-        ouvindo: 'ouvindo você',
-        falando: 'falando'
-    };
-
-    let estadoAtual = 'idle';
-    let transicao = 1; // 0->1 blend entre paleta anterior e atual
-    let paletaAnterior = PALETAS.idle;
-    window.definirEstadoAndromeda = function(novoEstado){
-        if(!PALETAS[novoEstado] || novoEstado === estadoAtual) return;
-        paletaAnterior = paletaAtual();
-        estadoAtual = novoEstado;
-        transicao = 0;
-        statusEl.textContent = NOMES_ESTADO[novoEstado] || novoEstado;
-    };
-
-    function paletaAtual(){
-        return PALETAS[estadoAtual];
+function salvarChave() {
+    const chave = document.getElementById('entradaChave').value.trim();
+    if(!chave) {
+        alert('Coloque a chave primeiro!');
+        return;
     }
-
-    function lerp(a, b, t){ return a + (b - a) * t; }
-
-    // Partículas em órbita ao redor do núcleo
-    const N = Math.min(140, Math.floor((window.innerWidth * window.innerHeight) / 9000));
-    const particulas = [];
-    for(let i = 0; i < N; i++){
-        const raioBase = 60 + Math.random() * Math.min(w, h) * 0.42;
-        particulas.push({
-            angulo: Math.random() * Math.PI * 2,
-            raioBase: raioBase,
-            velAngular: (0.05 + Math.random() * 0.25) * (Math.random() < 0.5 ? 1 : -1),
-            tamanho: 0.6 + Math.random() * 2.2,
-            fase: Math.random() * Math.PI * 2,
-            brilho: 0.4 + Math.random() * 0.6
-        });
-    }
-
-    let t = 0;
-    let ultimaAmplitudeFala = 0;
-
-    function desenhar(){
-        t += prefersReducedMotion ? 0.003 : 0.016;
-        if(transicao < 1) transicao = Math.min(1, transicao + 0.02);
-
-        const p = paletaAtual();
-        const pAnt = paletaAnterior;
-        const hue = lerp(pAnt.hue, p.hue, transicao);
-        const hue2 = lerp(pAnt.hue2, p.hue2, transicao);
-        const speed = lerp(pAnt.speed, p.speed, transicao);
-        const pulso = lerp(pAnt.pulso, p.pulso, transicao);
-
-        ctx.clearRect(0, 0, w, h);
-
-        // fundo: leve névoa radial
-        const fundo = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.75);
-        fundo.addColorStop(0, `hsla(${hue}, 70%, 14%, 1)`);
-        fundo.addColorStop(1, 'rgba(5,7,26,1)');
-        ctx.fillStyle = fundo;
-        ctx.fillRect(0, 0, w, h);
-
-        // respiração do núcleo central
-        const respiro = Math.sin(t * pulso) * 0.5 + 0.5;
-        const raioNucleo = 26 + respiro * 14 * pulso;
-
-        // halo externo
-        const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, raioNucleo * 6);
-        halo.addColorStop(0, `hsla(${hue}, 90%, 65%, 0.35)`);
-        halo.addColorStop(0.5, `hsla(${hue2}, 90%, 55%, 0.12)`);
-        halo.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = halo;
-        ctx.beginPath();
-        ctx.arc(cx, cy, raioNucleo * 6, 0, Math.PI * 2);
-        ctx.fill();
-
-        // núcleo sólido
-        ctx.beginPath();
-        ctx.fillStyle = `hsla(${hue}, 95%, 75%, 0.95)`;
-        ctx.shadowColor = `hsla(${hue}, 95%, 65%, 0.9)`;
-        ctx.shadowBlur = 40;
-        ctx.arc(cx, cy, raioNucleo, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        // partículas orbitando
-        const pontos = [];
-        for(let i = 0; i < particulas.length; i++){
-            const part = particulas[i];
-            part.angulo += part.velAngular * 0.01 * speed;
-            const oscila = Math.sin(t * 0.8 + part.fase) * 10 * pulso;
-            const raio = part.raioBase + oscila;
-            const x = cx + Math.cos(part.angulo) * raio;
-            const y = cy + Math.sin(part.angulo) * raio * 0.55; // achatado, sensação de disco
-            pontos.push({x, y});
-
-            const brilhoPulsa = part.brilho * (0.6 + respiro * 0.4);
-            ctx.beginPath();
-            ctx.fillStyle = `hsla(${hue2}, 85%, 70%, ${brilhoPulsa})`;
-            ctx.arc(x, y, part.tamanho, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // constelação: liga pontos próximos (só em estados calmos)
-        if(p.ligacoes){
-            ctx.lineWidth = 0.6;
-            for(let i = 0; i < pontos.length; i++){
-                for(let j = i + 1; j < pontos.length; j++){
-                    const dx = pontos[i].x - pontos[j].x;
-                    const dy = pontos[i].y - pontos[j].y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    if(dist < 70){
-                        ctx.strokeStyle = `hsla(${hue}, 80%, 70%, ${0.12 * (1 - dist/70)})`;
-                        ctx.beginPath();
-                        ctx.moveTo(pontos[i].x, pontos[i].y);
-                        ctx.lineTo(pontos[j].x, pontos[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        // ondas de fala saindo do núcleo
-        if(estadoAtual === 'falando'){
-            for(let onda = 0; onda < 3; onda++){
-                const fasee = (t * 1.4 + onda * 0.9) % 3;
-                const raioOnda = raioNucleo + fasee * 60;
-                const opac = Math.max(0, 0.35 - fasee * 0.12);
-                ctx.beginPath();
-                ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${opac})`;
-                ctx.lineWidth = 2;
-                ctx.arc(cx, cy, raioOnda, 0, Math.PI * 2);
-                ctx.stroke();
-            }
-        }
-
-        requestAnimationFrame(desenhar);
-    }
-    desenhar();
-})();
-
-/* ============================================================
-   LÓGICA ORIGINAL DA ANDRÔMEDA (chave, chat, voz)
-   ============================================================ */
-let chave = localStorage.getItem('chaveGemini') || '';
-let reconhecimento = null;
-
-if(chave){
-    document.getElementById('caixaChave').style.display = 'none';
-}
-
-function ligarAndromeda(){
-    chave = document.getElementById('chaveApi').value.trim();
-    if(!chave){ alert('Cola a chave primeiro!'); return; }
+    CHAVE_GEMINI = chave;
     localStorage.setItem('chaveGemini', chave);
-    document.getElementById('caixaChave').style.display = 'none';
-    if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('acordando');
-    setTimeout(() => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle'); }, 2200);
+    usarChave(chave);
 }
 
-async function enviarMensagem(){
+function usarChave(chave) {
+    document.getElementById('caixaChave').style.display = 'none';
+    document.getElementById('areaEnvio').style.display = 'flex';
+    document.getElementById('status').innerHTML = '<span class="sucesso">✅ Conectada! Pode falar!</span>';
+}
+
+async function enviarMensagem() {
     const texto = document.getElementById('mensagem').value.trim();
     if(!texto) return;
-    if(!chave) { alert('Cole a chave e ligue primeiro!'); return; }
+    if(!CHAVE_GEMINI) {
+        alert('Coloque a chave primeiro!');
+        return;
+    }
 
     document.getElementById('mensagem').value = '';
-    const respostaDiv = document.getElementById('resposta');
-    respostaDiv.style.display = 'block';
-    respostaDiv.innerText = '🧠 Pensando...';
-    if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('pensando');
+    document.getElementById('resposta').style.display = 'block';
+    document.getElementById('textoResposta').innerHTML = '🧠 Pensando...';
+    document.getElementById('status').innerHTML = 'Processando...';
+
+    const SISTEMA = `Você é a Andrômeda, assistente pessoal de Francival Alves Farias. Fale em português brasileiro, de forma simples, amigável e direta.`;
+
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${CHAVE_GEMINI}`;
 
     try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${chave}`, {
+        const resposta = await fetch(url, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: texto }] }]
+                contents: [{
+                    parts: [{ text: SISTEMA + '\n\nPergunta: ' + texto }]
+                }]
             })
         });
 
-        if(!res.ok) throw new Error('Erro na conexão');
-
-        const dados = await res.json();
-        const textoResposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não consegui entender.';
-
-        respostaDiv.innerText = textoResposta;
-        falaResposta(textoResposta);
+        if(!resposta.ok) throw new Error('Erro na conexão');
+        
+        const dados = await resposta.json();
+        const textoResposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não entendi.';
+        
+        document.getElementById('textoResposta').innerHTML = textoResposta;
+        document.getElementById('status').innerHTML = '<span class="sucesso">✅ Pronta</span>';
+        
+        // Fala a resposta
+        if ('speechSynthesis' in window) {
+            const fala = new SpeechSynthesisUtterance(textoResposta);
+            fala.lang = 'pt-BR';
+            fala.rate = 1.05;
+            speechSynthesis.cancel();
+            speechSynthesis.speak(fala);
+        }
 
     } catch(erro) {
-        respostaDiv.innerText = '⚠️ Erro: verifique a chave ou a internet.';
-        if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle');
+        console.error(erro);
+        document.getElementById('textoResposta').innerHTML = `⚠️ Erro: ${erro.message}<br><br>💡 Dica: Se estiver no GitHub Pages, tente abrir o arquivo direto do celular (arquivo .html). O GitHub bloqueia às vezes.`;
+        document.getElementById('status').innerHTML = '<span class="erro">❌ Erro de conexão</span>';
     }
 }
 
-function falaResposta(texto){
-    if(!('speechSynthesis' in window)){
-        if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle');
-        return;
-    }
-    const fala = new SpeechSynthesisUtterance(texto);
-    fala.lang = 'pt-BR';
-    fala.rate = 1.0;
-    fala.pitch = 1.0;
-    fala.onstart = () => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('falando'); };
-    fala.onend = () => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle'); };
-    fala.onerror = () => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle'); };
-    speechSynthesis.speak(fala);
-}
-
-function iniciarFala(){
-    const botao = document.getElementById('botaoMic');
-
-    if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
-        alert('Seu navegador não suporta reconhecimento de voz.');
-        return;
-    }
-
-    const Recon = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(!reconhecimento) reconhecimento = new Recon();
-
-    reconhecimento.lang = 'pt-BR';
-    reconhecimento.continuous = false;
-    reconhecimento.onresult = (evento) => {
-        const falado = evento.results[0][0].transcript;
-        document.getElementById('mensagem').value = falado;
-        botao.classList.remove('gravando');
+// Enter envia
+document.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter' && document.getElementById('areaEnvio').style.display === 'flex') {
         enviarMensagem();
-    };
-    reconhecimento.onstart = () => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('ouvindo'); };
-    reconhecimento.onend = () => {
-        botao.classList.remove('gravando');
-        if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle');
-    };
-    reconhecimento.onerror = () => {
-        botao.classList.remove('gravando');
-        if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle');
-    };
-
-    botao.classList.add('gravando');
-    reconhecimento.start();
-}
+    }
+});
 </script>
-
 </body>
 </html>
