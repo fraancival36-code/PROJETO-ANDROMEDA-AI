@@ -1,0 +1,21 @@
+{
+  "name": "PROJETO-ANDROMEDA-AI",
+  "version": "0.1.0",
+  "description": "Empacotamento Capacitor para Andrômeda",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -c-1 . -p 8080",
+    "build": "echo \"No build step (static)\"",
+    "cap:init": "npx cap init 'Andrômeda' com.fraancival.andromeda --web-dir=.",
+    "cap:add-android": "npx cap add android",
+    "cap:copy": "npx cap copy",
+    "cap:open-android": "npx cap open android"
+  },
+  "keywords": ["andrômeda","capacitor","pwa","android"],
+  "author": "fraancival36-code",
+  "license": "MIT",
+  "devDependencies": {
+    "@capacitor/cli": "^5.0.0",
+    "@capacitor/core": "^5.0.0"
+  }
+}
