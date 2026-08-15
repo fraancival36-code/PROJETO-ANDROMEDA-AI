@@ -27,6 +27,25 @@
             position: relative;
         }
 
+        /* === 🔑 BOTÃO DE CHAVE — DISCRETO NO CANTO === */
+        .botao-chave {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(79,70,229,0.2);
+            border: 1px solid rgba(79,70,229,0.5);
+            color: #a5b4fc;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 15;
+            transition: all 0.2s;
+        }
+        .botao-chave:hover {
+            background: rgba(79,70,229,0.4);
+        }
+
         /* === 👤 A ANDRÔMEDA — IMAGEM COMPLETA === */
         #andromeda-container {
             position: fixed;
@@ -106,22 +125,35 @@
             text-shadow: 0 0 10px rgba(79,70,229,0.8); pointer-events: none;
         }
 
-        /* === CAIXA DE CHAVE === */
+        /* === CAIXA DE CHAVE — POPUP === */
         .caixa-chave {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(10,15,40,0.95); border: 2px solid #4f46e5; border-radius: 20px;
-            padding: 30px; width: 90%; max-width: 400px; z-index: 100; text-align: center;
+            background: rgba(10,15,40,0.98); border: 2px solid #4f46e5; border-radius: 20px;
+            padding: 25px; width: 90%; max-width: 380px; z-index: 100; text-align: center;
             box-shadow: 0 0 60px rgba(79,70,229,0.35);
+            display: none;
         }
-        .caixa-chave h2 { color: #a5b4fc; margin-bottom: 20px; }
+        .caixa-chave.visivel { display: block; }
+        .caixa-chave h3 { color: #a5b4fc; margin-bottom: 15px; font-size: 18px; }
         .caixa-chave input {
             width: 100%; padding: 12px; font-size: 14px; border-radius: 8px;
             border: 1px solid #4f46e5; background: #0f172a; color: white;
-            margin-bottom: 15px; box-sizing: border-box;
+            margin-bottom: 12px; box-sizing: border-box;
         }
-        .botao-ligar {
-            width: 100%; padding: 14px; font-size: 18px; background: #16a34a;
+        .caixa-chave .botoes {
+            display: flex; gap: 10px;
+        }
+        .botao-salvar {
+            flex: 1; padding: 12px; font-size: 16px; background: #16a34a;
             color: white; border: none; border-radius: 10px; cursor: pointer;
+        }
+        .botao-fechar {
+            padding: 12px 16px; font-size: 16px; background: transparent;
+            color: #94a3b8; border: 1px solid #333; border-radius: 10px; cursor: pointer;
+        }
+        .dica-chave {
+            font-size: 12px; color: #64748b; margin-top: 10px;
+            line-height: 1.5;
         }
 
         /* === CONVERSA === */
@@ -153,15 +185,40 @@
             position: fixed; top: 50px; right: 20px; font-size: 11px; color: #64748b;
             z-index: 10; pointer-events: none;
         }
+        .sombra-fundo {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7); z-index: 99; display: none;
+        }
+        .sombra-fundo.visivel { display: block; }
     </style>
 </head>
 <body id="corpo-principal">
 
+    <!-- 🔑 BOTÃO DE CHAVE NO CANTO SUPERIOR DIREITO -->
+    <button class="botao-chave" onclick="abrirCaixaChave()">🔑 Chave</button>
+
+    <!-- SOMBRA DE FUNDO QUANDO A CAIXA ABRIR -->
+    <div class="sombra-fundo" id="sombraFundo" onclick="fecharCaixaChave()"></div>
+
+    <!-- CAIXA DE CHAVE -->
+    <div class="caixa-chave" id="caixaChave">
+        <h3>🔑 Chave da Andrômeda</h3>
+        <input type="text" id="entradaChave" placeholder="Cole sua chave aqui...">
+        <div class="botoes">
+            <button class="botao-fechar" onclick="fecharCaixaChave()">Fechar</button>
+            <button class="botao-salvar" onclick="salvarChave()">✅ Salvar e Ligar</button>
+        </div>
+        <p class="dica-chave">
+            Pegue grátis em: <strong>aistudio.google.com/apikey</strong><br>
+            A chave fica salva no seu navegador, nunca é enviada para mais ninguém.
+        </p>
+    </div>
+
     <!-- 👤 IMAGENS DA ANDRÔMEDA → Coloque 3 imagens na pasta -->
     <div id="andromeda-container">
-        <img src="andromeda-corpo.png" class="camada-andromeda" id="corpo-base" alt="Andrômeda">
-        <img src="andromeda-boca.png" class="camada-andromeda" id="boca-aberta" alt="">
-        <img src="andromeda-olhos-fechados.png" class="camada-andromeda" id="olhos-fechados" alt="">
+        <img src="andromeda-corpo.png" class="camada-andromeda" id="corpo-base" alt="Andrômeda" onerror="this.style.display='none'">
+        <img src="andromeda-boca.png" class="camada-andromeda" id="boca-aberta" alt="" onerror="this.style.display='none'">
+        <img src="andromeda-olhos-fechados.png" class="camada-andromeda" id="olhos-fechados" alt="" onerror="this.style.display='none'">
     </div>
 
     <!-- 🌌 NÚCLEO GALÁCTICO NA ROUPA -->
@@ -185,13 +242,6 @@
         <a href="#" onclick="limparMemoria(); return false;">🗑️ Limpar Memória</a>
     </div>
 
-    <div class="caixa-chave" id="caixaChave">
-        <h2>🔑 COLE SUA CHAVE DO GEMINI</h2>
-        <input type="text" id="chaveApi" placeholder="Começa com AIzaSy...">
-        <button class="botao-ligar" onclick="ligarAndromeda()">✅ LIGAR A ANDRÔMEDA</button>
-        <p style="font-size:13px; color:#94a3b8; margin-top:10px;">Grátis em aistudio.google.com/apikey</p>
-    </div>
-
     <div class="resposta" id="resposta" style="display:none;"></div>
 
     <div class="area-conversa">
@@ -200,6 +250,51 @@
     </div>
 
 <script>
+/* ============================================================
+   🔑 SISTEMA DE CHAVE — SALVA NO NAVEGADOR, NÃO NO CÓDIGO
+   ============================================================ */
+let CHAVE_GEMINI = localStorage.getItem('chaveGemini') || '';
+let reconhecimento = null;
+
+function abrirCaixaChave(){
+    document.getElementById('caixaChave').classList.add('visivel');
+    document.getElementById('sombraFundo').classList.add('visivel');
+    document.getElementById('entradaChave').value = CHAVE_GEMINI;
+    document.getElementById('entradaChave').focus();
+}
+
+function fecharCaixaChave(){
+    document.getElementById('caixaChave').classList.remove('visivel');
+    document.getElementById('sombraFundo').classList.remove('visivel');
+}
+
+function salvarChave(){
+    const novaChave = document.getElementById('entradaChave').value.trim();
+    if(!novaChave){
+        alert('Por favor, cole sua chave!');
+        return;
+    }
+    CHAVE_GEMINI = novaChave;
+    localStorage.setItem('chaveGemini', novaChave);
+    fecharCaixaChave();
+    
+    // Acorda a Andrômeda
+    definirEstadoAndromeda('acordando');
+    setTimeout(() => definirEstadoAndromeda('idle'), 2500);
+    
+    alert('✅ Chave salva! Andrômeda está pronta!');
+}
+
+// Abre a caixa automaticamente se não tiver chave
+window.addEventListener('load', () => {
+    if(!CHAVE_GEMINI) {
+        setTimeout(abrirCaixaChave, 500);
+    } else {
+        setTimeout(() => definirEstadoAndromeda('acordando'), 500);
+        setTimeout(() => definirEstadoAndromeda('idle'), 2500);
+    }
+});
+
 /* ============================================================
    🌌 NÚCLEO GALÁCTICO — ROUPA VIVA
    ============================================================ */
@@ -235,7 +330,6 @@
         transicao = 0;
         statusEl.textContent = NOMES_ESTADO[novoEstado] || novoEstado;
         
-        // 🗣️ Ativa/desativa boca aberta
         const corpo = document.getElementById('corpo-principal');
         if(novoEstado === 'falando') corpo.classList.add('falando');
         else corpo.classList.remove('falando');
@@ -244,7 +338,6 @@
     function paletaAtual(){ return PALETAS[estadoAtual]; }
     function lerp(a, b, t){ return a + (b - a) * t; }
 
-    // Partículas
     const N = 75;
     const particulas = [];
     for(let i = 0; i < N; i++){
@@ -271,7 +364,6 @@
         const respiro = Math.sin(t * pulso) * 0.5 + 0.5;
         const raioNucleo = 20 + respiro * 10 * pulso;
 
-        // Halo
         const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, raioNucleo * 5);
         halo.addColorStop(0, `hsla(${hue},90%,65%,0.4)`);
         halo.addColorStop(0.5, `hsla(${hue2},90%,55%,0.15)`);
@@ -279,7 +371,6 @@
         ctx.fillStyle = halo;
         ctx.beginPath(); ctx.arc(cx, cy, raioNucleo * 5, 0, Math.PI*2); ctx.fill();
 
-        // Núcleo
         ctx.beginPath();
         ctx.fillStyle = `hsla(${hue},95%,75%,0.95)`;
         ctx.shadowColor = `hsla(${hue},95%,65%,0.9)`;
@@ -287,8 +378,6 @@
         ctx.arc(cx, cy, raioNucleo, 0, Math.PI*2); ctx.fill();
         ctx.shadowBlur = 0;
 
-        // Partículas
-        const pontos = [];
         for(let i=0;i<particulas.length;i++){
             const part = particulas[i];
             part.angulo += part.velAngular * 0.01 * speed;
@@ -296,13 +385,11 @@
             const raio = part.raioBase + oscila;
             const x = cx + Math.cos(part.angulo) * raio;
             const y = cy + Math.sin(part.angulo) * raio;
-            pontos.push({x,y});
             ctx.beginPath();
             ctx.fillStyle = `hsla(${hue2},85%,70%,${part.brilho*(0.6+respiro*0.4)})`;
             ctx.arc(x, y, part.tamanho, 0, Math.PI*2); ctx.fill();
         }
 
-        // Ondas ao falar
         if(estadoAtual === 'falando'){
             for(let o=0;o<3;o++){
                 const f = (t*1.4 + o*0.9) % 3;
@@ -318,10 +405,10 @@
 })();
 
 /* ============================================================
-   🧠 MEMÓRIA PERMANENTE — Salva conversas
+   🧠 MEMÓRIA PERMANENTE
    ============================================================ */
 let historicoConversa = JSON.parse(localStorage.getItem('historicoAndromeda') || '[]');
-const MEMORIA_MAX = 15; // Guarda últimas 15 mensagens
+const MEMORIA_MAX = 15;
 
 function atualizarInfoMemoria(){
     document.getElementById('memoriaInfo').textContent = `🧠 Memória: ${historicoConversa.length} mensagens`;
@@ -345,7 +432,7 @@ function limparMemoria(){
 }
 
 /* ============================================================
-   📝 PERSONALIDADE — Quem é a Andrômeda
+   📝 PERSONALIDADE
    ============================================================ */
 const SISTEMA = `Você é a **Andrômeda**, assistente pessoal, criada por **Francival Alves Farias**.
 Você é calorosa, amigável, direta, leal e inteligente. Fala sempre em **português brasileiro**, simples e natural.
@@ -354,29 +441,17 @@ Responda de forma clara, nunca seja formal. Seja prestativa e atenta.
 Lembre-se do que conversamos antes — somos parceiros.`;
 
 /* ============================================================
-   🔑 CHAVE E CONEXÃO
-   ============================================================ */
-let chave = localStorage.getItem('chaveGemini') || '';
-let reconhecimento = null;
-
-if(chave) document.getElementById('caixaChave').style.display = 'none';
-
-function ligarAndromeda(){
-    chave = document.getElementById('chaveApi').value.trim();
-    if(!chave){ alert('Cole a chave primeiro!'); return; }
-    localStorage.setItem('chaveGemini', chave);
-    document.getElementById('caixaChave').style.display = 'none';
-    if(window.definirEstadoAndromeda) definirEstadoAndromeda('acordando');
-    setTimeout(() => definirEstadoAndromeda('idle'), 2200);
-}
-
-/* ============================================================
-   💬 ENVIAR MENSAGEM — COM MEMÓRIA
+   💬 ENVIAR MENSAGEM
    ============================================================ */
 async function enviarMensagem(){
     const texto = document.getElementById('mensagem').value.trim();
     if(!texto) return;
-    if(!chave) { alert('Cole a chave e ligue primeiro!'); return; }
+    
+    if(!CHAVE_GEMINI) {
+        alert('Por favor, coloque sua chave primeiro! Clique em 🔑 Chave no canto superior direito.');
+        abrirCaixaChave();
+        return;
+    }
 
     document.getElementById('mensagem').value = '';
     const respostaDiv = document.getElementById('resposta');
@@ -384,20 +459,17 @@ async function enviarMensagem(){
     respostaDiv.innerText = '🧠 Pensando...';
     definirEstadoAndromeda('pensando');
 
-    // Monta contexto com memória
     let contexto = SISTEMA + '\n\n--- Conversa anterior ---\n';
-    historicoConversa.forEach((h,i) => {
+    historicoConversa.forEach((h) => {
         contexto += `\nUsuário: ${h.usuario}\nAndrômeda: ${h.resposta}`;
     });
     contexto += `\n--- Nova pergunta ---\nUsuário: ${texto}`;
 
     try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${chave}`, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${CHAVE_GEMINI}`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: contexto }] }]
-            })
+            body: JSON.stringify({ contents: [{ parts: [{ text: contexto }] }] })
         });
 
         if(!res.ok) throw new Error('Erro na conexão');
@@ -409,27 +481,26 @@ async function enviarMensagem(){
         falaResposta(textoResposta);
 
     } catch(erro) {
-        respostaDiv.innerText = '⚠️ Erro: verifique a chave ou a internet.';
+        respostaDiv.innerText = '⚠️ Erro: verifique a chave, a internet ou tente novamente.';
         definirEstadoAndromeda('idle');
     }
 }
 
 /* ============================================================
-   🔊 FALA — VOZ EM PORTUGUÊS BRASILEIRO
+   🔊 FALA — VOZ EM PORTUGUÊS
    ============================================================ */
 function falaResposta(texto){
     if(!('speechSynthesis' in window)){
         definirEstadoAndromeda('idle');
         return;
     }
-    // Escolhe melhor voz em português
     const vozes = speechSynthesis.getVoices();
-    const vozPt = vozes.find(v => v.lang === 'pt-BR' && !v.name.includes('Microsoft')) || vozes.find(v => v.lang.startsWith('pt')) || vozes[0];
+    const vozPt = vozes.find(v => v.lang === 'pt-BR') || vozes.find(v => v.lang.startsWith('pt')) || vozes[0];
     
     const fala = new SpeechSynthesisUtterance(texto);
     fala.voice = vozPt || null;
     fala.lang = 'pt-BR';
-    fala.rate = 1.05; // Um pouco mais natural
+    fala.rate = 1.05;
     fala.pitch = 1.02;
     fala.volume = 1;
     
@@ -440,15 +511,20 @@ function falaResposta(texto){
     speechSynthesis.speak(fala);
 }
 
-// Carrega vozes quando prontas
 if ('speechSynthesis' in window) {
     speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
 }
 
 /* ============================================================
-   🎤 MICROFONE — OUVIR VOCÊ
+   🎤 MICROFONE
    ============================================================ */
 function iniciarFala(){
+    if(!CHAVE_GEMINI) {
+        alert('Por favor, coloque sua chave primeiro!');
+        abrirCaixaChave();
+        return;
+    }
+    
     const botao = document.getElementById('botaoMic');
 
     if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
@@ -461,7 +537,6 @@ function iniciarFala(){
 
     reconhecimento.lang = 'pt-BR';
     reconhecimento.continuous = false;
-    reconhecimento.interimResults = false;
     
     reconhecimento.onresult = (evento) => {
         const falado = evento.results[0][0].transcript;
