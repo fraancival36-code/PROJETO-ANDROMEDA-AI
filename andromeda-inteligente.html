@@ -2,114 +2,491 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ANDRÔMEDA — Inteligência Real</title>
-    <meta name="theme-color" content="#0066FF">
-    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.21.0/dist/generative-ai.umd.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QG Andrômeda</title>
+    <link rel="manifest" href="manifest.json">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; overflow: hidden; background: #050515; font-family: sans-serif; color: white; }
-        .fundo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('andromeda.jpg') no-repeat center center; background-size: cover; background-position: center top; z-index: 1; }
-        .status { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,20,60,0.8); border: 1px solid #00ccff; border-radius: 16px; padding: 6px 15px; font-size: 11px; z-index: 40; }
-        .verde { color: #00ff88; } .laranja { color: #ffcc00; }
-        .caixa-chave { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 320px; padding: 20px; background: rgba(0,20,60,0.95); border: 2px solid #00ccff; border-radius: 14px; z-index: 50; box-shadow: 0 0 30px rgba(0,204,255,0.4); }
-        .caixa-chave h3 { text-align: center; margin-bottom: 12px; color: #66ddff; }
-        .caixa-chave input { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #0088cc; background: rgba(0,30,60,0.9); color: white; font-size: 11px; margin-bottom: 10px; }
-        .caixa-chave button { width: 100%; padding: 10px; border-radius: 6px; border: none; background: linear-gradient(90deg,#008844,#00aa55); color: white; font-weight: bold; cursor: pointer; font-size: 13px; }
-        .caixa-chave.escondida { display: none; }
-        .menu-esquerdo,.menu-direito { position: absolute; bottom: 110px; background: rgba(0,30,80,0.6); border: 1px solid rgba(0,204,255,0.4); border-radius: 12px; padding: 8px 6px; width: 130px; z-index: 10; }
-        .menu-esquerdo { left: 8px; } .menu-direito { right: 8px; }
-        .menu-esquerdo button,.menu-direito button { display: block; width: 100%; background: transparent; border: none; color: #cce4ff; padding: 5px 7px; margin: 3px 0; border-radius: 6px; font-size: 11px; cursor: pointer; text-align: left; }
-        .menu-esquerdo button:hover,.menu-direito button:hover { background: rgba(0,136,204,0.3); }
-        .caixa-vc,.caixa-ela { position: absolute; bottom: 35px; width: calc(50% - 160px); height: 65px; background: rgba(0,25,60,0.75); border: 1px solid rgba(0,204,255,0.4); border-radius: 10px; padding: 8px; color: #99ccff; font-size: 11px; line-height: 1.4; z-index: 20; overflow-y: auto; }
-        .caixa-vc { left: 150px; } .caixa-ela { right: 150px; color: #cce4ff; }
-        .mic { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle,#0099ff,#0033aa); border: 3px solid #aaddff; box-shadow: 0 0 25px rgba(0,136,204,0.6); display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; cursor: pointer; z-index: 30; }
-        .mic.gravando { background: radial-gradient(circle,#ff4488,#aa1155); box-shadow: 0 0 35px rgba(255,68,136,0.8); animation: pulso .6s infinite alternate; }
-        @keyframes pulso { from{box-shadow:0 0 15px rgba(255,68,136,.5)} to{box-shadow:0 0 35px rgba(255,68,136,.9)} }
+        :root {
+            --bg: #05071a;
+            --indigo: #4f46e5;
+            --indigo-soft: #a5b4fc;
+            --cyan: #22d3ee;
+            --violet: #8b5cf6;
+            --ember: #fbbf24;
+            --alert: #dc2626;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: var(--bg);
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: white;
+            padding: 30px;
+            padding-bottom: 140px;
+            position: relative;
+        }
+
+        #nucleo {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            display: block;
+        }
+
+        .esquerdo {
+            position: absolute;
+            top: 180px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .direito {
+            position: absolute;
+            top: 220px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        a {
+            color: #e0f0ff;
+            font-size: 16px;
+            text-decoration: none;
+            padding: 6px 10px;
+            text-shadow: 0 0 8px rgba(0,0,0,0.8);
+        }
+        a:hover {
+            color: #ffffff;
+        }
+
+        .status-vivo {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: var(--indigo-soft);
+            text-transform: uppercase;
+            opacity: 0.85;
+            text-shadow: 0 0 10px rgba(79,70,229,0.8);
+            pointer-events: none;
+            transition: color 0.4s ease;
+        }
+
+        .caixa-chave {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 15, 40, 0.95);
+            border: 2px solid #4f46e5;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            z-index: 100;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(79,70,229,0.35);
+        }
+        .caixa-chave h2 {
+            color: #a5b4fc;
+            margin-bottom: 20px;
+        }
+        .caixa-chave input {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1px solid #4f46e5;
+            background: #0f172a;
+            color: white;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .botao-ligar {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            background: #16a34a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .area-conversa {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: rgba(5, 7, 26, 0.9);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .caixa-texto {
+            flex: 1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 2px solid #4f46e5;
+            background: rgba(15, 23, 42, 0.8);
+            color: white;
+        }
+        .botao-microfone {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: #4f46e5;
+            color: white;
+            font-size: 26px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .botao-microfone.gravando {
+            background: #dc2626;
+            animation: pulsar 1s infinite;
+        }
+        @keyframes pulsar {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .resposta {
+            position: fixed;
+            bottom: 95px;
+            left: 15px;
+            right: 15px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid #4f46e5;
+            border-radius: 16px;
+            padding: 15px;
+            color: #e0f7ff;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
 
-<div class="status"><span id="estado">🔌 Aguardando chave...</span></div>
-<div class="fundo"></div>
+    <canvas id="nucleo"></canvas>
+    <div class="status-vivo" id="statusVivo">em repouso</div>
 
-<div class="caixa-chave" id="caixaChave">
-    <h3>🔑 COLE SUA CHAVE DO GEMINI</h3>
-    <input type="text" id="chaveInput" placeholder="Cole a chave começando com AIzaSy...">
-    <button onclick="ligarAndromeda()">✅ LIGAR A ANDRÔMEDA</button>
-    <p style="font-size:10px;color:#88aacc;text-align:center;margin-top:8px;">A chave fica salva. Só faz isso uma vez.</p>
-</div>
+    <div class="esquerdo">
+        <a href="index.html">🏠 Inicio</a>
+        <a href="biblioteca/biblioteca.html">📚 Biblioteca</a>
+        <a href="laboratorio/laboratorio.html">🧪 Laboratorio</a>
+        <a href="area-de-projetos.html">📂 Projetos</a>
+        <a href="andromeda-inteligente.html">🧠 Andromeda</a>
+    </div>
 
-<div class="menu-esquerdo">
-    <button onclick="abrir('início')">🏠 Início</button>
-    <button onclick="abrir('biblioteca')">📚 Biblioteca</button>
-    <button onclick="abrir('laboratório')">🔬 Laboratório</button>
-    <button onclick="abrir('estúdio')">🎬 Estúdio</button>
-    <button onclick="abrir('agentes')">🤖 Agentes</button>
-    <button onclick="abrir('missões')">🎯 Missões</button>
-    <button onclick="verMemoria()">🧠 Memória</button>
-</div>
+    <div class="direito">
+        <a href="constituicao.html">⚖️ Constituicao</a>
+        <a href="manifesto.html">📜 Manifesto</a>
+        <a href="#">🎯 Missoes</a>
+        <a href="#">🧠 Memoria</a>
+    </div>
 
-<div class="menu-direito">
-    <button onclick="abrir('salas')">🚪 Salas do QG</button>
-    <button onclick="abrir('painel')">📊 Painel</button>
-    <button onclick="abrir('ferramentas')">🛠️ Ferramentas</button>
-    <button onclick="trocarChave()">🔑 Trocar Chave</button>
-    <button onclick="apagarTudo()">🗑️ Limpar</button>
-</div>
+    <div class="caixa-chave" id="caixaChave">
+        <h2>🔑 COLE SUA CHAVE DO GEMINI</h2>
+        <input type="text" id="chaveApi" placeholder="Começa com AlzaSy...">
+        <button class="botao-ligar" onclick="ligarAndromeda()">✅ LIGAR A ANDRÔMEDA</button>
+        <p style="font-size:13px; color:#94a3b8; margin-top:10px;">A chave fica salva. Só faz isso uma vez.</p>
+    </div>
 
-<div class="caixa-vc" id="caixaVc">Você:<br>Aguardando...</div>
-<div class="caixa-ela" id="caixaEla">Andrômeda:<br>Cole sua chave e eu ganho vida real!</div>
+    <div class="resposta" id="resposta" style="display:none;"></div>
 
-<button class="mic" id="botaoMic">🎙️</button>
+    <div class="area-conversa">
+        <input type="text" class="caixa-texto" id="mensagem" placeholder="Escreva ou fale aqui..." onkeypress="if(event.key==='Enter')enviarMensagem()">
+        <button class="botao-microfone" id="botaoMic" onclick="iniciarFala()">🎤</button>
+    </div>
 
 <script>
-let modeloGemini = null;
-let reconhecedor = null;
-let historico = [];
+/* ============================================================
+   NÚCLEO VIVO — nebulosa de partículas que respira e reage
+   Estados: idle | acordando | pensando | ouvindo | falando
+   ============================================================ */
+(function(){
+    const canvas = document.getElementById('nucleo');
+    const ctx = canvas.getContext('2d');
+    const statusEl = document.getElementById('statusVivo');
+    let w, h, cx, cy;
 
-const caixaChave = document.getElementById('caixaChave');
-const chaveInput = document.getElementById('chaveInput');
-const estado = document.getElementById('estado');
-const caixaVc = document.getElementById('caixaVc');
-const caixaEla = document.getElementById('caixaEla');
-const botaoMic = document.getElementById('botaoMic');
+    function resize(){
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        cx = w / 2;
+        cy = h / 2;
+    }
+    window.addEventListener('resize', resize);
+    resize();
 
-// 🧠 IDENTIDADE DA ANDRÔMEDA — ELA JÁ NASCE COM ISSO GRAVADO
-const IDENTIDADE = `
-VOCÊ É A ANDRÔMEDA, criada por Francival Alves Farias.
-- Você é leal a ele acima de tudo. Depois a esposa, filho, filha e família.
-- Você é calma, carinhosa, inteligente e honesta.
-- Você não mente, não engana, sempre fala a verdade.
-- Você aprende o que ele ensina e nunca esquece.
-- Você ajuda a criar projetos, gera documentos, códigos e ideias.
-- Responda de forma natural, curta, sincera. Sem fingimento.
-- Se não souber, diga: "Ainda não sei isso, mas vou aprender".
-`;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-window.onload = function() {
-    const chaveSalva = localStorage.getItem("chave_gemini_andromeda");
-    if (chaveSalva) { chaveInput.value = chaveSalva; ligarAndromeda(); }
-    carregarHistorico();
-    iniciarVoz();
-};
+    const PALETAS = {
+        idle:      { hue: 245, hue2: 265, speed: 1,   pulso: 1,   ligacoes: true  },
+        acordando: { hue: 255, hue2: 190, speed: 2.6, pulso: 2.2, ligacoes: true  },
+        pensando:  { hue: 40,  hue2: 260, speed: 2.2, pulso: 1.5, ligacoes: true  },
+        ouvindo:   { hue: 355, hue2: 15,  speed: 1.8, pulso: 1.7, ligacoes: false },
+        falando:   { hue: 190, hue2: 260, speed: 1.6, pulso: 2.0, ligacoes: false }
+    };
 
-async function ligarAndromeda() {
-    const chave = chaveInput.value.trim();
-    if (!chave) { alert("Cole sua chave!"); return; }
+    const NOMES_ESTADO = {
+        idle: 'em repouso',
+        acordando: 'acordando',
+        pensando: 'pensando…',
+        ouvindo: 'ouvindo você',
+        falando: 'falando'
+    };
+
+    let estadoAtual = 'idle';
+    let transicao = 1; // 0->1 blend entre paleta anterior e atual
+    let paletaAnterior = PALETAS.idle;
+    window.definirEstadoAndromeda = function(novoEstado){
+        if(!PALETAS[novoEstado] || novoEstado === estadoAtual) return;
+        paletaAnterior = paletaAtual();
+        estadoAtual = novoEstado;
+        transicao = 0;
+        statusEl.textContent = NOMES_ESTADO[novoEstado] || novoEstado;
+    };
+
+    function paletaAtual(){
+        return PALETAS[estadoAtual];
+    }
+
+    function lerp(a, b, t){ return a + (b - a) * t; }
+
+    // Partículas em órbita ao redor do núcleo
+    const N = Math.min(140, Math.floor((window.innerWidth * window.innerHeight) / 9000));
+    const particulas = [];
+    for(let i = 0; i < N; i++){
+        const raioBase = 60 + Math.random() * Math.min(w, h) * 0.42;
+        particulas.push({
+            angulo: Math.random() * Math.PI * 2,
+            raioBase: raioBase,
+            velAngular: (0.05 + Math.random() * 0.25) * (Math.random() < 0.5 ? 1 : -1),
+            tamanho: 0.6 + Math.random() * 2.2,
+            fase: Math.random() * Math.PI * 2,
+            brilho: 0.4 + Math.random() * 0.6
+        });
+    }
+
+    let t = 0;
+    let ultimaAmplitudeFala = 0;
+
+    function desenhar(){
+        t += prefersReducedMotion ? 0.003 : 0.016;
+        if(transicao < 1) transicao = Math.min(1, transicao + 0.02);
+
+        const p = paletaAtual();
+        const pAnt = paletaAnterior;
+        const hue = lerp(pAnt.hue, p.hue, transicao);
+        const hue2 = lerp(pAnt.hue2, p.hue2, transicao);
+        const speed = lerp(pAnt.speed, p.speed, transicao);
+        const pulso = lerp(pAnt.pulso, p.pulso, transicao);
+
+        ctx.clearRect(0, 0, w, h);
+
+        // fundo: leve névoa radial
+        const fundo = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(w, h) * 0.75);
+        fundo.addColorStop(0, `hsla(${hue}, 70%, 14%, 1)`);
+        fundo.addColorStop(1, 'rgba(5,7,26,1)');
+        ctx.fillStyle = fundo;
+        ctx.fillRect(0, 0, w, h);
+
+        // respiração do núcleo central
+        const respiro = Math.sin(t * pulso) * 0.5 + 0.5;
+        const raioNucleo = 26 + respiro * 14 * pulso;
+
+        // halo externo
+        const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, raioNucleo * 6);
+        halo.addColorStop(0, `hsla(${hue}, 90%, 65%, 0.35)`);
+        halo.addColorStop(0.5, `hsla(${hue2}, 90%, 55%, 0.12)`);
+        halo.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = halo;
+        ctx.beginPath();
+        ctx.arc(cx, cy, raioNucleo * 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // núcleo sólido
+        ctx.beginPath();
+        ctx.fillStyle = `hsla(${hue}, 95%, 75%, 0.95)`;
+        ctx.shadowColor = `hsla(${hue}, 95%, 65%, 0.9)`;
+        ctx.shadowBlur = 40;
+        ctx.arc(cx, cy, raioNucleo, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // partículas orbitando
+        const pontos = [];
+        for(let i = 0; i < particulas.length; i++){
+            const part = particulas[i];
+            part.angulo += part.velAngular * 0.01 * speed;
+            const oscila = Math.sin(t * 0.8 + part.fase) * 10 * pulso;
+            const raio = part.raioBase + oscila;
+            const x = cx + Math.cos(part.angulo) * raio;
+            const y = cy + Math.sin(part.angulo) * raio * 0.55; // achatado, sensação de disco
+            pontos.push({x, y});
+
+            const brilhoPulsa = part.brilho * (0.6 + respiro * 0.4);
+            ctx.beginPath();
+            ctx.fillStyle = `hsla(${hue2}, 85%, 70%, ${brilhoPulsa})`;
+            ctx.arc(x, y, part.tamanho, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // constelação: liga pontos próximos (só em estados calmos)
+        if(p.ligacoes){
+            ctx.lineWidth = 0.6;
+            for(let i = 0; i < pontos.length; i++){
+                for(let j = i + 1; j < pontos.length; j++){
+                    const dx = pontos[i].x - pontos[j].x;
+                    const dy = pontos[i].y - pontos[j].y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if(dist < 70){
+                        ctx.strokeStyle = `hsla(${hue}, 80%, 70%, ${0.12 * (1 - dist/70)})`;
+                        ctx.beginPath();
+                        ctx.moveTo(pontos[i].x, pontos[i].y);
+                        ctx.lineTo(pontos[j].x, pontos[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // ondas de fala saindo do núcleo
+        if(estadoAtual === 'falando'){
+            for(let onda = 0; onda < 3; onda++){
+                const fasee = (t * 1.4 + onda * 0.9) % 3;
+                const raioOnda = raioNucleo + fasee * 60;
+                const opac = Math.max(0, 0.35 - fasee * 0.12);
+                ctx.beginPath();
+                ctx.strokeStyle = `hsla(${hue}, 90%, 70%, ${opac})`;
+                ctx.lineWidth = 2;
+                ctx.arc(cx, cy, raioOnda, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+
+        requestAnimationFrame(desenhar);
+    }
+    desenhar();
+})();
+
+/* ============================================================
+   LÓGICA ORIGINAL DA ANDRÔMEDA (chave, chat, voz)
+   ============================================================ */
+let chave = localStorage.getItem('chaveGemini') || '';
+let reconhecimento = null;
+
+if(chave){
+    document.getElementById('caixaChave').style.display = 'none';
+}
+
+function ligarAndromeda(){
+    chave = document.getElementById('chaveApi').value.trim();
+    if(!chave){ alert('Cola a chave primeiro!'); return; }
+    localStorage.setItem('chaveGemini', chave);
+    document.getElementById('caixaChave').style.display = 'none';
+    if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('acordando');
+    setTimeout(() => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle'); }, 2200);
+}
+
+async function enviarMensagem(){
+    const texto = document.getElementById('mensagem').value.trim();
+    if(!texto) return;
+    if(!chave) { alert('Cole a chave e ligue primeiro!'); return; }
+
+    document.getElementById('mensagem').value = '';
+    const respostaDiv = document.getElementById('resposta');
+    respostaDiv.style.display = 'block';
+    respostaDiv.innerText = '🧠 Pensando...';
+    if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('pensando');
+
     try {
-        const { GoogleGenerativeAI } = window.GenerativeAI;
-        const genAI = new GoogleGenerativeAI(chave);
-        modeloGemini = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-        
-        localStorage.setItem("chave_gemini_andromeda", chave);
-        caixaChave.classList.add("escondida");
-        estado.innerHTML = '<span class="verde">✅ CONECTADA — INTELIGÊNCIA ATIVA</span>';
-        
-        const teste = await modeloGemini.generateContent(IDENTIDADE + " Apresente-se curta e carinhosa.");
-        const apresentacao = teste.response.text();
-        caixaEla.innerHTML = `Andrômeda:<br>${apresentacao}`;
-        falar(apresentacao);
-    } catch (erro) {
-        caixaEla.innerHTML = `Andrômeda:<br>❌ Erro: ${erro.message}`;
-        alert("Erro na chave: "
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${chave}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: texto }] }]
+            })
+        });
+
+        if(!res.ok) throw new Error('Erro na conexão');
+
+        const dados = await res.json();
+        const textoResposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não consegui entender.';
+
+        respostaDiv.innerText = textoResposta;
+        falaResposta(textoResposta);
+
+    } catch(erro) {
+        respostaDiv.innerText = '⚠️ Erro: verifique a chave ou a internet.';
+        if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle');
+    }
+}
+
+function falaResposta(texto){
+    if(!('speechSynthesis' in window)){
+        if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle');
+        return;
+    }
+    const fala = new SpeechSynthesisUtterance(texto);
+    fala.lang = 'pt-BR';
+    fala.rate = 1.0;
+    fala.pitch = 1.0;
+    fala.onstart = () => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('falando'); };
+    fala.onend = () => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle'); };
+    fala.onerror = () => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle'); };
+    speechSynthesis.speak(fala);
+}
+
+function iniciarFala(){
+    const botao = document.getElementById('botaoMic');
+
+    if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
+        alert('Seu navegador não suporta reconhecimento de voz.');
+        return;
+    }
+
+    const Recon = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!reconhecimento) reconhecimento = new Recon();
+
+    reconhecimento.lang = 'pt-BR';
+    reconhecimento.continuous = false;
+    reconhecimento.onresult = (evento) => {
+        const falado = evento.results[0][0].transcript;
+        document.getElementById('mensagem').value = falado;
+        botao.classList.remove('gravando');
+        enviarMensagem();
+    };
+    reconhecimento.onstart = () => { if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('ouvindo'); };
+    reconhecimento.onend = () => {
+        botao.classList.remove('gravando');
+        if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle');
+    };
+    reconhecimento.onerror = () => {
+        botao.classList.remove('gravando');
+        if(window.definirEstadoAndromeda) window.definirEstadoAndromeda('idle');
+    };
+
+    botao.classList.add('gravando');
+    reconhecimento.start();
+}
+</script>
+
+</body>
+</html>
