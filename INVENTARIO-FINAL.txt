@@ -1,0 +1,35 @@
+TOPOLOGIA DE ARQUIVOS - INVENTÁRIO
+
+Gerado automaticamente na branch feat/android-build.
+Data: 2026-08-15T15:10:00Z
+
+Top-level files e pastas (capturados):
+- README.md
+- andromeda-config.js
+- andromeda-core.js
+- andromeda-inteligente.html
+- andromeda.jpg
+- index.html
+- manifest.json
+- talento-andromeda.js
+- voz.js
+- biblioteca/ (diretório)
+- laboratorio/ (diretório)
+- area de projetos.html
+- caderno-inteligente.html
+- raiz (arquivo)
+
+Arquivos importantes referenciados em páginas:
+- andromeda-corpo.png (referenciado em andromeda-inteligente.html) — pode não existir no repositório
+- andromeda-boca.png — pode não existir
+- andromeda-olhos-fechados.png — pode não existir
+- icone-andromeda.jpg (referenciado em manifest.json) — NÃO encontrei este arquivo; existe andromeda.jpg
+
+Pontos a validar / ações necessárias:
+- Substituir icone-andromeda.jpg por andromeda.jpg no manifest.json (feito em passo de correção)
+- Confirmar imagens da Andrômeda (andromeda-corpo.png, andromeda-boca.png, andromeda-olhos-fechados.png). Se ausentes, as páginas já tratam com onerror para esconder imagens.
+- Criar service worker (sw.js) e registrar nas páginas para offline básico.
+- Criar arquivo andromeda-api.js para centralizar comunicação com IA (modo local/mock e remote stub).
+- Preparar capacitor.config.json (com appId com.fraancival.andromeda e appName Andrômeda) — o próximo passo.
+
+Observação: este inventário foi gerado sem alterar arquivos de lógica.
