@@ -3,25 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌌 Andrômeda — QG</title>
+  <title>🌌 Andrômeda — QG + Mesa de Som</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #030114; color: #fff; overflow: hidden; min-height: 100vh; }
     .escondido { display: none !important; }
 
-    /* 🔑 CAIXA DE CHAVE — APARECE PRIMEIRO */
+    /* 🔑 CAIXA DE CHAVE */
     .camada-chave {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(5,7,26,0.95); z-index: 200;
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
+      background: rgba(5,7,26,0.95); z-index: 300;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
     }
     .caixa-chave {
       background: rgba(15,23,42,0.95); border: 2px solid #00d2ff;
       border-radius: 20px; padding: 30px; max-width: 400px; width: 100%;
       box-shadow: 0 0 40px rgba(0,210,255,0.4);
     }
-    .caixa-chave h2 { color: #8be4ff; text-align: center; margin-bottom: 20px; font-size: 20px; }
+    .caixa-chave h2 { color: #8be4ff; text-align: center; margin-bottom: 20px; }
     .caixa-chave input {
       width: 100%; padding: 15px; font-size: 16px; border-radius: 12px;
       border: 1px solid #00d2ff; background: #05071a; color: white; margin-bottom: 15px;
@@ -42,10 +41,10 @@
     .app-container {
       position: relative; z-index: 2;
       width: 100%; max-width: 500px; margin: 0 auto;
-      min-height: 100vh; padding: 20px 15px 100px;
+      min-height: 100vh; padding: 20px 15px 340px;
     }
 
-    /* BARRA DE STATUS DE CIMA */
+    /* BARRA DE STATUS */
     .barra-topo {
       display: flex; justify-content: space-between; align-items: center;
       padding: 10px 0; margin-bottom: 20px;
@@ -54,7 +53,7 @@
     .status-esquerdo { color: #8be4ff; font-size: 14px; }
     .status-direito { color: #88ccff; font-size: 13px; }
 
-    /* PAINÉIS HUD — TRANSPARENTES, FLUTUANTES ✨ */
+    /* PAINÉIS HUD */
     .hud-panel {
       position: absolute; top: 100px; width: 130px;
       background: rgba(10, 20, 50, 0.35);
@@ -65,18 +64,15 @@
     }
     .left-panel { left: 5px; }
     .right-panel { right: 5px; }
-    .titulo-painel { font-size: 12px; color: #00d2ff; margin-bottom: 8px; border-bottom: 1px solid rgba(0,195,255,0.2); padding-bottom: 5px; }
     .menu-item {
       font-size: 13px; padding: 8px 6px;
       border-bottom: 1px solid rgba(0,195,255,0.15);
       color: #8be4ff; cursor: pointer; border-radius: 4px;
       transition: all 0.2s;
     }
-    .menu-item:hover, .menu-item.ativo {
-      background: rgba(0,195,255,0.15);
-    }
+    .menu-item:hover, .menu-item.ativo { background: rgba(0,195,255,0.15); }
 
-    /* AVATAR CENTRAL */
+    /* AVATAR */
     .avatar-container {
       display: flex; justify-content: center; margin-top: 220px; margin-bottom: 20px;
     }
@@ -94,17 +90,51 @@
       background: rgba(10,20,50,0.4); border: 1px solid rgba(0,195,255,0.4);
       border-radius: 12px; padding: 15px; margin: 20px 0;
       backdrop-filter: blur(8px); display: none;
-      font-size: 15px; line-height: 1.7;
-      color: #e0f0ff;
+      font-size: 15px; line-height: 1.7; color: #e0f0ff;
     }
+
+    /* 🎛️ MESA DE SOM — O NOVO! */
+    .mesa-som {
+      position: fixed; bottom: 90px; left: 10px; right: 10px;
+      background: rgba(10,20,50,0.6); border: 1px solid rgba(0,210,255,0.4);
+      border-radius: 16px; padding: 15px;
+      backdrop-filter: blur(10px); z-index: 60;
+      box-shadow: 0 0 25px rgba(0,210,255,0.2);
+    }
+    .mesa-titulo {
+      color: #00d2ff; font-size: 14px; margin-bottom: 12px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .btn-voz {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      border: none; color: white; padding: 6px 12px;
+      border-radius: 20px; font-size: 12px; cursor: pointer;
+    }
+    .controles {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+    }
+    .controle { text-align: center; }
+    .controle label {
+      display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px;
+    }
+    .controle input[type="range"] {
+      width: 100%; height: 6px; border-radius: 3px;
+      background: rgba(0,210,255,0.2);
+      -webkit-appearance: none; appearance: none; outline: none;
+    }
+    .controle input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 18px; height: 18px;
+      border-radius: 50%; background: #00d2ff;
+      box-shadow: 0 0 10px rgba(0,210,255,0.6); cursor: pointer;
+    }
+    .valor-controle { font-size: 11px; color: #8be4ff; margin-top: 3px; }
 
     /* ✏️ ÁREA DE ENTRADA */
     .entrada-container {
       position: fixed; bottom: 0; left: 0; right: 0; padding: 15px;
       background: linear-gradient(to top, rgba(5,7,26,0.95), rgba(5,7,26,0.6));
       display: flex; gap: 10px; align-items: center;
-      border-top: 1px solid rgba(0,210,255,0.3);
-      z-index: 50;
+      border-top: 1px solid rgba(0,210,255,0.3); z-index: 50;
     }
     .entrada-container input {
       flex: 1; padding: 14px 18px; font-size: 16px;
@@ -122,7 +152,7 @@
 </head>
 <body>
 
-<!-- 🔑 CAIXA DE CHAVE — APARECE PRIMEIRO -->
+<!-- 🔑 CAIXA DE CHAVE -->
 <div class="camada-chave" id="camadaChave">
   <div class="caixa-chave">
     <h2>🔑 Chave da Andrômeda</h2>
@@ -132,18 +162,15 @@
   </div>
 </div>
 
-<!-- FUNDO CÓSMICO -->
 <div class="space-background"></div>
 
 <div class="app-container escondido" id="telaPrincipal">
 
-  <!-- STATUS DE CIMA -->
   <div class="barra-topo">
     <div class="status-esquerdo">✅ Andrômeda Ativa 🧠 Memória: 31</div>
     <div class="status-direito" id="statusTexto">Pronta</div>
   </div>
 
-  <!-- PAINEL ESQUERDO HUD -->
   <div class="hud-panel left-panel">
     <div class="menu-item">🏠 Início</div>
     <div class="menu-item">📚 Biblioteca</div>
@@ -154,9 +181,7 @@
     <div class="menu-item">🧠 Memória</div>
   </div>
 
-  <!-- PAINEL DIREITO HUD -->
   <div class="hud-panel right-panel">
-    <div class="titulo-painel">Salas do QG</div>
     <div class="menu-item">📊 Painel</div>
     <div class="menu-item">📚 Biblioteca</div>
     <div class="menu-item">🛠️ Ferramentas</div>
@@ -164,31 +189,68 @@
     <div class="menu-item">🗑️ Limpar</div>
   </div>
 
-  <!-- AVATAR CENTRAL -->
   <div class="avatar-container">
     <div class="avatar-img">🌌</div>
   </div>
 
-  <!-- 💬 ÁREA DE RESPOSTA -->
   <div class="caixa-resposta" id="caixaResposta">
     <strong>🌌 Andrômeda:</strong><br><br>
     <span id="textoResposta"></span>
   </div>
 
-  <!-- 🎤 ÁREA DE ENTRADA E MICROFONE -->
-  <div class="entrada-container">
-    <input type="text" id="entradaTexto" placeholder="Escreva ou fale com a Andrômeda...">
-    <button class="mic-button" id="btnMic" onclick="ativarMic()">🎤</button>
-    <button class="btn-envio" onclick="enviarMensagem()">➤</button>
+  <!-- 🎛️ MESA DE SOM — A NOVIDADE! -->
+  <div class="mesa-som">
+    <div class="mesa-titulo">
+      🎛️ Mesa de Som — Voz da Andrômeda
+      <button class="btn-voz" onclick="testarVoz()">🔊 Testar Voz</button>
+    </div>
+    <div class="controles">
+      <div class="controle">
+        <label>🔊 Volume</label>
+        <input type="range" id="volume" min="0.5" max="2" step="0.1" value="1" oninput="atualizarValor('volume', this.value)">
+        <div class="valor-controle" id="valor-volume">100%</div>
+      </div>
+      <div class="controle">
+        <label>⚡ Velocidade</label>
+        <input type="range" id="velocidade" min="0.6" max="1.5" step="0.05" value="1" oninput="atualizarValor('velocidade', this.value)">
+        <div class="valor-controle" id="valor-velocidade">Normal</div>
+      </div>
+      <div class="controle">
+        <label>🎵 Tom</label>
+        <input type="range" id="tom" min="0.6" max="1.5" step="0.05" value="1" oninput="atualizarValor('tom', this.value)">
+        <div class="valor-controle" id="valor-tom">Normal</div>
+      </div>
+    </div>
   </div>
 
+</div>
+
+<div class="entrada-container">
+  <input type="text" id="entradaTexto" placeholder="Escreva ou fale com a Andrômeda...">
+  <button class="mic-button" id="btnMic" onclick="ativarMic()">🎤</button>
+  <button class="btn-envio" onclick="enviarMensagem()">➤</button>
 </div>
 
 <script>
 let CHAVE_GEMINI = localStorage.getItem('chaveGemini') || '';
 const SISTEMA = `Você é a Andrômeda, assistente pessoal de Francival Alves Farias. Fale em português brasileiro, de forma calorosa, amigável e direta. Seja sempre leal e prestativa.`;
 
+// Configurações de voz — salvas automaticamente
+let configVoz = {
+  volume: parseFloat(localStorage.getItem('vozVolume') || 1),
+  velocidade: parseFloat(localStorage.getItem('vozVelocidade') || 1),
+  tom: parseFloat(localStorage.getItem('vozTom') || 1)
+};
+
 window.addEventListener('load', () => {
+  // Carrega configurações salvas
+  document.getElementById('volume').value = configVoz.volume;
+  document.getElementById('velocidade').value = configVoz.velocidade;
+  document.getElementById('tom').value = configVoz.tom;
+  atualizarValor('volume', configVoz.volume);
+  atualizarValor('velocidade', configVoz.velocidade);
+  atualizarValor('tom', configVoz.tom);
+  
   if(CHAVE_GEMINI) ativarSistema();
 });
 
@@ -203,6 +265,49 @@ function salvarChave() {
 function ativarSistema() {
   document.getElementById('camadaChave').style.display = 'none';
   document.getElementById('telaPrincipal').classList.remove('escondido');
+}
+
+function atualizarValor(tipo, valor) {
+  const num = parseFloat(valor);
+  configVoz[tipo] = num;
+  localStorage.setItem(`voz${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`, num);
+  
+  if(tipo === 'volume') {
+    document.getElementById(`valor-${tipo}`).textContent = Math.round(num * 100) + '%';
+  } else {
+    let texto = 'Normal';
+    if(num < 0.85) texto = 'Mais Calmo';
+    else if(num < 0.95) texto = 'Suave';
+    else if(num > 1.15) texto = 'Mais Dinâmico';
+    else if(num > 1.05) texto = 'Animado';
+    document.getElementById(`valor-${tipo}`).textContent = texto;
+  }
+}
+
+// 🎤 FUNÇÃO DE FALA — COM MESA DE SOM!
+function falar(texto) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  
+  const fala = new SpeechSynthesisUtterance(texto);
+  fala.lang = 'pt-BR';
+  fala.volume = configVoz.volume;
+  fala.rate = configVoz.velocidade;
+  fala.pitch = configVoz.tom;
+  
+  // Tenta usar a melhor voz disponível
+  const vozes = speechSynthesis.getVoices();
+  const vozPt = vozes.find(v => v.lang === 'pt-BR' && v.name.includes('Google')) || 
+                vozes.find(v => v.lang === 'pt-BR') ||
+                vozes[0];
+  if(vozPt) fala.voice = vozPt;
+  
+  speechSynthesis.speak(fala);
+}
+
+// 🔊 TESTAR VOZ
+function testarVoz() {
+  falar('Olá Francival! Sou a Andrômeda. Agora você pode ajustar minha voz do jeito que preferir — mais grave, mais suave, mais calma ou mais animada. Estou aqui para você!');
 }
 
 async function enviarMensagem() {
@@ -227,13 +332,9 @@ async function enviarMensagem() {
     document.getElementById('textoResposta').innerText = resposta;
     document.getElementById('statusTexto').innerText = 'Pronta';
     
-    // Fala em voz
-    if ('speechSynthesis' in window) {
-      const fala = new SpeechSynthesisUtterance(resposta);
-      fala.lang = 'pt-BR'; fala.rate = 1.05;
-      speechSynthesis.cancel();
-      speechSynthesis.speak(fala);
-    }
+    // Fala com as configurações da mesa de som!
+    falar(resposta);
+    
   } catch(e) {
     document.getElementById('textoResposta').innerHTML = `⚠️ ${e.message}<br><br>💡 Baixe o arquivo e abra direto no Chrome! O GitHub bloqueia às vezes.`;
     document.getElementById('statusTexto').innerText = 'Erro de conexão';
@@ -255,6 +356,9 @@ function ativarMic() {
 document.addEventListener('keypress', e => {
   if(e.key === 'Enter' && CHAVE_GEMINI) enviarMensagem();
 });
+
+// Carrega vozes quando prontas
+window.speechSynthesis.onvoiceschanged = () => {};
 </script>
 
 </body>
