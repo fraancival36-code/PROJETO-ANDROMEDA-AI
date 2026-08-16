@@ -4,7 +4,121 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🌌 Andrômeda — QG</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #030114; color: #fff; overflow: hidden; min-height: 100vh; }
+    .escondido { display: none !important; }
+
+    /* 🔑 CAIXA DE CHAVE — APARECE PRIMEIRO */
+    .camada-chave {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(5,7,26,0.95); z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .caixa-chave {
+      background: rgba(15,23,42,0.95); border: 2px solid #00d2ff;
+      border-radius: 20px; padding: 30px; max-width: 400px; width: 100%;
+      box-shadow: 0 0 40px rgba(0,210,255,0.4);
+    }
+    .caixa-chave h2 { color: #8be4ff; text-align: center; margin-bottom: 20px; font-size: 20px; }
+    .caixa-chave input {
+      width: 100%; padding: 15px; font-size: 16px; border-radius: 12px;
+      border: 1px solid #00d2ff; background: #05071a; color: white; margin-bottom: 15px;
+    }
+    .btn-salvar-chave {
+      width: 100%; padding: 15px; background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+      color: white; border: none; border-radius: 12px; font-size: 16px; cursor: pointer;
+    }
+    .dica-chave { font-size: 13px; color: #888; margin-top: 15px; text-align: center; }
+
+    /* FUNDO CÓSMICO */
+    .space-background {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at center, #1a0b36 0%, #050014 70%, #000 100%);
+      z-index: 1;
+    }
+
+    .app-container {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 500px; margin: 0 auto;
+      min-height: 100vh; padding: 20px 15px 100px;
+    }
+
+    /* BARRA DE STATUS DE CIMA */
+    .barra-topo {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; margin-bottom: 20px;
+      border-bottom: 1px solid rgba(0,210,255,0.2);
+    }
+    .status-esquerdo { color: #8be4ff; font-size: 14px; }
+    .status-direito { color: #88ccff; font-size: 13px; }
+
+    /* PAINÉIS HUD — TRANSPARENTES, FLUTUANTES ✨ */
+    .hud-panel {
+      position: absolute; top: 100px; width: 130px;
+      background: rgba(10, 20, 50, 0.35);
+      border: 1px solid rgba(0, 195, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 195, 255, 0.2);
+      backdrop-filter: blur(8px);
+      border-radius: 10px; padding: 12px;
+    }
+    .left-panel { left: 5px; }
+    .right-panel { right: 5px; }
+    .titulo-painel { font-size: 12px; color: #00d2ff; margin-bottom: 8px; border-bottom: 1px solid rgba(0,195,255,0.2); padding-bottom: 5px; }
+    .menu-item {
+      font-size: 13px; padding: 8px 6px;
+      border-bottom: 1px solid rgba(0,195,255,0.15);
+      color: #8be4ff; cursor: pointer; border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .menu-item:hover, .menu-item.ativo {
+      background: rgba(0,195,255,0.15);
+    }
+
+    /* AVATAR CENTRAL */
+    .avatar-container {
+      display: flex; justify-content: center; margin-top: 220px; margin-bottom: 20px;
+    }
+    .avatar-img {
+      max-width: 280px; width: 80%; height: auto;
+      border-radius: 16px;
+      box-shadow: 0 0 40px rgba(0,210,255,0.3);
+      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 60px; color: white;
+    }
+
+    /* 💬 RESPOSTA */
+    .caixa-resposta {
+      background: rgba(10,20,50,0.4); border: 1px solid rgba(0,195,255,0.4);
+      border-radius: 12px; padding: 15px; margin: 20px 0;
+      backdrop-filter: blur(8px); display: none;
+      font-size: 15px; line-height: 1.7;
+      color: #e0f0ff;
+    }
+
+    /* ✏️ ÁREA DE ENTRADA */
+    .entrada-container {
+      position: fixed; bottom: 0; left: 0; right: 0; padding: 15px;
+      background: linear-gradient(to top, rgba(5,7,26,0.95), rgba(5,7,26,0.6));
+      display: flex; gap: 10px; align-items: center;
+      border-top: 1px solid rgba(0,210,255,0.3);
+      z-index: 50;
+    }
+    .entrada-container input {
+      flex: 1; padding: 14px 18px; font-size: 16px;
+      border-radius: 25px; border: 2px solid rgba(0,210,255,0.5);
+      background: rgba(15,23,42,0.6); color: white;
+      backdrop-filter: blur(8px);
+    }
+    .mic-button, .btn-envio {
+      width: 52px; height: 52px; border-radius: 50%; border: none;
+      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+      color: white; font-size: 20px; cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,210,255,0.4);
+    }
+  </style>
 </head>
 <body>
 
@@ -52,7 +166,7 @@
 
   <!-- AVATAR CENTRAL -->
   <div class="avatar-container">
-    <img src="andromeda.png" alt="Andrômeda" class="avatar-img">
+    <div class="avatar-img">🌌</div>
   </div>
 
   <!-- 💬 ÁREA DE RESPOSTA -->
@@ -64,7 +178,7 @@
   <!-- 🎤 ÁREA DE ENTRADA E MICROFONE -->
   <div class="entrada-container">
     <input type="text" id="entradaTexto" placeholder="Escreva ou fale com a Andrômeda...">
-    <div class="mic-button" id="btnMic" onclick="ativarMic()">🎤</div>
+    <button class="mic-button" id="btnMic" onclick="ativarMic()">🎤</button>
     <button class="btn-envio" onclick="enviarMensagem()">➤</button>
   </div>
 
@@ -106,7 +220,7 @@ async function enviarMensagem() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({contents: [{parts: [{text: SISTEMA + '\n\nPergunta: ' + texto}]}]})
     });
-    if(!res.ok) throw new Error('Verifique a chave ou abra direto do arquivo');
+    if(!res.ok) throw new Error('Verifique a chave ou a conexão');
     const dados = await res.json();
     const resposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não entendi.';
     
@@ -122,6 +236,7 @@ async function enviarMensagem() {
     }
   } catch(e) {
     document.getElementById('textoResposta').innerHTML = `⚠️ ${e.message}<br><br>💡 Baixe o arquivo e abra direto no Chrome! O GitHub bloqueia às vezes.`;
+    document.getElementById('statusTexto').innerText = 'Erro de conexão';
   }
 }
 
