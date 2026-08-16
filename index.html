@@ -1,258 +1,144 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌌 Andrômeda — QG</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-        html, body { height: 100%; overflow: hidden; }
-
-        /* FUNDO COM A IMAGEM DA ANDRÔMEDA */
-        body {
-            background: #05071a url('andromeda-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-        }
-
-        /* 🔑 CAIXA DE CHAVE — APARECE PRIMEIRO, SOBRE TUDO */
-        .camada-chave {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(5,7,26,0.92); z-index: 200;
-            display: flex; align-items: center; justify-content: center;
-            padding: 20px;
-        }
-        .caixa-chave {
-            background: rgba(15,23,42,0.95); border: 2px solid #4f46e5;
-            border-radius: 20px; padding: 30px; max-width: 400px; width: 100%;
-            box-shadow: 0 0 40px rgba(79,70,229,0.4);
-        }
-        .caixa-chave h2 { color: #a5b4fc; text-align: center; margin-bottom: 20px; font-size: 20px; }
-        .caixa-chave input {
-            width: 100%; padding: 15px; font-size: 16px; border-radius: 12px;
-            border: 1px solid #4f46e5; background: #05071a; color: white; margin-bottom: 15px;
-        }
-        .btn-salvar-chave {
-            width: 100%; padding: 15px; background: #4f46e5; color: white;
-            border: none; border-radius: 12px; font-size: 16px; cursor: pointer;
-        }
-        .dica-chave { font-size: 13px; color: #94a3b8; margin-top: 15px; text-align: center; }
-        .escondido { display: none !important; }
-
-        /* STATUS DE CIMA */
-        .barra-topo {
-            position: fixed; top: 0; left: 0; right: 0; padding: 15px 20px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 50;
-        }
-        .status-esquerdo { display: flex; align-items: center; gap: 8px; color: #4ade80; font-size: 15px; }
-        .status-direito { color: #94a3b8; font-size: 14px; }
-
-        /* PAINEL ESQUERDO — TRANSPARENTE, LETRAS FLUTUANDO ✨ */
-        .painel-esquerdo {
-            position: fixed; bottom: 120px; left: 15px; z-index: 30;
-            background: rgba(15,23,42,0.35); border: 1px solid rgba(79,70,229,0.3);
-            border-radius: 16px; padding: 18px 15px;
-            backdrop-filter: blur(8px);
-        }
-        .item-menu {
-            display: flex; align-items: center; gap: 10px;
-            color: #e0e7ff; text-decoration: none;
-            padding: 10px 12px; margin-bottom: 6px;
-            border-radius: 8px; font-size: 15px;
-            transition: all 0.2s;
-        }
-        .item-menu:hover { background: rgba(79,70,229,0.2); }
-
-        /* PAINEL DIREITO — TAMBÉM TRANSPARENTE ✨ */
-        .painel-direito {
-            position: fixed; bottom: 120px; right: 15px; z-index: 30;
-            background: rgba(15,23,42,0.35); border: 1px solid rgba(79,70,229,0.3);
-            border-radius: 16px; padding: 18px 15px;
-            backdrop-filter: blur(8px);
-        }
-        .titulo-painel { font-size: 13px; color: #818cf8; margin-bottom: 10px; border-bottom: 1px solid rgba(79,70,229,0.2); padding-bottom: 5px; }
-        .item-direito {
-            display: flex; align-items: center; gap: 8px;
-            color: #e0e7ff; text-decoration: none;
-            padding: 8px 10px; margin-bottom: 5px;
-            border-radius: 6px; font-size: 14px;
-        }
-        .item-direito.ativo { background: rgba(79,70,229,0.3); }
-
-        /* 💬 ÁREA DE CONVERSA — EMBAIXO, FLUTUANDO */
-        .caixa-resposta {
-            position: fixed; bottom: 70px; left: 20px; right: 20px;
-            background: rgba(15,23,42,0.6); border: 1px solid rgba(79,70,229,0.4);
-            border-radius: 16px; padding: 15px; max-height: 120px; overflow-y: auto;
-            z-index: 40; display: none;
-            backdrop-filter: blur(8px);
-            font-size: 15px; line-height: 1.6;
-        }
-
-        /* ✏️ ÁREA DE PERGUNTA — EMBAIXO */
-        .barra-entrada {
-            position: fixed; bottom: 0; left: 0; right: 0; padding: 12px 15px;
-            background: linear-gradient(to top, rgba(5,7,26,0.95), rgba(5,7,26,0.6));
-            display: flex; gap: 10px; align-items: center; z-index: 50;
-            border-top: 1px solid rgba(79,70,229,0.3);
-        }
-        .barra-entrada input {
-            flex: 1; padding: 14px 18px; font-size: 16px;
-            border-radius: 25px; border: 2px solid rgba(79,70,229,0.5);
-            background: rgba(15,23,42,0.6); color: white;
-            backdrop-filter: blur(8px);
-        }
-        .btn-mic, .btn-envio {
-            width: 52px; height: 52px; border-radius: 50%; border: none;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white; font-size: 20px; cursor: pointer;
-        }
-        .btn-mic.gravando { background: #dc2626; animation: pulsar 1s infinite; }
-        @keyframes pulsar { 0%{transform:scale(1)} 50%{transform:scale(1.1)} 100%{transform:scale(1)} }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌌 Andrômeda — QG</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- 🔑 CAIXA DE CHAVE — APARECE PRIMEIRO -->
 <div class="camada-chave" id="camadaChave">
-    <div class="caixa-chave">
-        <h2>🔑 Chave da Andrômeda</h2>
-        <input type="text" id="entradaChave" placeholder="Cole sua chave aqui...">
-        <button class="btn-salvar-chave" onclick="salvarChave()">✅ Salvar e Ativar</button>
-        <p class="dica-chave">Pegue grátis em: aistudio.google.com → "Criar chave de API"</p>
-    </div>
+  <div class="caixa-chave">
+    <h2>🔑 Chave da Andrômeda</h2>
+    <input type="text" id="entradaChave" placeholder="Cole sua chave aqui...">
+    <button class="btn-salvar-chave" onclick="salvarChave()">✅ Salvar e Ativar</button>
+    <p class="dica-chave">Pegue grátis em: aistudio.google.com → "Criar chave de API"</p>
+  </div>
 </div>
 
-<!-- 📊 BARRA DE STATUS DE CIMA -->
-<div class="barra-topo escondido" id="barraTopo">
-    <div class="status-esquerdo">✅ Andrômeda Ativa 🧠 Memória: <span id="contadorMemoria">31</span></div>
+<!-- FUNDO CÓSMICO -->
+<div class="space-background"></div>
+
+<div class="app-container escondido" id="telaPrincipal">
+
+  <!-- STATUS DE CIMA -->
+  <div class="barra-topo">
+    <div class="status-esquerdo">✅ Andrômeda Ativa 🧠 Memória: 31</div>
     <div class="status-direito" id="statusTexto">Pronta</div>
-</div>
+  </div>
 
-<!-- 📋 PAINEL ESQUERDO -->
-<div class="painel-esquerdo escondido" id="painelEsquerdo">
-    <a href="#" class="item-menu">🏠 Início</a>
-    <a href="#" class="item-menu">📚 Biblioteca</a>
-    <a href="#" class="item-menu">🧪 Laboratório</a>
-    <a href="#" class="item-menu">🎨 Estúdio</a>
-    <a href="#" class="item-menu">🤖 Agentes</a>
-    <a href="#" class="item-menu">🎯 Missões</a>
-    <a href="#" class="item-menu">🧠 Memória</a>
-</div>
+  <!-- PAINEL ESQUERDO HUD -->
+  <div class="hud-panel left-panel">
+    <div class="menu-item">🏠 Início</div>
+    <div class="menu-item">📚 Biblioteca</div>
+    <div class="menu-item">🧪 Laboratório</div>
+    <div class="menu-item">🎨 Estúdio</div>
+    <div class="menu-item">🤖 Agentes</div>
+    <div class="menu-item">🎯 Missões</div>
+    <div class="menu-item">🧠 Memória</div>
+  </div>
 
-<!-- 📋 PAINEL DIREITO -->
-<div class="painel-direito escondido" id="painelDireito">
+  <!-- PAINEL DIREITO HUD -->
+  <div class="hud-panel right-panel">
     <div class="titulo-painel">Salas do QG</div>
-    <a href="#" class="item-direito">📊 Painel</a>
-    <a href="#" class="item-direito">📚 Biblioteca</a>
-    <a href="#" class="item-direito">🛠️ Ferramentas</a>
-    <a href="#" class="item-direito ativo">🎯 Missões</a>
-    <a href="#" class="item-direito">🗑️ Limpar</a>
-</div>
+    <div class="menu-item">📊 Painel</div>
+    <div class="menu-item">📚 Biblioteca</div>
+    <div class="menu-item">🛠️ Ferramentas</div>
+    <div class="menu-item ativo">🎯 Missões</div>
+    <div class="menu-item">🗑️ Limpar</div>
+  </div>
 
-<!-- 💬 RESPOSTA -->
-<div class="caixa-resposta" id="caixaResposta">
+  <!-- AVATAR CENTRAL -->
+  <div class="avatar-container">
+    <img src="andromeda.png" alt="Andrômeda" class="avatar-img">
+  </div>
+
+  <!-- 💬 ÁREA DE RESPOSTA -->
+  <div class="caixa-resposta" id="caixaResposta">
     <strong>🌌 Andrômeda:</strong><br><br>
     <span id="textoResposta"></span>
-</div>
+  </div>
 
-<!-- ✏️ BARRA DE PERGUNTA -->
-<div class="barra-entrada escondido" id="barraEntrada">
+  <!-- 🎤 ÁREA DE ENTRADA E MICROFONE -->
+  <div class="entrada-container">
     <input type="text" id="entradaTexto" placeholder="Escreva ou fale com a Andrômeda...">
-    <button class="btn-mic" id="btnMic" onclick="ativarMic()">🎤</button>
+    <div class="mic-button" id="btnMic" onclick="ativarMic()">🎤</div>
     <button class="btn-envio" onclick="enviarMensagem()">➤</button>
+  </div>
+
 </div>
 
 <script>
 let CHAVE_GEMINI = localStorage.getItem('chaveGemini') || '';
 const SISTEMA = `Você é a Andrômeda, assistente pessoal de Francival Alves Farias. Fale em português brasileiro, de forma calorosa, amigável e direta. Seja sempre leal e prestativa.`;
 
-// Se já tem chave salva, ativa tudo
 window.addEventListener('load', () => {
-    if(CHAVE_GEMINI) ativarSistema();
+  if(CHAVE_GEMINI) ativarSistema();
 });
 
 function salvarChave() {
-    const chave = document.getElementById('entradaChave').value.trim();
-    if(!chave) return alert('Por favor, cole sua chave primeiro!');
-    CHAVE_GEMINI = chave;
-    localStorage.setItem('chaveGemini', chave);
-    ativarSistema();
+  const chave = document.getElementById('entradaChave').value.trim();
+  if(!chave) return alert('Cole a chave primeiro!');
+  CHAVE_GEMINI = chave;
+  localStorage.setItem('chaveGemini', chave);
+  ativarSistema();
 }
 
 function ativarSistema() {
-    // Esconde a caixa de chave
-    document.getElementById('camadaChave').classList.add('escondido');
-    // Mostra TUDO o resto
-    document.getElementById('barraTopo').classList.remove('escondido');
-    document.getElementById('painelEsquerdo').classList.remove('escondido');
-    document.getElementById('painelDireito').classList.remove('escondido');
-    document.getElementById('barraEntrada').classList.remove('escondido');
-    document.getElementById('statusTexto').innerText = 'Pronta para conversar';
+  document.getElementById('camadaChave').style.display = 'none';
+  document.getElementById('telaPrincipal').classList.remove('escondido');
 }
 
 async function enviarMensagem() {
-    const texto = document.getElementById('entradaTexto').value.trim();
-    if(!texto) return;
-    if(!CHAVE_GEMINI) return alert('Coloque a chave primeiro!');
+  const texto = document.getElementById('entradaTexto').value.trim();
+  if(!texto || !CHAVE_GEMINI) return;
 
-    document.getElementById('entradaTexto').value = '';
-    document.getElementById('caixaResposta').style.display = 'block';
-    document.getElementById('textoResposta').innerText = '🧠 Pensando...';
-    document.getElementById('statusTexto').innerText = 'Processando...';
+  document.getElementById('entradaTexto').value = '';
+  document.getElementById('caixaResposta').style.display = 'block';
+  document.getElementById('textoResposta').innerText = '🧠 Pensando...';
+  document.getElementById('statusTexto').innerText = 'Processando...';
 
-    try {
-        const resposta = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${CHAVE_GEMINI}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: SISTEMA + '\n\nPergunta: ' + texto }] }]
-            })
-        });
-
-        if(!resposta.ok) throw new Error('Verifique a chave ou a conexão');
-        
-        const dados = await resposta.json();
-        const fala = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não entendi. Tente de novo.';
-        
-        document.getElementById('textoResposta').innerText = fala;
-        document.getElementById('statusTexto').innerText = 'Pronta';
-        
-        // Fala em voz
-        if ('speechSynthesis' in window) {
-            const voz = new SpeechSynthesisUtterance(fala);
-            voz.lang = 'pt-BR'; voz.rate = 1.05;
-            speechSynthesis.cancel();
-            speechSynthesis.speak(voz);
-        }
-
-    } catch(erro) {
-        document.getElementById('textoResposta').innerHTML = `⚠️ ${erro.message}<br><br>💡 <strong>Dica:</strong> Se estiver no GitHub, baixe o arquivo e abra direto no Chrome do celular! O GitHub bloqueia às vezes.`;
-        document.getElementById('statusTexto').innerText = 'Erro de conexão';
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${CHAVE_GEMINI}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({contents: [{parts: [{text: SISTEMA + '\n\nPergunta: ' + texto}]}]})
+    });
+    if(!res.ok) throw new Error('Verifique a chave ou abra direto do arquivo');
+    const dados = await res.json();
+    const resposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não entendi.';
+    
+    document.getElementById('textoResposta').innerText = resposta;
+    document.getElementById('statusTexto').innerText = 'Pronta';
+    
+    // Fala em voz
+    if ('speechSynthesis' in window) {
+      const fala = new SpeechSynthesisUtterance(resposta);
+      fala.lang = 'pt-BR'; fala.rate = 1.05;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(fala);
     }
+  } catch(e) {
+    document.getElementById('textoResposta').innerHTML = `⚠️ ${e.message}<br><br>💡 Baixe o arquivo e abra direto no Chrome! O GitHub bloqueia às vezes.`;
+  }
 }
 
-// Microfone
 function ativarMic() {
-    if(!CHAVE_GEMINI) return alert('Coloque a chave primeiro!');
-    if(!('webkitSpeechRecognition' in window)) return alert('Use o Chrome para falar.');
-    const btn = document.getElementById('btnMic');
-    const rec = new webkitSpeechRecognition();
-    rec.lang = 'pt-BR';
-    rec.onstart = () => btn.classList.add('gravando');
-    rec.onresult = (e) => {
-        document.getElementById('entradaTexto').value = e.results[0][0].transcript;
-        enviarMensagem();
-    };
-    rec.onend = rec.onerror = () => btn.classList.remove('gravando');
-    rec.start();
+  if(!CHAVE_GEMINI) return alert('Coloque a chave primeiro!');
+  if(!('webkitSpeechRecognition' in window)) return alert('Use o Chrome para falar.');
+  const rec = new webkitSpeechRecognition();
+  rec.lang = 'pt-BR';
+  rec.onresult = (e) => {
+    document.getElementById('entradaTexto').value = e.results[0][0].transcript;
+    enviarMensagem();
+  };
+  rec.start();
 }
 
-// Enter envia
 document.addEventListener('keypress', e => {
-    if(e.key === 'Enter' && CHAVE_GEMINI) enviarMensagem();
+  if(e.key === 'Enter' && CHAVE_GEMINI) enviarMensagem();
 });
 </script>
 
