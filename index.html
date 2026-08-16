@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌌 Andrômeda — QG + Mesa de Som</title>
+  <title>🌌 Andrômeda — QG + Voz</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #030114; color: #fff; overflow: hidden; min-height: 100vh; }
@@ -20,7 +20,7 @@
       border-radius: 20px; padding: 30px; max-width: 400px; width: 100%;
       box-shadow: 0 0 40px rgba(0,210,255,0.4);
     }
-    .caixa-chave h2 { color: #8be4ff; text-align: center; margin-bottom: 20px; }
+    .caixa-chave h2 { color: #8be4ff; text-align: center; margin-bottom: 20px; font-size: 20px; }
     .caixa-chave input {
       width: 100%; padding: 15px; font-size: 16px; border-radius: 12px;
       border: 1px solid #00d2ff; background: #05071a; color: white; margin-bottom: 15px;
@@ -41,7 +41,7 @@
     .app-container {
       position: relative; z-index: 2;
       width: 100%; max-width: 500px; margin: 0 auto;
-      min-height: 100vh; padding: 20px 15px 340px;
+      min-height: 100vh; padding: 20px 15px 320px;
     }
 
     /* BARRA DE STATUS */
@@ -93,7 +93,7 @@
       font-size: 15px; line-height: 1.7; color: #e0f0ff;
     }
 
-    /* 🎛️ MESA DE SOM — O NOVO! */
+    /* 🎛️ MESA DE SOM — SIMPLIFICADA, SÓ O QUE FUNCIONA! */
     .mesa-som {
       position: fixed; bottom: 90px; left: 10px; right: 10px;
       background: rgba(10,20,50,0.6); border: 1px solid rgba(0,210,255,0.4);
@@ -110,24 +110,15 @@
       border: none; color: white; padding: 6px 12px;
       border-radius: 20px; font-size: 12px; cursor: pointer;
     }
-    .controles {
-      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+    .controles { display: flex; flex-direction: column; gap: 12px; }
+    .linha-controle { display: flex; align-items: center; gap: 10px; }
+    .linha-controle label { font-size: 13px; color: #94a3b8; width: 80px; }
+    .linha-controle select, .linha-controle input[type="range"] {
+      flex: 1; padding: 6px; border-radius: 6px;
+      background: rgba(15,23,42,0.6); color: white;
+      border: 1px solid rgba(0,210,255,0.3);
     }
-    .controle { text-align: center; }
-    .controle label {
-      display: block; font-size: 11px; color: #94a3b8; margin-bottom: 4px;
-    }
-    .controle input[type="range"] {
-      width: 100%; height: 6px; border-radius: 3px;
-      background: rgba(0,210,255,0.2);
-      -webkit-appearance: none; appearance: none; outline: none;
-    }
-    .controle input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 18px; height: 18px;
-      border-radius: 50%; background: #00d2ff;
-      box-shadow: 0 0 10px rgba(0,210,255,0.6); cursor: pointer;
-    }
-    .valor-controle { font-size: 11px; color: #8be4ff; margin-top: 3px; }
+    .valor-controle { font-size: 12px; color: #8be4ff; width: 50px; text-align: right; }
 
     /* ✏️ ÁREA DE ENTRADA */
     .entrada-container {
@@ -198,27 +189,23 @@
     <span id="textoResposta"></span>
   </div>
 
-  <!-- 🎛️ MESA DE SOM — A NOVIDADE! -->
+  <!-- 🎛️ MESA DE SOM — SIMPLIFICADA E FUNCIONAL! -->
   <div class="mesa-som">
     <div class="mesa-titulo">
       🎛️ Mesa de Som — Voz da Andrômeda
       <button class="btn-voz" onclick="testarVoz()">🔊 Testar Voz</button>
     </div>
     <div class="controles">
-      <div class="controle">
+      <div class="linha-controle">
         <label>🔊 Volume</label>
-        <input type="range" id="volume" min="0.5" max="2" step="0.1" value="1" oninput="atualizarValor('volume', this.value)">
-        <div class="valor-controle" id="valor-volume">100%</div>
+        <input type="range" id="volume" min="0.5" max="1.5" step="0.1" value="1" oninput="atualizarVolume(this.value)">
+        <span class="valor-controle" id="valorVolume">100%</span>
       </div>
-      <div class="controle">
-        <label>⚡ Velocidade</label>
-        <input type="range" id="velocidade" min="0.6" max="1.5" step="0.05" value="1" oninput="atualizarValor('velocidade', this.value)">
-        <div class="valor-controle" id="valor-velocidade">Normal</div>
-      </div>
-      <div class="controle">
-        <label>🎵 Tom</label>
-        <input type="range" id="tom" min="0.6" max="1.5" step="0.05" value="1" oninput="atualizarValor('tom', this.value)">
-        <div class="valor-controle" id="valor-tom">Normal</div>
+      <div class="linha-controle">
+        <label>🎤 Voz</label>
+        <select id="seletorVoz" onchange="salvarVozEscolhida()">
+          <option value="">Carregando vozes...</option>
+        </select>
       </div>
     </div>
   </div>
@@ -235,24 +222,64 @@
 let CHAVE_GEMINI = localStorage.getItem('chaveGemini') || '';
 const SISTEMA = `Você é a Andrômeda, assistente pessoal de Francival Alves Farias. Fale em português brasileiro, de forma calorosa, amigável e direta. Seja sempre leal e prestativa.`;
 
-// Configurações de voz — salvas automaticamente
 let configVoz = {
   volume: parseFloat(localStorage.getItem('vozVolume') || 1),
-  velocidade: parseFloat(localStorage.getItem('vozVelocidade') || 1),
-  tom: parseFloat(localStorage.getItem('vozTom') || 1)
+  vozIndex: parseInt(localStorage.getItem('vozIndex') || -1)
 };
+let vozesDisponiveis = [];
 
 window.addEventListener('load', () => {
-  // Carrega configurações salvas
   document.getElementById('volume').value = configVoz.volume;
-  document.getElementById('velocidade').value = configVoz.velocidade;
-  document.getElementById('tom').value = configVoz.tom;
-  atualizarValor('volume', configVoz.volume);
-  atualizarValor('velocidade', configVoz.velocidade);
-  atualizarValor('tom', configVoz.tom);
-  
+  atualizarVolume(configVoz.volume);
+  carregarVozes();
   if(CHAVE_GEMINI) ativarSistema();
 });
+
+// Carrega as vozes disponíveis no celular
+function carregarVozes() {
+  vozesDisponiveis = speechSynthesis.getVoices();
+  const seletor = document.getElementById('seletorVoz');
+  seletor.innerHTML = '';
+  
+  const vozesPt = vozesDisponiveis.filter(v => v.lang.includes('pt'));
+  const vozesOutras = vozesDisponiveis.filter(v => !v.lang.includes('pt'));
+  const todasVozes = [...vozesPt, ...vozesOutras];
+  
+  if(todasVozes.length === 0) {
+    seletor.innerHTML = '<option value="">Vozes carregando...</option>';
+    return;
+  }
+  
+  todasVozes.forEach((voz, idx) => {
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = `${voz.name} (${voz.lang})`;
+    if(idx === configVoz.vozIndex) opt.selected = true;
+    seletor.appendChild(opt);
+  });
+  
+  if(configVoz.vozIndex === -1 && vozesPt.length > 0) {
+    configVoz.vozIndex = vozesDisponiveis.indexOf(vozesPt[0]);
+    seletor.value = configVoz.vozIndex;
+  }
+}
+
+// Espera o navegador carregar as vozes
+if ('speechSynthesis' in window) {
+  speechSynthesis.onvoiceschanged = carregarVozes;
+  setTimeout(carregarVozes, 500);
+}
+
+function salvarVozEscolhida() {
+  configVoz.vozIndex = parseInt(document.getElementById('seletorVoz').value);
+  localStorage.setItem('vozIndex', configVoz.vozIndex);
+}
+
+function atualizarVolume(valor) {
+  configVoz.volume = parseFloat(valor);
+  localStorage.setItem('vozVolume', configVoz.volume);
+  document.getElementById('valorVolume').textContent = Math.round(valor * 100) + '%';
+}
 
 function salvarChave() {
   const chave = document.getElementById('entradaChave').value.trim();
@@ -267,24 +294,7 @@ function ativarSistema() {
   document.getElementById('telaPrincipal').classList.remove('escondido');
 }
 
-function atualizarValor(tipo, valor) {
-  const num = parseFloat(valor);
-  configVoz[tipo] = num;
-  localStorage.setItem(`voz${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`, num);
-  
-  if(tipo === 'volume') {
-    document.getElementById(`valor-${tipo}`).textContent = Math.round(num * 100) + '%';
-  } else {
-    let texto = 'Normal';
-    if(num < 0.85) texto = 'Mais Calmo';
-    else if(num < 0.95) texto = 'Suave';
-    else if(num > 1.15) texto = 'Mais Dinâmico';
-    else if(num > 1.05) texto = 'Animado';
-    document.getElementById(`valor-${tipo}`).textContent = texto;
-  }
-}
-
-// 🎤 FUNÇÃO DE FALA — COM MESA DE SOM!
+// 🎤 FALA — COM VOLUME E ESCOLHA DE VOZ!
 function falar(texto) {
   if (!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
@@ -292,22 +302,20 @@ function falar(texto) {
   const fala = new SpeechSynthesisUtterance(texto);
   fala.lang = 'pt-BR';
   fala.volume = configVoz.volume;
-  fala.rate = configVoz.velocidade;
-  fala.pitch = configVoz.tom;
+  fala.rate = 1; // Velocidade fixa no natural — funciona melhor!
+  fala.pitch = 1; // Tom fixo — funciona melhor!
   
-  // Tenta usar a melhor voz disponível
-  const vozes = speechSynthesis.getVoices();
-  const vozPt = vozes.find(v => v.lang === 'pt-BR' && v.name.includes('Google')) || 
-                vozes.find(v => v.lang === 'pt-BR') ||
-                vozes[0];
-  if(vozPt) fala.voice = vozPt;
+  // Escolhe a voz que o usuário selecionou
+  if(configVoz.vozIndex >= 0 && vozesDisponiveis[configVoz.vozIndex]) {
+    fala.voice = vozesDisponiveis[configVoz.vozIndex];
+  }
   
   speechSynthesis.speak(fala);
 }
 
 // 🔊 TESTAR VOZ
 function testarVoz() {
-  falar('Olá Francival! Sou a Andrômeda. Agora você pode ajustar minha voz do jeito que preferir — mais grave, mais suave, mais calma ou mais animada. Estou aqui para você!');
+  falar('Olá Francival! Sou a Andrômeda. Escolha a voz que você mais gostar e ajuste o volume. Estou aqui para você!');
 }
 
 async function enviarMensagem() {
@@ -332,7 +340,7 @@ async function enviarMensagem() {
     document.getElementById('textoResposta').innerText = resposta;
     document.getElementById('statusTexto').innerText = 'Pronta';
     
-    // Fala com as configurações da mesa de som!
+    // Fala com a voz escolhida!
     falar(resposta);
     
   } catch(e) {
@@ -356,9 +364,6 @@ function ativarMic() {
 document.addEventListener('keypress', e => {
   if(e.key === 'Enter' && CHAVE_GEMINI) enviarMensagem();
 });
-
-// Carrega vozes quando prontas
-window.speechSynthesis.onvoiceschanged = () => {};
 </script>
 
 </body>
