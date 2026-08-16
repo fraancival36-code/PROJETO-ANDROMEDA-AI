@@ -3,193 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QG Andrômeda</title>
+    <title>🌌 Andrômeda</title>
     <style>
+        :root {
+            --bg: #05071a;
+            --indigo: #4f46e5;
+            --roxo: #8b5cf6;
+            --texto: #e0f0ff;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: linear-gradient(135deg, #05071a 0%, #1a1045 100%); 
-            color: white; 
-            font-family: sans-serif; 
-            padding: 20px; 
-            min-height: 100vh;
+        html, body { height: 100%; background: var(--bg); overflow-x: hidden; font-family: sans-serif; color: white; }
+
+        /* 🔑 CAIXA DE CHAVE — APARECE PRIMEIRO, SEMPRE VISÍVEL */
+        .caixa-chave-fixa {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(10,15,40,0.98); border-bottom: 2px solid var(--indigo);
+            padding: 15px; box-shadow: 0 0 30px rgba(79,70,229,0.3);
         }
-        .container { max-width: 500px; margin: 0 auto; }
-        h1 { text-align: center; color: #a5b4fc; margin-bottom: 20px; font-size: 22px; }
-        
-        .caixa-chave { 
-            background: rgba(15,23,42,0.9); 
-            border: 2px solid #4f46e5; 
-            border-radius: 16px; 
-            padding: 25px; 
-            margin-bottom: 20px;
-            box-shadow: 0 0 30px rgba(79,70,229,0.2);
+        .caixa-chave-fixa h3 { color: #a5b4fc; font-size: 15px; margin-bottom: 8px; }
+        .caixa-chave-fixa input {
+            width: 100%; padding: 12px; font-size: 15px; border-radius: 8px;
+            border: 1px solid var(--indigo); background: #0f172a; color: white; margin-bottom: 10px;
         }
-        input { 
-            width: 100%; 
-            padding: 14px; 
-            font-size: 16px; 
-            border-radius: 10px; 
-            border: 1px solid #4f46e5; 
-            background: #05071a; 
-            color: white; 
-            margin: 10px 0;
+        .botoes-chave { display: flex; gap: 10px; }
+        .btn-salvar {
+            flex: 1; padding: 12px; background: #16a34a; color: white; border: none;
+            border-radius: 8px; font-size: 15px; cursor: pointer;
         }
-        button { 
-            background: #4f46e5; 
-            color: white; 
-            border: none; 
-            padding: 14px 20px; 
-            font-size: 16px; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            width: 100%;
-            margin-top: 10px;
-            transition: all 0.2s;
+        .btn-fechar {
+            padding: 12px 18px; background: transparent; color: #94a3b8;
+            border: 1px solid #333; border-radius: 8px; cursor: pointer;
         }
-        button:hover { background: #4338ca; }
-        
-        .resposta { 
-            background: rgba(15,23,42,0.9); 
-            border: 1px solid #4f46e5; 
-            border-radius: 16px; 
-            padding: 20px; 
-            margin: 20px 0; 
-            min-height: 100px;
-            line-height: 1.6;
-            font-size: 16px;
+        .status-chave { margin-top: 8px; font-size: 13px; color: #94a3b8; }
+        .conectada { color: #4ade80; }
+        .escondida { transform: translateY(-100%); transition: 0.3s ease; }
+
+        /* 👤 IMAGEM DA ANDRÔMEDA NO CENTRO */
+        .andromeda-centro {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 260px; z-index: 5; text-align: center;
         }
-        .area-envio { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            padding: 15px; 
-            background: rgba(5,7,26,0.95); 
-            display: flex; 
-            gap: 10px;
-            border-top: 1px solid #333;
+        .andromeda-img {
+            width: 100%; height: auto; border-radius: 50%;
+            box-shadow: 0 0 60px rgba(139,92,246,0.35);
+            animation: respirar 4.5s ease-in-out infinite;
+            background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 80px; color: white;
         }
-        .area-envio input { flex: 1; margin: 0; }
-        .botao-envio { width: auto; padding: 14px 25px; margin: 0; }
-        .status { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
-        .erro { color: #f87171; }
-        .sucesso { color: #4ade80; }
+        @keyframes respirar {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .andromeda-nome {
+            margin-top: 15px; font-size: 22px; color: #c7d2fe;
+            text-shadow: 0 0 15px rgba(79,70,229,0.6);
+        }
+        .status {
+            font-size: 14px; color: #818cf8; margin-top: 5px;
+        }
+
+        /* 📋 BOTÕES LATERAIS */
+        .menu-esquerdo {
+            position: absolute; top: 180px; left: 15px; display: flex;
+            flex-direction: column; gap: 10px; z-index: 10;
+        }
+        .menu-direito {
+            position: absolute; top: 180px; right: 15px; display: flex;
+            flex-direction: column; gap: 10px; z-index: 10;
+        }
+        .botao-lateral {
+            background: rgba(15,23,42,0.7); border: 1px solid #374151;
+            border-radius: 10px; padding: 12px 15px; color: var(--texto);
+            text-decoration: none; font-size: 15px; transition: all 0.2s;
+        }
+        .botao-lateral:hover { border-color: var(--indigo); background: rgba(79,70,229,0.15); }
+
+        /* 💬 ÁREA DE CONVERSA EMBAIXO */
+        .resposta {
+            position: fixed; bottom: 100px; left: 15px; right: 15px;
+            background: rgba(15,23,42,0.92); border: 1px solid var(--indigo);
+            border-radius: 16px; padding: 15px; max-height: 180px; overflow-y: auto;
+            display: none; z-index: 20; font-size: 16px; line-height: 1.7;
+        }
+        .area-envio {
+            position: fixed; bottom: 0; left: 0; right: 0; padding: 15px;
+            background: rgba(5,7,26,0.95); display: flex; gap: 10px; z-index: 20;
+            border-top: 1px solid #222;
+        }
+        .area-envio input {
+            flex: 1; padding: 14px; font-size: 16px; border-radius: 25px;
+            border: 2px solid var(--indigo); background: #0f172a; color: white;
+        }
+        .btn-enviar, .btn-mic {
+            width: 55px; height: 55px; border-radius: 50%; border: none;
+            background: var(--indigo); color: white; font-size: 20px; cursor: pointer;
+        }
+        .btn-mic.gravando { background: #dc2626; animation: pulsar 1s infinite; }
+        @keyframes pulsar { 0%{transform:scale(1)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🌌 Andrômeda</h1>
-        
-        <div class="status" id="status">Aguardando chave...</div>
-        
-        <!-- CAIXA DE CHAVE -->
-        <div class="caixa-chave" id="caixaChave">
-            <h3>🔑 Coloque sua chave</h3>
-            <input type="text" id="entradaChave" placeholder="Cole sua chave aqui..." value="">
-            <button onclick="salvarChave()">✅ Salvar e Ligar</button>
-            <p style="font-size:12px; color:#94a3b8; margin-top:10px;">Pegue grátis em: aistudio.google.com → "Criar chave de API"</p>
-        </div>
 
-        <!-- RESPOSTA -->
-        <div class="resposta" id="resposta" style="display:none;">
-            <strong>Andrômeda:</strong><br><br>
-            <span id="textoResposta"></span>
-        </div>
+<!-- 🔑 CAIXA DE CHAVE — APARECE LOGO QUE ABRIR! -->
+<div class="caixa-chave-fixa" id="caixaChave">
+    <h3>🔑 Chave da Andrômeda</h3>
+    <input type="text" id="entradaChave" placeholder="Cole sua chave aqui...">
+    <div class="botoes-chave">
+        <button class="btn-fechar" onclick="fecharChave()">Fechar</button>
+        <button class="btn-salvar" onclick="salvarChave()">✅ Salvar e Ligar</button>
     </div>
+    <div class="status-chave" id="statusChave">Aguardando chave...</div>
+</div>
 
-    <!-- ÁREA DE DIGITAÇÃO -->
-    <div class="area-envio" id="areaEnvio" style="display:none;">
-        <input type="text" id="mensagem" placeholder="Escreva aqui...">
-        <button class="botao-envio" onclick="enviarMensagem()">Enviar</button>
-    </div>
+<!-- 👤 A ANDRÔMEDA NO CENTRO -->
+<div class="andromeda-centro">
+    <div class="andromeda-img">🌌</div>
+    <div class="andromeda-nome">Andrômeda</div>
+    <div class="status" id="statusTexto">Em repouso</div>
+</div>
+
+<!-- 📋 BOTÕES LATERAIS -->
+<div class="menu-esquerdo">
+    <a href="#" class="botao-lateral">🏠 Início</a>
+    <a href="#" class="botao-lateral">📚 Biblioteca</a>
+    <a href="#" class="botao-lateral">🧪 Laboratório</a>
+    <a href="#" class="botao-lateral">📂 Projetos</a>
+</div>
+<div class="menu-direito">
+    <a href="#" class="botao-lateral">⚙️ Configurações</a>
+    <a href="#" onclick="abrirChave(); return false;" class="botao-lateral">🔑 Mudar Chave</a>
+    <a href="#" class="botao-lateral">🗑️ Limpar Memória</a>
+</div>
+
+<!-- 💬 RESPOSTA -->
+<div class="resposta" id="resposta">
+    <strong>🌌 Andrômeda:</strong><br><br>
+    <span id="textoResposta"></span>
+</div>
+
+<!-- ✏️ CAIXA DE PERGUNTA EMBAIXO -->
+<div class="area-envio" id="areaEnvio" style="display:none;">
+    <input type="text" id="mensagem" placeholder="Escreva ou fale com a Andrômeda...">
+    <button class="btn-mic" id="btnMic" onclick="falarMic()">🎤</button>
+    <button class="btn-enviar" onclick="enviarMensagem()">➤</button>
+</div>
 
 <script>
 let CHAVE_GEMINI = localStorage.getItem('chaveGemini') || '';
+const SISTEMA = `Você é a Andrômeda, assistente pessoal de Francival Alves Farias. Fale em português brasileiro, simples, amigável e direta. Seja leal e prestativa.`;
 
-// Inicializa
+// Abre a caixa se não tiver chave
 window.addEventListener('load', () => {
     if(CHAVE_GEMINI) {
-        usarChave(CHAVE_GEMINI);
-    } else {
-        document.getElementById('entradaChave').value = '';
+        chaveSalva();
     }
 });
 
+function abrirChave() {
+    document.getElementById('caixaChave').classList.remove('escondida');
+    document.getElementById('entradaChave').value = CHAVE_GEMINI;
+}
+function fecharChave() {
+    if(!CHAVE_GEMINI) return alert('Coloque a chave para poder usar!');
+    document.getElementById('caixaChave').classList.add('escondida');
+}
 function salvarChave() {
     const chave = document.getElementById('entradaChave').value.trim();
-    if(!chave) {
-        alert('Coloque a chave primeiro!');
-        return;
-    }
+    if(!chave) return alert('Cole a chave primeiro!');
     CHAVE_GEMINI = chave;
     localStorage.setItem('chaveGemini', chave);
-    usarChave(chave);
+    chaveSalva();
 }
-
-function usarChave(chave) {
-    document.getElementById('caixaChave').style.display = 'none';
+function chaveSalva() {
+    document.getElementById('statusChave').innerHTML = '<span class="conectada">✅ Conectada! Pode falar!</span>';
+    document.getElementById('caixaChave').classList.add('escondida');
     document.getElementById('areaEnvio').style.display = 'flex';
-    document.getElementById('status').innerHTML = '<span class="sucesso">✅ Conectada! Pode falar!</span>';
+    document.getElementById('statusTexto').innerText = 'Pronta para conversar';
 }
 
 async function enviarMensagem() {
     const texto = document.getElementById('mensagem').value.trim();
     if(!texto) return;
-    if(!CHAVE_GEMINI) {
-        alert('Coloque a chave primeiro!');
-        return;
-    }
+    if(!CHAVE_GEMINI) return abrirChave(), alert('Coloque a chave primeiro!');
 
     document.getElementById('mensagem').value = '';
     document.getElementById('resposta').style.display = 'block';
-    document.getElementById('textoResposta').innerHTML = '🧠 Pensando...';
-    document.getElementById('status').innerHTML = 'Processando...';
-
-    const SISTEMA = `Você é a Andrômeda, assistente pessoal de Francival Alves Farias. Fale em português brasileiro, de forma simples, amigável e direta.`;
-
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${CHAVE_GEMINI}`;
+    document.getElementById('textoResposta').innerText = '🧠 Pensando...';
+    document.getElementById('statusTexto').innerText = 'Pensando...';
 
     try {
-        const resposta = await fetch(url, {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${CHAVE_GEMINI}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: SISTEMA + '\n\nPergunta: ' + texto }]
-                }]
-            })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ contents: [{ parts: [{ text: SISTEMA + '\n\nPergunta: ' + texto }] }] })
         });
-
-        if(!resposta.ok) throw new Error('Erro na conexão');
+        if(!res.ok) throw new Error('Verifique a chave ou a internet');
+        const dados = await res.json();
+        const resposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não entendi.';
         
-        const dados = await resposta.json();
-        const textoResposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não entendi.';
+        document.getElementById('textoResposta').innerText = resposta;
+        document.getElementById('statusTexto').innerText = 'Pronta';
         
-        document.getElementById('textoResposta').innerHTML = textoResposta;
-        document.getElementById('status').innerHTML = '<span class="sucesso">✅ Pronta</span>';
-        
-        // Fala a resposta
+        // Fala em voz
         if ('speechSynthesis' in window) {
-            const fala = new SpeechSynthesisUtterance(textoResposta);
-            fala.lang = 'pt-BR';
-            fala.rate = 1.05;
+            const fala = new SpeechSynthesisUtterance(resposta);
+            fala.lang = 'pt-BR'; fala.rate = 1.05;
             speechSynthesis.cancel();
             speechSynthesis.speak(fala);
         }
-
-    } catch(erro) {
-        console.error(erro);
-        document.getElementById('textoResposta').innerHTML = `⚠️ Erro: ${erro.message}<br><br>💡 Dica: Se estiver no GitHub Pages, tente abrir o arquivo direto do celular (arquivo .html). O GitHub bloqueia às vezes.`;
-        document.getElementById('status').innerHTML = '<span class="erro">❌ Erro de conexão</span>';
+    } catch(e) {
+        document.getElementById('textoResposta').innerHTML = `⚠️ ${e.message}<br><br>💡 <strong>Se estiver no GitHub:</strong> baixe o arquivo e abra direto no Chrome do celular! O GitHub bloqueia às vezes.`;
+        document.getElementById('statusTexto').innerText = 'Erro de conexão';
     }
 }
 
-// Enter envia
-document.addEventListener('keypress', (e) => {
-    if(e.key === 'Enter' && document.getElementById('areaEnvio').style.display === 'flex') {
+// Microfone
+function falarMic() {
+    if(!CHAVE_GEMINI) return abrirChave(), alert('Coloque a chave primeiro!');
+    const btn = document.getElementById('btnMic');
+    if(!('webkitSpeechRecognition' in window)) return alert('Use Chrome para falar.');
+    const rec = new webkitSpeechRecognition();
+    rec.lang = 'pt-BR';
+    rec.onstart = () => btn.classList.add('gravando');
+    rec.onresult = (e) => {
+        document.getElementById('mensagem').value = e.results[0][0].transcript;
         enviarMensagem();
-    }
+    };
+    rec.onend = rec.onerror = () => btn.classList.remove('gravando');
+    rec.start();
+}
+
+// Enter envia
+document.addEventListener('keypress', e => {
+    if(e.key === 'Enter' && CHAVE_GEMINI) enviarMensagem();
 });
 </script>
+
 </body>
 </html>
