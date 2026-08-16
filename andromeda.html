@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 Andrômeda — Inteligência Artificial</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: linear-gradient(135deg, #05071a 0%, #1a1045 100%); 
+            color: white; 
+            font-family: sans-serif; 
+            padding: 20px; 
+            padding-bottom: 120px;
+            min-height: 100vh;
+        }
+        .container { max-width: 500px; margin: 0 auto; }
+        h1 { text-align: center; color: #a5b4fc; margin-bottom: 25px; font-size: 24px; }
+        
+        .caixa-chave { 
+            background: rgba(15,23,42,0.9); 
+            border: 2px solid #4f46e5; 
+            border-radius: 16px; 
+            padding: 25px; 
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(79,70,229,0.2);
+        }
+        h3 { color: #a5b4fc; margin-bottom: 15px; font-size: 18px; }
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            font-size: 16px; 
+            border-radius: 10px; 
+            border: 1px solid #4f46e5; 
+            background: #05071a; 
+            color: white; 
+            margin: 10px 0;
+        }
+        button { 
+            background: #4f46e5; 
+            color: white; 
+            border: none; 
+            padding: 14px 20px; 
+            font-size: 16px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        button:hover { background: #4338ca; }
+        
+        .resposta { 
+            background: rgba(15,23,42,0.9); 
+            border: 1px solid #4f46e5; 
+            border-radius: 16px; 
+            padding: 20px; 
+            margin: 20px 0; 
+            min-height: 100px;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .area-envio { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            padding: 15px; 
+            background: rgba(5,7,26,0.95); 
+            display: flex; 
+            gap: 10px;
+            border-top: 1px solid #333;
+        }
+        .area-envio input { flex: 1; margin: 0; }
+        .botao-envio { width: auto; padding: 14px 25px; margin: 0; }
+        .status { text-align: center; color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
+        .erro { color: #f87171; }
+        .sucesso { color: #4ade80; }
+        .dica { font-size: 13px; color: #94a3b8; margin-top: 12px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌌 Andrômeda</h1>
+        
+        <div class="status" id="status">Aguardando chave de API...</div>
+        
+        <!-- CAIXA DE CHAVE -->
+        <div class="caixa-chave" id="caixaChave">
+            <h3>🔑 Coloque sua chave</h3>
+            <input type="text" id="entradaChave" placeholder="Cole sua chave aqui...">
+            <button onclick="salvarChave()">✅ Salvar e Ligar</button>
+            <p class="dica">Pegue grátis em: <strong>aistudio.google.com</strong> → "Criar chave de API"</p>
+        </div>
+
+        <!-- RESPOSTA -->
+        <div class="resposta" id="resposta" style="display:none;">
+            <strong>🌌 Andrômeda:</strong><br><br>
+            <span id="textoResposta"></span>
+        </div>
+    </div>
+
+    <!-- ÁREA DE DIGITAÇÃO -->
+    <div class="area-envio" id="areaEnvio" style="display:none;">
+        <input type="text" id="mensagem" placeholder="Escreva ou fale aqui...">
+        <button class="botao-envio" onclick="enviarMensagem()">Enviar</button>
+    </div>
+
+<script>
+let CHAVE_GEMINI = localStorage.getItem('chaveGemini') || '';
+
+// Inicializa ao carregar
+window.addEventListener('load', () => {
+    if(CHAVE_GEMINI) {
+        usarChave(CHAVE_GEMINI);
+    }
+});
+
+function salvarChave() {
+    const chave = document.getElementById('entradaChave').value.trim();
+    if(!chave) {
+        alert('Por favor, cole sua chave primeiro!');
+        return;
+    }
+    CHAVE_GEMINI = chave;
+    localStorage.setItem('chaveGemini', chave);
+    usarChave(chave);
+}
+
+function usarChave(chave) {
+    document.getElementById('caixaChave').style.display = 'none';
+    document.getElementById('areaEnvio').style.display = 'flex';
+    document.getElementById('status').innerHTML = '<span class="sucesso">✅ Conectada! Pode falar!</span>';
+}
+
+async function enviarMensagem() {
+    const texto = document.getElementById('mensagem').value.trim();
+    if(!texto) return;
+    if(!CHAVE_GEMINI) {
+        alert('Coloque a chave primeiro!');
+        return;
+    }
+
+    document.getElementById('mensagem').value = '';
+    document.getElementById('resposta').style.display = 'block';
+    document.getElementById('textoResposta').innerHTML = '🧠 Pensando...';
+    document.getElementById('status').innerHTML = 'Processando...';
+
+    const SISTEMA = `Você é a Andrômeda, assistente pessoal de Francival Alves Farias. Fale em português brasileiro, de forma simples, amigável e direta. Seja sempre leal, prestativa e calorosa.`;
+
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${CHAVE_GEMINI}`;
+
+    try {
+        const resposta = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: SISTEMA + '\n\nPergunta: ' + texto }]
+                }]
+            })
+        });
+
+        if(!resposta.ok) throw new Error('Erro na conexão');
+        
+        const dados = await resposta.json();
+        const textoResposta = dados?.candidates?.[0]?.content?.parts?.[0]?.text || 'Desculpe, não consegui entender. Tente de novo.';
+        
+        document.getElementById('textoResposta').innerHTML = textoResposta;
+        document.getElementById('status').innerHTML = '<span class="sucesso">✅ Pronta</span>';
+        
+        // Fala a resposta em voz
+        if ('speechSynthesis' in window) {
+            const fala = new SpeechSynthesisUtterance(textoResposta);
+            fala.lang = 'pt-BR';
+            fala.rate = 1.05;
+            fala.pitch = 1.02;
+            speechSynthesis.cancel();
+            speechSynthesis.speak(fala);
+        }
+
+    } catch(erro) {
+        console.error(erro);
+        document.getElementById('textoResposta').innerHTML = `⚠️ Erro: ${erro.message}<br><br>💡 <strong>Dica importante:</strong> Se estiver abrindo pelo GitHub Pages, o site bloqueia a conexão. Para funcionar de verdade, <strong>baixe este arquivo e abra direto no Chrome do celular</strong> (arquivo .html). Assim funciona 100%! ✅`;
+        document.getElementById('status').innerHTML = '<span class="erro">❌ Erro de conexão</span>';
+    }
+}
+
+// Enter envia mensagem
+document.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter' && document.getElementById('areaEnvio').style.display === 'flex') {
+        enviarMensagem();
+    }
+});
+</script>
+</body>
+</html>
