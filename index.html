@@ -7,247 +7,312 @@
   <title>ANDRÔMEDA</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-    body { background: #0a0a0f; color: #f0f0f0; min-height: 100vh; }
+    body {
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #0f0f23 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 16px;
+    }
 
-    /* 🔐 TELA DE ACESSO */
-    .tela-chave {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 100vh; padding: 20px;
-    }
-    .tela-chave.escondida { display: none; }
-    .titulo-andromeda { font-size: 36px; margin-bottom: 8px; color: #4ea0d1; letter-spacing: 4px; }
-    .subtitulo { font-size: 14px; color: #888; margin-bottom: 40px; }
-    .caixa-chave { background: #151520; padding: 30px; border-radius: 12px; width: 100%; max-width: 340px; }
-    .input-chave {
-      width: 100%; padding: 14px; font-size: 18px; text-align: center;
-      background: #000; border: 1px solid #333; color: #fff; border-radius: 8px;
-      margin-bottom: 15px; outline: none;
-    }
-    .btn-entrar {
-      width: 100%; padding: 14px; font-size: 16px; background: #2563eb;
-      color: #fff; border: none; border-radius: 8px; cursor: pointer;
-    }
-    .erro { color: #ff5555; text-align: center; margin-top: 10px; display: none; }
-
-    /* 🧭 CABEÇALHO DA ANDRÔMEDA */
+    /* CABEÇALHO */
     .cabecalho {
-      position: fixed; top: 0; left: 0; right: 0; background: #111; padding: 12px 16px;
       display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid #333; z-index: 100;
+      background: rgba(0,0,0,0.5); padding: 12px 20px; border-radius: 12px;
+      border: 1px solid rgba(100,180,255,0.3); margin-bottom: 20px;
     }
-    .nome-assistente { font-size: 18px; font-weight: bold; color: #4ea0d1; }
-    .btn-voltar { background: none; border: 1px solid #4ea0d1; color: #4ea0d1; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+    .status { display: flex; gap: 16px; align-items: center; }
+    .status span { display: flex; align-items: center; gap: 6px; font-size: 15px; color: #90ee90; }
+    .pronta { color: #87ceeb; font-weight: bold; }
 
-    /* 💬 ÁREA DE CONVERSA — TEXTO */
-    .area-chat { padding: 70px 16px 100px; display: none; max-width: 700px; margin: 0 auto; }
-    .area-chat.ativo { display: block; }
-    .mensagem { margin-bottom: 16px; padding: 12px 16px; border-radius: 12px; max-width: 85%; line-height: 1.5; }
-    .mensagem.assistente { background: #1a1a2e; margin-right: auto; border-bottom-left-radius: 4px; }
-    .mensagem.usuario { background: #2563eb; margin-left: auto; border-bottom-right-radius: 4px; }
-    .saudacao-inicial { color: #ccc; font-size: 14px; margin-bottom: 20px; }
+    /* MENU LATERAL */
+    .menu-container { display: flex; gap: 16px; margin-bottom: 20px; }
+    .menu-coluna {
+      flex: 1; background: rgba(0,0,0,0.4); border-radius: 12px;
+      border: 1px solid rgba(100,180,255,0.2); padding: 16px;
+    }
+    .menu-item {
+      padding: 12px 14px; margin: 6px 0; border-radius: 8px; cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center; gap: 10px;
+      font-size: 15px;
+    }
+    .menu-item:hover { background: rgba(100,180,255,0.2); }
+    .menu-item.ativo { background: rgba(100,180,255,0.3); border-left: 3px solid #4fc3f7; }
 
-    /* 🎤 ÁREA DE ENTRADA — TEXTO + VOZ */
+    /* IMAGEM CENTRAL */
+    .imagem-central {
+      display: flex; justify-content: center; align-items: center;
+      background: linear-gradient(135deg, #1a1a4a, #2a2a5a);
+      border-radius: 12px; padding: 20px; margin: 10px 0;
+      border: 1px solid rgba(100,180,255,0.3);
+    }
+    .imagem-central img { width: 120px; height: 120px; border-radius: 8px; }
+
+    /* MESA DE SOM — VOZ */
+    .mesa-som {
+      background: rgba(0,0,0,0.4); border-radius: 12px; padding: 20px;
+      border: 1px solid rgba(100,180,255,0.2); margin-bottom: 20px;
+    }
+    .titulo-som { font-size: 17px; margin-bottom: 16px; color: #87ceeb; font-weight: bold; }
+    .linha { display: flex; align-items: center; gap: 12px; margin: 12px 0; flex-wrap: wrap; }
+    .linha label { width: 80px; font-size: 14px; color: #ccc; }
+    .linha input[type="range"] { flex: 1; height: 8px; border-radius: 4px; background: #333; outline: none; -webkit-appearance: none; }
+    .linha input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: #4fc3f7; border-radius: 50%; cursor: pointer; }
+    .valor { width: 50px; text-align: right; font-size: 14px; color: #87ceeb; font-weight: bold; }
+    .btn-testar-voz {
+      background: linear-gradient(135deg, #7b2ffd, #4fc3f7); border: none; color: #fff;
+      padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 15px; font-weight: bold;
+    }
+    .seletor-voz {
+      flex: 1; padding: 10px 14px; background: #1a1a3a; border: 1px solid #444; color: #fff;
+      border-radius: 8px; font-size: 14px;
+    }
+
+    /* ÁREA DE CONVERSA */
+    .area-conversa {
+      background: rgba(0,0,0,0.4); border-radius: 12px; padding: 16px;
+      border: 1px solid rgba(100,180,255,0.2); margin-bottom: 16px; min-height: 150px; max-height: 300px; overflow-y: auto;
+    }
+    .mensagem { margin: 10px 0; padding: 12px; border-radius: 10px; max-width: 85%; line-height: 1.5; }
+    .mensagem.assistente { background: rgba(100,180,255,0.15); margin-right: auto; border-bottom-left-radius: 4px; }
+    .mensagem.usuario { background: rgba(123,47,253,0.25); margin-left: auto; border-bottom-right-radius: 4px; }
+
+    /* ENTRADA DE TEXTO */
     .entrada {
-      position: fixed; bottom: 0; left: 0; right: 0; background: #111; padding: 12px 16px;
-      display: flex; gap: 10px; align-items: center; border-top: 1px solid #333;
+      display: flex; gap: 10px; align-items: center; background: rgba(0,0,0,0.4);
+      border-radius: 30px; padding: 8px 12px; border: 1px solid rgba(100,180,255,0.3);
     }
-    .input-texto {
-      flex: 1; padding: 12px 16px; background: #1a1a2e; border: 1px solid #333;
-      color: #fff; border-radius: 24px; outline: none; font-size: 15px;
+    .entrada input {
+      flex: 1; background: transparent; border: none; color: #fff;
+      padding: 10px 14px; font-size: 15px; outline: none;
     }
-    .btn-voz {
-      width: 44px; height: 44px; border-radius: 50%; background: #2563eb;
-      border: none; color: #fff; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    .btn-mic, .btn-enviar {
+      width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
+      font-size: 20px; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
     }
-    .btn-voz.gravando { background: #dc2626; animation: pulso 1s infinite; }
+    .btn-mic { background: #2a2a5a; color: #fff; }
+    .btn-mic.gravando { background: #ff4444; animation: pulso 1s infinite; }
+    .btn-enviar { background: linear-gradient(135deg, #4fc3f7, #7b2ffd); color: #fff; }
     @keyframes pulso { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-    .btn-enviar {
-      padding: 10px 18px; background: #2563eb; border: none; color: #fff;
-      border-radius: 20px; cursor: pointer; font-size: 14px;
-    }
 
-    /* 🚑 BOTÃO PRIME */
+    /* BOTÃO PRIME */
     .btn-prime {
-      margin-top: 20px; padding: 14px 20px; background: linear-gradient(135deg, #dc2626, #f97316);
-      border: none; color: #fff; border-radius: 10px; cursor: pointer; font-size: 16px;
-      width: 100%; font-weight: bold;
+      width: 100%; margin-top: 16px; padding: 16px; background: linear-gradient(135deg, #dc2626, #f97316);
+      border: none; color: #fff; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer;
     }
-
-    /* 📱 ÁREA DO PRIME */
-    .area-prime { display: none; padding-top: 60px; }
-    .area-prime.ativo { display: block; background: #000; min-height: 100vh; }
   </style>
 </head>
 <body>
 
-  <!-- 🔐 TELA DE ENTRADA -->
-  <div class="tela-chave" id="telaChave">
-    <h1 class="titulo-andromeda">ANDRÔMEDA</h1>
-    <p class="subtitulo">Assistente · Voz e Texto</p>
-    <div class="caixa-chave">
-      <input type="text" id="chaveInput" class="input-chave" placeholder="Chave de acesso" maxlength="20">
-      <button class="btn-entrar" id="btnEntrar">ENTRAR</button>
-      <div class="erro" id="msgErro">Chave inválida</div>
+  <!-- CABEÇALHO -->
+  <div class="cabecalho">
+    <div class="status">
+      <span>✅ Andrômeda Ativa 🧠 Memória: 31</span>
+    </div>
+    <span class="pronta">Pronta</span>
+  </div>
+
+  <!-- MENU -->
+  <div class="menu-container">
+    <div class="menu-coluna">
+      <div class="menu-item ativo" data-pagina="inicio">🏠 Início</div>
+      <div class="menu-item" data-pagina="biblioteca">📚 Biblioteca</div>
+      <div class="menu-item" data-pagina="laboratorio">🧪 Laboratório</div>
+      <div class="menu-item" data-pagina="estudio">🎨 Estúdio</div>
+      <div class="menu-item" data-pagina="agentes">🤖 Agentes</div>
+      <div class="menu-item" data-pagina="missoes">🎯 Missões</div>
+      <div class="menu-item" data-pagina="memoria">🧠 Memória</div>
+      <div class="menu-item" data-pagina="prime">🚑 PRIME — Socorros</div>
+    </div>
+    <div class="menu-coluna">
+      <div class="menu-item" data-pagina="painel">📊 Painel</div>
+      <div class="menu-item" data-pagina="biblioteca">📚 Biblioteca</div>
+      <div class="menu-item" data-pagina="ferramentas">🛠️ Ferramentas</div>
+      <div class="menu-item ativo" data-pagina="missoes">🎯 Missões</div>
+      <div class="menu-item" data-pagina="limpar">🗑️ Limpar</div>
     </div>
   </div>
 
-  <!-- 🧭 CABEÇALHO (depois de entrar) -->
-  <div class="cabecalho" id="cabecalho" style="display:none;">
-    <button class="btn-voltar" id="btnVoltar">← Sair</button>
-    <span class="nome-assistente">ANDRÔMEDA</span>
-    <span style="width:60px;"></span>
+  <!-- IMAGEM CENTRAL -->
+  <div class="imagem-central">
+    <span style="font-size:80px;">🌌</span>
   </div>
 
-  <!-- 💬 ÁREA DE CONVERSA -->
-  <div class="area-chat" id="areaChat">
-    <p class="saudacao-inicial">Estou aqui. Fale comigo por texto ou voz. 🎤</p>
-    <div id="caixaMensagens"></div>
-    <button class="btn-prime" id="btnAbrirPrime">🚑 ABRIR PRIME — PRIMEIROS SOCORROS</button>
+  <!-- MESA DE SOM -->
+  <div class="mesa-som">
+    <div class="titulo-som">🎛️ Mesa de Som — Voz da Andrômeda</div>
+    <div class="linha">
+      <label>🔊 Volume</label>
+      <input type="range" id="volumeVoz" min="0" max="200" value="150">
+      <span class="valor" id="valorVolume">150%</span>
+      <button class="btn-testar-voz" id="btnTestarVoz">🔊 Testar Voz</button>
+    </div>
+    <div class="linha">
+      <label>🎙️ Voz</label>
+      <select class="seletor-voz" id="seletorVoz">
+        <option value="pt-BR">português Brasil (pt_BR)</option>
+      </select>
+    </div>
   </div>
 
-  <!-- 🎤 ÁREA DE ENTRADA -->
-  <div class="entrada" id="entrada" style="display:none;">
-    <input type="text" id="inputTexto" class="input-texto" placeholder="Digite sua mensagem...">
-    <button class="btn-voz" id="btnVoz">🎤</button>
-    <button class="btn-enviar" id="btnEnviar">Enviar</button>
+  <!-- ÁREA DE CONVERSA -->
+  <div class="area-conversa" id="areaConversa">
+    <div class="mensagem assistente">Olá! Sou a Andrômeda. Estou pronta para falar e ouvir você. Como posso ajudar? 🌌</div>
   </div>
 
-  <!-- 🚑 ÁREA DO PRIME -->
-  <div class="area-prime" id="areaPrime">
-    <div id="root"></div>
+  <!-- ENTRADA -->
+  <div class="entrada">
+    <input type="text" id="inputTexto" placeholder="Escreva ou fale com a Andrômeda...">
+    <button class="btn-mic" id="btnMic">🎤</button>
+    <button class="btn-enviar" id="btnEnviar">➤</button>
   </div>
+
+  <!-- BOTÃO PRIME -->
+  <button class="btn-prime" id="btnAbrirPrime">🚑 ABRIR PRIME — PRIMEIROS SOCORROS</button>
 
   <script>
-    // 🔑 CHAVE DE ACESSO
-    const CHAVE_CORRETA = "ANDROMEDA2026";
+    // ==============================================
+    // 🧠 SISTEMA DE FALA — TTS (Texto → Voz)
+    // ==============================================
+    const sintese = window.speechSynthesis;
+    let vozes = [];
+    let vozSelecionada = null;
+    let volume = 1.5;
 
-    // Elementos
-    const telaChave = document.getElementById('telaChave');
-    const chaveInput = document.getElementById('chaveInput');
-    const btnEntrar = document.getElementById('btnEntrar');
-    const msgErro = document.getElementById('msgErro');
-    const cabecalho = document.getElementById('cabecalho');
-    const areaChat = document.getElementById('areaChat');
-    const entrada = document.getElementById('entrada');
-    const areaPrime = document.getElementById('areaPrime');
-    const btnVoltar = document.getElementById('btnVoltar');
-    const btnAbrirPrime = document.getElementById('btnAbrirPrime');
+    // Carregar vozes
+    function carregarVozes() {
+      vozes = sintese.getVoices();
+      vozSelecionada = vozes.find(v => v.lang.includes('pt-BR') || v.lang.includes('pt')) || vozes[0];
+    }
+    carregarVozes();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = carregarVozes;
+    }
+
+    // Falar
+    function falar(texto) {
+      sintese.cancel();
+      const fala = new SpeechSynthesisUtterance(texto);
+      fala.voice = vozSelecionada;
+      fala.volume = volume;
+      fala.lang = 'pt-BR';
+      fala.rate = 1.0;
+      sintese.speak(fala);
+    }
+
+    // ==============================================
+    // 🎤 RECONHECIMENTO DE VOZ (Voz → Texto)
+    // ==============================================
+    let reconhecimento = null;
+    let ouvindo = false;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      reconhecimento = new Rec();
+      reconhecimento.lang = 'pt-BR';
+      reconhecimento.continuous = false;
+      reconhecimento.onresult = (e) => {
+        const texto = e.results[0][0].transcript;
+        inputTexto.value = texto;
+        processarMensagem(texto);
+      };
+      reconhecimento.onend = () => {
+        ouvindo = false;
+        btnMic.classList.remove('gravando');
+      };
+    }
+
+    // ==============================================
+    // 💬 CONVERSA
+    // ==============================================
+    const areaConversa = document.getElementById('areaConversa');
     const inputTexto = document.getElementById('inputTexto');
     const btnEnviar = document.getElementById('btnEnviar');
-    const btnVoz = document.getElementById('btnVoz');
-    const caixaMensagens = document.getElementById('caixaMensagens');
-
-    let reconhecimentoVoz = null;
-    let gravando = false;
-
-    // ✅ Entrar com chave
-    function entrar() {
-      if (chaveInput.value.trim().toUpperCase() === CHAVE_CORRETA) {
-        telaChave.classList.add('escondida');
-        cabecalho.style.display = 'flex';
-        areaChat.classList.add('ativo');
-        entrada.style.display = 'flex';
-        msgErro.style.display = 'none';
-        chaveInput.value = '';
-      } else {
-        msgErro.style.display = 'block';
-        chaveInput.value = '';
-      }
-    }
-
-    btnEntrar.addEventListener('click', entrar);
-    chaveInput.addEventListener('keydown', e => e.key === 'Enter' && entrar());
-
-    // 📤 Enviar mensagem de texto
-    function enviarMensagem() {
-      const texto = inputTexto.value.trim();
-      if (!texto) return;
-      
-      // Adiciona mensagem do usuário
-      addMensagem(texto, 'usuario');
-      inputTexto.value = '';
-      
-      // Resposta da Andrômeda
-      setTimeout(() => {
-        addMensagem('Recebido. Estou processando sua mensagem. Em desenvolvimento — em breve responderei com inteligência completa.', 'assistente');
-      }, 600);
-    }
+    const btnMic = document.getElementById('btnMic');
+    const btnTestarVoz = document.getElementById('btnTestarVoz');
+    const volumeVoz = document.getElementById('volumeVoz');
+    const valorVolume = document.getElementById('valorVolume');
+    const btnAbrirPrime = document.getElementById('btnAbrirPrime');
+    const menuItens = document.querySelectorAll('.menu-item');
 
     function addMensagem(texto, tipo) {
       const div = document.createElement('div');
       div.className = `mensagem ${tipo}`;
       div.textContent = texto;
-      caixaMensagens.appendChild(div);
-      caixaMensagens.scrollTop = caixaMensagens.scrollHeight;
+      areaConversa.appendChild(div);
+      areaConversa.scrollTop = areaConversa.scrollHeight;
     }
 
-    btnEnviar.addEventListener('click', enviarMensagem);
-    inputTexto.addEventListener('keydown', e => e.key === 'Enter' && enviarMensagem());
-
-    // 🎤 Reconhecimento de Voz
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      reconhecimentoVoz = new SpeechRecognition();
-      reconhecimentoVoz.lang = 'pt-BR';
-      reconhecimentoVoz.continuous = false;
-      reconhecimentoVoz.onresult = (e) => {
-        const transcrito = e.results[0][0].transcript;
-        inputTexto.value = transcrito;
-        enviarMensagem();
-      };
-      reconhecimentoVoz.onend = () => {
-        gravando = false;
-        btnVoz.classList.remove('gravando');
-      };
-      reconhecimentoVoz.onerror = () => {
-        gravando = false;
-        btnVoz.classList.remove('gravando');
-      };
+    function processarMensagem(texto) {
+      if (!texto.trim()) return;
+      addMensagem(texto, 'usuario');
+      
+      // Resposta simples
+      setTimeout(() => {
+        const resposta = `Recebi: "${texto}". Estou processando. Em breve terei respostas completas!`;
+        addMensagem(resposta, 'assistente');
+        falar(resposta);
+      }, 500);
     }
 
-    btnVoz.addEventListener('click', () => {
-      if (!reconhecimentoVoz) {
-        alert('Reconhecimento de voz não disponível no navegador. Use o Chrome.');
+    // Eventos
+    btnEnviar.addEventListener('click', () => {
+      processarMensagem(inputTexto.value);
+      inputTexto.value = '';
+    });
+    inputTexto.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { processarMensagem(inputTexto.value); inputTexto.value = ''; }
+    });
+
+    // Microfone
+    btnMic.addEventListener('click', () => {
+      if (!reconhecimento) {
+        addMensagem('Reconhecimento de voz não disponível. Use o Chrome.', 'assistente');
         return;
       }
-      if (gravando) {
-        reconhecimentoVoz.stop();
-        gravando = false;
-        btnVoz.classList.remove('gravando');
+      if (ouvindo) {
+        reconhecimento.stop();
+        ouvindo = false;
+        btnMic.classList.remove('gravando');
       } else {
-        reconhecimentoVoz.start();
-        gravando = true;
-        btnVoz.classList.add('gravando');
+        reconhecimento.start();
+        ouvindo = true;
+        btnMic.classList.add('gravando');
       }
     });
 
-    // 🚑 Abrir PRIME
+    // Testar Voz
+    btnTestarVoz.addEventListener('click', () => {
+      falar('Olá! Eu sou a Andrômeda. Minha voz está funcionando perfeitamente!');
+    });
+
+    // Volume
+    volumeVoz.addEventListener('input', (e) => {
+      volume = parseInt(e.target.value) / 100;
+      valorVolume.textContent = `${e.target.value}%`;
+    });
+
+    // Menu
+    menuItens.forEach(item => {
+      item.addEventListener('click', () => {
+        menuItens.forEach(i => i.classList.remove('ativo'));
+        item.classList.add('ativo');
+        const pagina = item.dataset.pagina;
+        if (pagina === 'prime') {
+          falar('Abrindo o PRIME — Primeiros Socorros.');
+          alert('🚑 PRIME — Em breve! Coloque o código do jogo em uma página chamada prime.html');
+        } else {
+          falar(`Acessando ${item.textContent.trim()}`);
+        }
+      });
+    });
+
+    // Botão PRIME
     btnAbrirPrime.addEventListener('click', () => {
-      areaChat.classList.remove('ativo');
-      entrada.style.display = 'none';
-      areaPrime.classList.add('ativo');
-      document.querySelector('.nome-assistente').textContent = 'PRIME — Socorros';
-    });
-
-    // 🔙 Voltar
-    btnVoltar.addEventListener('click', () => {
-      if (areaPrime.classList.contains('ativo')) {
-        areaPrime.classList.remove('ativo');
-        areaChat.classList.add('ativo');
-        entrada.style.display = 'flex';
-        document.querySelector('.nome-assistente').textContent = 'ANDRÔMEDA';
-      } else {
-        // Voltar para tela de chave
-        cabecalho.style.display = 'none';
-        areaChat.classList.remove('ativo');
-        entrada.style.display = 'none';
-        areaPrime.classList.remove('ativo');
-        telaChave.classList.remove('escondida');
-      }
+      falar('Abrindo PRIME — Primeiros Socorros.');
+      alert('🚑 PRIME — Coloque o código do jogo em prime.html e eu abro!');
     });
   </script>
 
-  <!-- ⚛️ CARREGA O PRIME -->
-  <script type="module" src="/src/App.jsx"></script>
 </body>
 </html>
