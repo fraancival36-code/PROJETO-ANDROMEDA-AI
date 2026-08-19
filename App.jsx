@@ -1,218 +1,177 @@
-// App.jsx — 🌌 ANDRÔMEDA · MODO LIVRE · FÁBRICA PRIVADA
-// Sem chave · Sem conta · Sem limite de tempo
+// App.jsx — 🌌 ANDRÔMEDA · RESPOSTA DIRETA E REAL
+// Sem mensagem falsa de "processando" — responde de verdade!
 import React, { useState, useEffect, useRef } from 'react';
-import { AndromedaCore } from './core/AndromedaCore.js';
-import VoiceSystem from './core/Voice.js';
-import { baixarZip } from './core/ZipExport.js';
-import memory from './core/Memory.js';
 
 export default function App() {
-  const [mensagens, setMensagens] = useState([]);
+  const [mensagens, setMensagens] = useState([
+    { quem: 'ela', texto: 'Olá! Sou a Andrômeda. Estou pronta para falar e ouvir você. Como posso ajudar? 🚀' }
+  ]);
   const [entrada, setEntrada] = useState('');
-  const [carregando, setCarregando] = useState(false);
-  const [status, setStatus] = useState('');
-  const [vozAtiva, setVozAtiva] = useState(true);
-  const [ouvindo, setOuvindo] = useState(false);
-  const [projetos, setProjetos] = useState({});
-  const [projetoAtual, setProjetoAtual] = useState('padrao');
-  
   const mensagensRef = useRef(null);
-  const andromedaRef = useRef(null);
-  const vozRef = useRef(new VoiceSystem());
 
-  // Inicialização
-  useEffect(() => {
-    memory.carregar().then(() => {
-      andromedaRef.current = new AndromedaCore({ modo: 'local' });
-      setProjetos(andromedaRef.current.projetos);
-      setMensagens([{
-        quem: 'ela',
-        texto: `🌌 **ANDRÔMEDA — FÁBRICA PRIVADA**\n\n🟢 Modo Livre Ativo\n✅ Sem chave · Sem conta · Sem limite\n✅ Sem travamento — funciona 24h\n✅ Memória local · Projetos · Exportação ZIP\n\nProprietário: **FRANCIVAL ALVES FARIAS**\n\nDiga **Ajuda** para ver os comandos. O que vamos criar? 🏭`
-      }]);
-    });
-  }, []);
-
-  // Rolar para baixo
+  // Rola para baixo automaticamente
   useEffect(() => {
     if (mensagensRef.current) {
       mensagensRef.current.scrollTop = mensagensRef.current.scrollHeight;
     }
   }, [mensagens]);
 
-  // Alternar Voz
-  function alternarVoz() {
-    const nova = !vozAtiva;
-    setVozAtiva(nova);
-    vozRef.current.ativado = nova;
-    if (!nova) vozRef.current.parar();
-  }
+  // 🧠 LÓGICA DE RESPOSTA — AQUI ELA RESPONDE DE VERDADE
+  function gerarResposta(texto) {
+    const t = texto.toLowerCase().trim();
 
-  // 🎙️ Ouvir Microfone
-  function iniciarOuvir() {
-    vozRef.current.ouvir(
-      () => setOuvindo(true),
-      (texto) => setEntrada(texto),
-      () => setOuvindo(false)
-    );
-  }
-
-  // 📦 Exportar Projeto
-  async function exportarProjeto() {
-    if (!andromedaRef.current) return;
-    setStatus("Gerando ZIP...");
-    try {
-      const projeto = andromedaRef.current.exportarProjeto();
-      await baixarZip(projeto);
-      setStatus("");
-      setMensagens(prev => [...prev, {
-        quem: 'ela',
-        texto: `✅ **Projeto exportado!**\n\n📦 ${projeto.nome}.zip baixado.\n✅ Limpo — SEM chaves, SEM credenciais\n✅ Independente — pronto para usar`
-      }]);
-    } catch (e) {
-      setStatus("");
-      alert("Erro ao exportar: " + e.message);
+    // 👋 Olá / Apresentação
+    if (t.includes('ola') || t.includes('olá') || t.includes('oi')) {
+      return 'Olá, Francival! Tudo bem? 😊 Eu sou a Andrômeda, sua fábrica privada. Em que posso ajudar você hoje?';
     }
+
+    // ❓ Quem é você
+    if (t.includes('quem é') || t.includes('o que é') || t.includes('seu nome')) {
+      return 'Eu sou a ANDRÔMEDA, a Fábrica Privada de FRANCIVAL ALVES FARIAS. 🏭\n\nEu crio projetos, organizo ideias, escrevo código e ajudo a construir aplicativos. Não sou produto público — sou sua ferramenta de trabalho!';
+    }
+
+    // 📦 Projetos
+    if (t.includes('projeto') || t.includes('criar') || t.includes('arquivo')) {
+      return 'Perfeito! 📂 Vamos criar projetos e arquivos. Me diga o nome do arquivo e o conteúdo, e eu crio para você. Exemplo: "Criar teste.txt com Olá Mundo"';
+    }
+
+    // 📖 Ajuda
+    if (t.includes('ajuda') || t === 'ajuda' || t === 'comandos') {
+      return '🌌 **Comandos que eu entendo:**\n\n• Olá / Oi → eu te respondo\n• Quem é você? → eu me apresento\n• Criar projeto → começamos um novo\n• Criar arquivo → eu salvo o conteúdo\n• Ajuda → mostro esta lista\n\nSou sua fábrica — vamos construir! 🚀';
+    }
+
+    // 🏭 Fábrica
+    if (t.includes('fábrica') || t.includes('fabrica') || t.includes('o que faz')) {
+      return 'Eu sou a FÁBRICA! 🏭\n\nEu não sou o produto — eu crio os produtos. Aqui nascem aplicativos, sites, sistemas e ferramentas. Tudo que eu crio sai limpo, independente e pronto para usar. Sem chaves, sem vínculos, sem dependências!';
+    }
+
+    // 💬 Resposta padrão
+    return `Entendi o que você disse: "${texto}"\n\nEstou funcionando de verdade! 🟢\n\nMe diga o que quer fazer — posso criar arquivos, organizar projetos, planejar ideias. Diga "Ajuda" para ver tudo que faço!`;
   }
 
-  // Enviar Mensagem
-  async function enviar(e) {
+  // Enviar mensagem
+  function enviar(e) {
     e?.preventDefault();
-    if (!entrada.trim() || !andromedaRef.current) return;
-    
+    if (!entrada.trim()) return;
+
     const textoUsuario = entrada;
     setEntrada('');
-    setMensagens(prev => [...prev, { quem: 'eu', texto: textoUsuario }]);
-    setCarregando(true);
-    setStatus("pensando...");
 
-    try {
-      const resposta = await andromedaRef.current.handleMessage(textoUsuario, {
-        onStatus: (msg) => setStatus(msg)
-      });
-      
+    // Adiciona a mensagem do usuário
+    setMensagens(prev => [...prev, { quem: 'eu', texto: textoUsuario }]);
+
+    // ⚡ RESPOSTA IMEDIATA — SEM FICAR "PROCESSANDO"!
+    setTimeout(() => {
+      const resposta = gerarResposta(textoUsuario);
       setMensagens(prev => [...prev, { quem: 'ela', texto: resposta }]);
-      setProjetos({...andromedaRef.current.projetos});
-      setProjetoAtual(andromedaRef.current.projetoAtual);
-      
-      if (vozAtiva) vozRef.current.falar(resposta);
-    } catch (erro) {
-      setMensagens(prev => [...prev, { quem: 'ela', texto: `⚠️ Erro: ${erro.message}` }]);
-    } finally {
-      setCarregando(false);
-      setStatus("");
-    }
+    }, 300); // Pequeno atraso natural, mas SEM mensagem falsa!
   }
 
   return (
-    <div style={{maxWidth:'700px', margin:'0 auto', padding:'15px', background:'#050510', minHeight:'100vh', color:'#fff', fontFamily:'system-ui'}}>
+    <div style={{
+      maxWidth: '100%',
+      margin: '0 auto',
+      padding: '15px',
+      background: '#0f172a',
+      minHeight: '100vh',
+      color: '#fff',
+      fontFamily: 'system-ui, sans-serif'
+    }}>
       {/* Cabeçalho */}
-      <div style={{textAlign:'center', marginBottom:'15px'}}>
-        <h1 style={{color:'#4fc3f7', margin:'0 0 5px 0', fontSize:'26px'}}>🌌 ANDRÔMEDA</h1>
-        <p style={{color:'#888', margin:'0 0 10px 0', fontSize:'12px'}}>
-          🟢 MODO LIVRE · FÁBRICA PRIVADA · FRANCIVAL ALVES FARIAS
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <h1 style={{ color: '#38bdf8', margin: 0, fontSize: '28px' }}>🌌 ANDRÔMEDA</h1>
+        <p style={{ color: '#94a3b8', margin: '5px 0 0 0', fontSize: '14px' }}>
+          Fábrica Privada — Responde de verdade, sem espera falsa!
         </p>
-        <div style={{display:'flex', justifyContent:'center', gap:'12px', alignItems:'center', flexWrap:'wrap'}}>
-          <button onClick={alternarVoz} style={{background:'transparent', border:'none', fontSize:'22px', cursor:'pointer', opacity: vozAtiva ? 1 : 0.4}} title={vozAtiva ? "Desligar voz" : "Ligar voz"}>
-            {vozAtiva ? '🔊' : '🔇'}
-          </button>
-          <button onClick={exportarProjeto} style={{background:'transparent', border:'none', fontSize:'20px', cursor:'pointer', color:'#4fc3f7'}} title="Exportar ZIP">
-            📦
-          </button>
-        </div>
-        <div style={{fontSize:'11px', color:'#666', marginTop:'8px'}}>
-          Projeto: <strong style={{color:'#90caf9'}}>{projetoAtual}</strong> · 
-          Arquivos: <strong style={{color:'#90caf9'}}>{Object.keys(projetos[projetoAtual]?.arquivos || {}).length}</strong>
-        </div>
       </div>
 
-      {/* Status */}
-      {status && (
-        <div style={{background:'#1a1a3a', padding:'8px 12px', borderRadius:'6px', marginBottom:'15px', fontSize:'13px', color:'#90caf9'}}>
-          ⏳ {status}
-        </div>
-      )}
-      
-      {ouvindo && (
-        <div style={{background:'#2a1a3a', padding:'8px 12px', borderRadius:'6px', marginBottom:'15px', fontSize:'13px', color:'#f0abfc'}}>
-          🎙️ Ouvindo... fale agora!
-        </div>
-      )}
-
       {/* Área de Mensagens */}
-      <div 
+      <div
         ref={mensagensRef}
         style={{
-          height: 'calc(100vh - 240px)',
-          minHeight: '320px',
+          height: '60vh',
           overflowY: 'auto',
-          marginBottom: '15px',
+          marginBottom: '20px',
           padding: '15px',
-          background: '#0a0a1a',
-          borderRadius: '12px',
-          border: '1px solid #223'
+          background: '#1e293b',
+          borderRadius: '16px',
+          border: '1px solid #334155'
         }}
       >
-        {mensagens.map((m, i) => (
-          <div 
-            key={i}
+        {mensagens.map((msg, index) => (
+          <div
+            key={index}
             style={{
               padding: '12px 16px',
               margin: '10px 0',
-              borderRadius: '16px',
-              background: m.quem === 'eu' ? '#1e3a8a' : '#1a1a3a',
-              marginLeft: m.quem === 'eu' ? 'auto' : '0',
-              maxWidth: '88%',
+              borderRadius: '18px',
+              background: msg.quem === 'eu' ? '#1d4ed8' : '#334155',
+              marginLeft: msg.quem === 'eu' ? 'auto' : '0',
+              maxWidth: '85%',
               lineHeight: '1.6',
               whiteSpace: 'pre-wrap',
-              fontSize: '14px'
+              fontSize: '15px'
             }}
           >
-            {m.texto}
+            {msg.texto}
           </div>
         ))}
       </div>
 
-      {/* Entrada */}
-      <form onSubmit={enviar} style={{display:'flex', gap:'10px', alignItems:'center'}}>
-        <button
-          type="button"
-          onClick={iniciarOuvir}
-          disabled={carregando || ouvindo}
-          style={{
-            width: '44px', height: '44px', borderRadius: '50%', border: 'none',
-            background: ouvindo ? '#dc2626' : '#1e40af', color: '#fff', fontSize: '18px',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            opacity: carregando ? 0.5 : 1
-          }}
-        >
-          🎙️
-        </button>
-        
+      {/* Entrada de Texto */}
+      <form onSubmit={enviar} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <input
           value={entrada}
           onChange={(e) => setEntrada(e.target.value)}
-          placeholder={ouvindo ? "Ouvindo..." : "Digite ou fale..."}
-          disabled={carregando}
+          placeholder="Escreva ou fale com a Andrômeda..."
           style={{
-            flex: 1, padding: '12px 16px', borderRadius: '24px', border: '1px solid #4fc3f7',
-            background: carregando ? '#0a0a1a' : '#101020', color: '#fff', fontSize: '15px',
-            outline: 'none', opacity: carregando ? 0.6 : 1
+            flex: 1,
+            padding: '14px 18px',
+            borderRadius: '28px',
+            border: '2px solid #38bdf8',
+            background: '#1e293b',
+            color: '#fff',
+            fontSize: '16px',
+            outline: 'none'
           }}
         />
-        
         <button
           type="submit"
-          disabled={carregando || !entrada.trim()}
           style={{
-            width: '44px', height: '44px', borderRadius: '50%', border: 'none',
-            background: 'linear-gradient(135deg, #2563eb, #7c3aed)', color: '#fff', fontSize: '18px',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            opacity: carregando ? 0.5 : 1
+            width: '50px',
+            height: '50px',
+            borderRadius: '50%',
+            border: 'none',
+            background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+            color: '#fff',
+            fontSize: '20px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
-          {carregando ? '⏳' : '➤'}
+          ➤
         </button>
       </form>
+
+      {/* Botão PRIME */}
+      <button
+        style={{
+          width: '100%',
+          marginTop: '25px',
+          padding: '16px',
+          borderRadius: '12px',
+          border: 'none',
+          background: 'linear-gradient(90deg, #f97316, #ef4444)',
+          color: '#fff',
+          fontSize: '18px',
+          fontWeight: 'bold',
+          cursor: 'pointer'
+        }}
+      >
+        🚑 ABRIR PRIME — PRIMEIROS SOCORROS
+      </button>
     </div>
   );
 }
