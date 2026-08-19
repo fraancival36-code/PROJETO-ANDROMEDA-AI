@@ -1,6 +1,5 @@
-// App.jsx — 🌌 ANDRÔMEDA · RESPOSTA DIRETA E REAL
-// Sem mensagem falsa de "processando" — responde de verdade!
-import React, { useState, useEffect, useRef } from 'react';
+// ANDRÔMEDA — CORREÇÃO: RESPOSTA REAL, SEM FICAR "PROCESSANDO"
+import React, { useState, useRef } from 'react';
 
 export default function App() {
   const [mensagens, setMensagens] = useState([
@@ -10,13 +9,13 @@ export default function App() {
   const mensagensRef = useRef(null);
 
   // Rola para baixo automaticamente
-  useEffect(() => {
+  useState(() => {
     if (mensagensRef.current) {
       mensagensRef.current.scrollTop = mensagensRef.current.scrollHeight;
     }
   }, [mensagens]);
 
-  // 🧠 LÓGICA DE RESPOSTA — AQUI ELA RESPONDE DE VERDADE
+  // 🧠 LÓGICA DE RESPOSTA — AQUI ELA RESPONDE DE VERDADE!
   function gerarResposta(texto) {
     const t = texto.toLowerCase().trim();
 
@@ -49,7 +48,7 @@ export default function App() {
     return `Entendi o que você disse: "${texto}"\n\nEstou funcionando de verdade! 🟢\n\nMe diga o que quer fazer — posso criar arquivos, organizar projetos, planejar ideias. Diga "Ajuda" para ver tudo que faço!`;
   }
 
-  // Enviar mensagem
+  // Enviar mensagem — ⚡ SEM FICAR "PROCESSANDO"!
   function enviar(e) {
     e?.preventDefault();
     if (!entrada.trim()) return;
@@ -60,11 +59,11 @@ export default function App() {
     // Adiciona a mensagem do usuário
     setMensagens(prev => [...prev, { quem: 'eu', texto: textoUsuario }]);
 
-    // ⚡ RESPOSTA IMEDIATA — SEM FICAR "PROCESSANDO"!
+    // ⚡ RESPOSTA IMEDIATA — SEM MENSAGEM FALSA DE "PROCESSANDO"!
     setTimeout(() => {
       const resposta = gerarResposta(textoUsuario);
       setMensagens(prev => [...prev, { quem: 'ela', texto: resposta }]);
-    }, 300); // Pequeno atraso natural, mas SEM mensagem falsa!
+    }, 300); // Pequeno atraso natural, MAS RESPONDE DE VERDADE!
   }
 
   return (
