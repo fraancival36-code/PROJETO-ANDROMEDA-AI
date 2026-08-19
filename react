@@ -1,0 +1,180 @@
+06 andromeda
+
+
+
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { AndromedaCore } from "./core/AndromedaCore";
+import { memory } from "./core/Memory";
+import { buildZip, downloadBlob } from "./core/ZipExport";
+
+export default function App() {
+  const [apiKey, setApiKey] = useState("");
+  const [needsKey, setNeedsKey] = useState(true);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const [busy, setBusy] = useState(false);
+  const coreRef = useRef(null);
+  const bottomRef = useRef(null);
+  const [projects, setProjects] = useState([]);
+  const [showProjects, setShowProjects] = useState(false);
+
+  const refreshProjects = useCallback(async () => {
+    const list = (await memory.get("project", "__projects__")) || [];
+    setProjects(list);
+  }, []);
+
+  const exportProject = useCallback(async (projectId) => {
+    const filenames = (await memory.get("project", `${projectId}::__files__`)) || [];
+    const files = {};
+    for (const fname of filenames) {
+      const f = await memory.get("project", `${projectId}::${fname}`);
+      if (f) files[fname] = f.content;
+    }
+    if (Object.keys(files).length === 0) return;
+    const blob = buildZip(files);
+    downloadBlob(blob, `${projectId}.zip`);
+  }, []);
+
+  // Carrega chave salva e histórico ao abrir o app
+  useEffect(() => {
+    (async () => {
+      const saved = await memory.get("system", "api_key");
+      if (saved) {
+        setApiKey(saved);
+        setNeedsKey(false);
+        coreRef.current = new AndromedaCore({ apiKey: saved });
+      }
+      const recent = await memory.recentHistory(20);
+      const restored = recent.reverse().flatMap((h) => [
+        { role: "user", text: h.user },
+        { role: "assistant", text: h.assistant },
+      ]);
+      setMessages(restored);
+    })();
+  }, []);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, busy]);
+
+  const saveKey = useCallback(async () => {
+    if (!apiKey.trim()) return;
+    await memory.set("system", "api_key", apiKey.trim());
+    coreRef.current = new AndromedaCore({ apiKey: apiKey.trim() });
+    setNeedsKey(false);
+  }, [apiKey]);
+
+  const send = useCallback(async () => {
+    if (!input.trim() || busy || !coreRef.current) return;
+    const text = input.trim();
+    setInput("");
+    setMessages((m) => [...m, { role: "user", text }]);
+    setBusy(true);
+    try {
+      const reply = await coreRef.current.handleMessage(text);
+      setMessages((m) => [...m, { role: "assistant", text: reply || "(sem resposta de texto)" }]);
+      refreshProjects();
+    } catch (err) {
+      setMessages((m) => [...m, { role: "assistant", text: `⚠️ Erro: ${err.message}` }]);
+    } finally {
+      setBusy(false);
+    }
+  }, [input, busy, refreshProjects]);
+
+  useEffect(() => { refreshProjects(); }, [refreshProjects]);
+
+  if (needsKey) {
+    return (
+      <div style={S.shell}>
+        <div style={S.setupBox}>
+          <h1 style={S.setupTitle}>ANDRÔMEDA</h1>
+          <p style={S.setupText}>
+            Cole sua chave de API da Anthropic para ligar o motor de IA.
+            Ela fica guardada só neste dispositivo.
+          </p>
+          <input
+            style={S.input}
+            type="password"
+            placeholder="sk-ant-..."
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+          />
+          <button style={S.button} onClick={saveKey}>CONECTAR</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={S.shell}>
+      <header style={S.header}>
+        <span style={S.headerDot} />
+        ANDRÔMEDA
+        <button style={S.projectsBtn} onClick={() => setShowProjects((v) => !v)}>
+          Projetos ({projects.length})
+        </button>
+      </header>
+
+      {showProjects && (
+        <div style={S.projectsPanel}>
+          {projects.length === 0 && <div style={S.empty}>Nenhum projeto criado ainda.</div>}
+          {projects.map((p) => (
+            <div key={p.id} style={S.projectRow}>
+              <div>
+                <div style={{ fontWeight: 600 }}>{p.name}</div>
+                <div style={{ fontSize: 11, color: "#8D8B96" }}>{p.fileCount} arquivo(s)</div>
+              </div>
+              <button style={S.exportBtn} onClick={() => exportProject(p.id)}>Baixar .zip</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div style={S.messages}>
+        {messages.length === 0 && (
+          <div style={S.empty}>Diga algo. Ela pode pesquisar, criar arquivos e lembrar do que conversarem.</div>
+        )}
+        {messages.map((m, i) => (
+          <div key={i} style={m.role === "user" ? S.bubbleUser : S.bubbleAI}>
+            {m.text}
+          </div>
+        ))}
+        {busy && <div style={S.bubbleAI}>pensando…</div>}
+        <div ref={bottomRef} />
+      </div>
+
+      <div style={S.inputRow}>
+        <input
+          style={S.textInput}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && send()}
+          placeholder="Fale com a Andrômeda..."
+        />
+        <button style={S.sendBtn} onClick={send} disabled={busy}>Enviar</button>
+      </div>
+    </div>
+  );
+}
+
+const S = {
+  shell: { maxWidth: 430, margin: "0 auto", height: "100vh", display: "flex", flexDirection: "column", background: "#0A0A0F", color: "#F2EFEA", fontFamily: "Inter, sans-serif" },
+  header: { padding: 16, borderBottom: "1px solid #201F27", fontWeight: 700, letterSpacing: 2, display: "flex", alignItems: "center", gap: 8 },
+  headerDot: { width: 8, height: 8, borderRadius: "50%", background: "#4E8FD1" },
+  projectsBtn: { marginLeft: "auto", background: "#121118", border: "1px solid #201F27", color: "#F2EFEA", borderRadius: 8, padding: "6px 10px", fontSize: 11, letterSpacing: 0, fontWeight: 500, cursor: "pointer" },
+  projectsPanel: { padding: 12, borderBottom: "1px solid #201F27", display: "flex", flexDirection: "column", gap: 8, maxHeight: 180, overflowY: "auto" },
+  projectRow: { display: "flex", alignItems: "center", justifyContent: "space-between", background: "#121118", border: "1px solid #201F27", borderRadius: 10, padding: "8px 12px", fontSize: 13 },
+  exportBtn: { background: "#2FBE72", border: "none", borderRadius: 8, padding: "6px 10px", fontSize: 11, fontWeight: 700, color: "#0A0A0F", cursor: "pointer" },
+  messages: { flex: 1, overflowY: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 10 },
+  empty: { color: "#8D8B96", fontSize: 13, textAlign: "center", marginTop: 40 },
+  bubbleUser: { alignSelf: "flex-end", background: "#4E8FD1", color: "#0A0A0F", padding: "10px 14px", borderRadius: 12, maxWidth: "80%", fontSize: 14 },
+  bubbleAI: { alignSelf: "flex-start", background: "#121118", border: "1px solid #201F27", padding: "10px 14px", borderRadius: 12, maxWidth: "85%", fontSize: 14, whiteSpace: "pre-wrap" },
+  inputRow: { display: "flex", gap: 8, padding: 12, borderTop: "1px solid #201F27" },
+  textInput: { flex: 1, background: "#121118", border: "1px solid #201F27", borderRadius: 10, padding: "10px 12px", color: "#F2EFEA", fontSize: 14 },
+  sendBtn: { background: "#FF3B4A", border: "none", borderRadius: 10, padding: "0 16px", color: "#0A0A0F", fontWeight: 700, cursor: "pointer" },
+  setupBox: { margin: "auto", padding: 24, maxWidth: 340, textAlign: "center" },
+  setupTitle: { letterSpacing: 3, marginBottom: 12 },
+  setupText: { color: "#B8B6C0", fontSize: 13, lineHeight: 1.6, marginBottom: 18 },
+  input: { width: "100%", background: "#121118", border: "1px solid #201F27", borderRadius: 10, padding: 12, color: "#F2EFEA", marginBottom: 12 },
+  button: { width: "100%", background: "#FF3B4A", border: "none", borderRadius: 10, padding: 12, fontWeight: 700, cursor: "pointer" },
+};
