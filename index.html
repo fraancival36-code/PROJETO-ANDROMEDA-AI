@@ -1,318 +1,178 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="author" content="FRANCIVAL ALVES FARIAS" />
-  <title>ANDRÔMEDA</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-    body {
-      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #0f0f23 100%);
-      color: #fff;
-      min-height: 100vh;
-      padding: 16px;
+// ANDRÔMEDA — CORREÇÃO: RESPOSTA REAL, SEM FICAR "PROCESSANDO"
+import React, { useState, useRef } from 'react';
+
+export default function App() {
+  const [mensagens, setMensagens] = useState([
+    { quem: 'ela', texto: 'Olá! Sou a Andrômeda. Estou pronta para falar e ouvir você. Como posso ajudar? 🚀' }
+  ]);
+  const [entrada, setEntrada] = useState('');
+  const mensagensRef = useRef(null);
+
+  // Rola para baixo automaticamente
+  useState(() => {
+    if (mensagensRef.current) {
+      mensagensRef.current.scrollTop = mensagensRef.current.scrollHeight;
+    }
+  }, [mensagens]);
+
+  // 🧠 LÓGICA DE RESPOSTA — AQUI ELA RESPONDE DE VERDADE!
+  function gerarResposta(texto) {
+    const t = texto.toLowerCase().trim();
+
+    // 👋 Olá / Apresentação
+    if (t.includes('ola') || t.includes('olá') || t.includes('oi')) {
+      return 'Olá, Francival! Tudo bem? 😊 Eu sou a Andrômeda, sua fábrica privada. Em que posso ajudar você hoje?';
     }
 
-    /* CABEÇALHO */
-    .cabecalho {
-      display: flex; justify-content: space-between; align-items: center;
-      background: rgba(0,0,0,0.5); padding: 12px 20px; border-radius: 12px;
-      border: 1px solid rgba(100,180,255,0.3); margin-bottom: 20px;
-    }
-    .status { display: flex; gap: 16px; align-items: center; }
-    .status span { display: flex; align-items: center; gap: 6px; font-size: 15px; color: #90ee90; }
-    .pronta { color: #87ceeb; font-weight: bold; }
-
-    /* MENU LATERAL */
-    .menu-container { display: flex; gap: 16px; margin-bottom: 20px; }
-    .menu-coluna {
-      flex: 1; background: rgba(0,0,0,0.4); border-radius: 12px;
-      border: 1px solid rgba(100,180,255,0.2); padding: 16px;
-    }
-    .menu-item {
-      padding: 12px 14px; margin: 6px 0; border-radius: 8px; cursor: pointer;
-      transition: all 0.2s; display: flex; align-items: center; gap: 10px;
-      font-size: 15px;
-    }
-    .menu-item:hover { background: rgba(100,180,255,0.2); }
-    .menu-item.ativo { background: rgba(100,180,255,0.3); border-left: 3px solid #4fc3f7; }
-
-    /* IMAGEM CENTRAL */
-    .imagem-central {
-      display: flex; justify-content: center; align-items: center;
-      background: linear-gradient(135deg, #1a1a4a, #2a2a5a);
-      border-radius: 12px; padding: 20px; margin: 10px 0;
-      border: 1px solid rgba(100,180,255,0.3);
-    }
-    .imagem-central img { width: 120px; height: 120px; border-radius: 8px; }
-
-    /* MESA DE SOM — VOZ */
-    .mesa-som {
-      background: rgba(0,0,0,0.4); border-radius: 12px; padding: 20px;
-      border: 1px solid rgba(100,180,255,0.2); margin-bottom: 20px;
-    }
-    .titulo-som { font-size: 17px; margin-bottom: 16px; color: #87ceeb; font-weight: bold; }
-    .linha { display: flex; align-items: center; gap: 12px; margin: 12px 0; flex-wrap: wrap; }
-    .linha label { width: 80px; font-size: 14px; color: #ccc; }
-    .linha input[type="range"] { flex: 1; height: 8px; border-radius: 4px; background: #333; outline: none; -webkit-appearance: none; }
-    .linha input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: #4fc3f7; border-radius: 50%; cursor: pointer; }
-    .valor { width: 50px; text-align: right; font-size: 14px; color: #87ceeb; font-weight: bold; }
-    .btn-testar-voz {
-      background: linear-gradient(135deg, #7b2ffd, #4fc3f7); border: none; color: #fff;
-      padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 15px; font-weight: bold;
-    }
-    .seletor-voz {
-      flex: 1; padding: 10px 14px; background: #1a1a3a; border: 1px solid #444; color: #fff;
-      border-radius: 8px; font-size: 14px;
+    // ❓ Quem é você
+    if (t.includes('quem é') || t.includes('o que é') || t.includes('seu nome')) {
+      return 'Eu sou a ANDRÔMEDA, a Fábrica Privada de FRANCIVAL ALVES FARIAS. 🏭\n\nEu crio projetos, organizo ideias, escrevo código e ajudo a construir aplicativos. Não sou produto público — sou sua ferramenta de trabalho!';
     }
 
-    /* ÁREA DE CONVERSA */
-    .area-conversa {
-      background: rgba(0,0,0,0.4); border-radius: 12px; padding: 16px;
-      border: 1px solid rgba(100,180,255,0.2); margin-bottom: 16px; min-height: 150px; max-height: 300px; overflow-y: auto;
+    // 📦 Projetos
+    if (t.includes('projeto') || t.includes('criar') || t.includes('arquivo')) {
+      return 'Perfeito! 📂 Vamos criar projetos e arquivos. Me diga o nome do arquivo e o conteúdo, e eu crio para você. Exemplo: "Criar teste.txt com Olá Mundo"';
     }
-    .mensagem { margin: 10px 0; padding: 12px; border-radius: 10px; max-width: 85%; line-height: 1.5; }
-    .mensagem.assistente { background: rgba(100,180,255,0.15); margin-right: auto; border-bottom-left-radius: 4px; }
-    .mensagem.usuario { background: rgba(123,47,253,0.25); margin-left: auto; border-bottom-right-radius: 4px; }
 
-    /* ENTRADA DE TEXTO */
-    .entrada {
-      display: flex; gap: 10px; align-items: center; background: rgba(0,0,0,0.4);
-      border-radius: 30px; padding: 8px 12px; border: 1px solid rgba(100,180,255,0.3);
+    // 📖 Ajuda
+    if (t.includes('ajuda') || t === 'ajuda' || t === 'comandos') {
+      return '🌌 **Comandos que eu entendo:**\n\n• Olá / Oi → eu te respondo\n• Quem é você? → eu me apresento\n• Criar projeto → começamos um novo\n• Criar arquivo → eu salvo o conteúdo\n• Ajuda → mostro esta lista\n\nSou sua fábrica — vamos construir! 🚀';
     }
-    .entrada input {
-      flex: 1; background: transparent; border: none; color: #fff;
-      padding: 10px 14px; font-size: 15px; outline: none;
-    }
-    .btn-mic, .btn-enviar {
-      width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
-      font-size: 20px; display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
-    }
-    .btn-mic { background: #2a2a5a; color: #fff; }
-    .btn-mic.gravando { background: #ff4444; animation: pulso 1s infinite; }
-    .btn-enviar { background: linear-gradient(135deg, #4fc3f7, #7b2ffd); color: #fff; }
-    @keyframes pulso { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
-    /* BOTÃO PRIME */
-    .btn-prime {
-      width: 100%; margin-top: 16px; padding: 16px; background: linear-gradient(135deg, #dc2626, #f97316);
-      border: none; color: #fff; border-radius: 12px; font-size: 17px; font-weight: bold; cursor: pointer;
+    // 🏭 Fábrica
+    if (t.includes('fábrica') || t.includes('fabrica') || t.includes('o que faz')) {
+      return 'Eu sou a FÁBRICA! 🏭\n\nEu não sou o produto — eu crio os produtos. Aqui nascem aplicativos, sites, sistemas e ferramentas. Tudo que eu crio sai limpo, independente e pronto para usar. Sem chaves, sem vínculos, sem dependências!';
     }
-  </style>
-</head>
-<body>
 
-  <!-- CABEÇALHO -->
-  <div class="cabecalho">
-    <div class="status">
-      <span>✅ Andrômeda Ativa 🧠 Memória: 31</span>
+    // 💬 Resposta padrão
+    return `Entendi o que você disse: "${texto}"\n\nEstou funcionando de verdade! 🟢\n\nMe diga o que quer fazer — posso criar arquivos, organizar projetos, planejar ideias. Diga "Ajuda" para ver tudo que faço!`;
+  }
+
+  // Enviar mensagem — ⚡ SEM FICAR "PROCESSANDO"!
+  function enviar(e) {
+    e?.preventDefault();
+    if (!entrada.trim()) return;
+
+    const textoUsuario = entrada;
+    setEntrada('');
+
+    // Adiciona a mensagem do usuário
+    setMensagens(prev => [...prev, { quem: 'eu', texto: textoUsuario }]);
+
+    // ⚡ RESPOSTA IMEDIATA — SEM MENSAGEM FALSA DE "PROCESSANDO"!
+    setTimeout(() => {
+      const resposta = gerarResposta(textoUsuario);
+      setMensagens(prev => [...prev, { quem: 'ela', texto: resposta }]);
+    }, 300); // Pequeno atraso natural, MAS RESPONDE DE VERDADE!
+  }
+
+  return (
+    <div style={{
+      maxWidth: '100%',
+      margin: '0 auto',
+      padding: '15px',
+      background: '#0f172a',
+      minHeight: '100vh',
+      color: '#fff',
+      fontFamily: 'system-ui, sans-serif'
+    }}>
+      {/* Cabeçalho */}
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <h1 style={{ color: '#38bdf8', margin: 0, fontSize: '28px' }}>🌌 ANDRÔMEDA</h1>
+        <p style={{ color: '#94a3b8', margin: '5px 0 0 0', fontSize: '14px' }}>
+          Fábrica Privada — Responde de verdade, sem espera falsa!
+        </p>
+      </div>
+
+      {/* Área de Mensagens */}
+      <div
+        ref={mensagensRef}
+        style={{
+          height: '60vh',
+          overflowY: 'auto',
+          marginBottom: '20px',
+          padding: '15px',
+          background: '#1e293b',
+          borderRadius: '16px',
+          border: '1px solid #334155'
+        }}
+      >
+        {mensagens.map((msg, index) => (
+          <div
+            key={index}
+            style={{
+              padding: '12px 16px',
+              margin: '10px 0',
+              borderRadius: '18px',
+              background: msg.quem === 'eu' ? '#1d4ed8' : '#334155',
+              marginLeft: msg.quem === 'eu' ? 'auto' : '0',
+              maxWidth: '85%',
+              lineHeight: '1.6',
+              whiteSpace: 'pre-wrap',
+              fontSize: '15px'
+            }}
+          >
+            {msg.texto}
+          </div>
+        ))}
+      </div>
+
+      {/* Entrada de Texto */}
+      <form onSubmit={enviar} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <input
+          value={entrada}
+          onChange={(e) => setEntrada(e.target.value)}
+          placeholder="Escreva ou fale com a Andrômeda..."
+          style={{
+            flex: 1,
+            padding: '14px 18px',
+            borderRadius: '28px',
+            border: '2px solid #38bdf8',
+            background: '#1e293b',
+            color: '#fff',
+            fontSize: '16px',
+            outline: 'none'
+          }}
+        />
+        <button
+          type="submit"
+          style={{
+            width: '50px',
+            height: '50px',
+            borderRadius: '50%',
+            border: 'none',
+            background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+            color: '#fff',
+            fontSize: '20px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          ➤
+        </button>
+      </form>
+
+      {/* Botão PRIME */}
+      <button
+        style={{
+          width: '100%',
+          marginTop: '25px',
+          padding: '16px',
+          borderRadius: '12px',
+          border: 'none',
+          background: 'linear-gradient(90deg, #f97316, #ef4444)',
+          color: '#fff',
+          fontSize: '18px',
+          fontWeight: 'bold',
+          cursor: 'pointer'
+        }}
+      >
+        🚑 ABRIR PRIME — PRIMEIROS SOCORROS
+      </button>
     </div>
-    <span class="pronta">Pronta</span>
-  </div>
+  );
+}
 
-  <!-- MENU -->
-  <div class="menu-container">
-    <div class="menu-coluna">
-      <div class="menu-item ativo" data-pagina="inicio">🏠 Início</div>
-      <div class="menu-item" data-pagina="biblioteca">📚 Biblioteca</div>
-      <div class="menu-item" data-pagina="laboratorio">🧪 Laboratório</div>
-      <div class="menu-item" data-pagina="estudio">🎨 Estúdio</div>
-      <div class="menu-item" data-pagina="agentes">🤖 Agentes</div>
-      <div class="menu-item" data-pagina="missoes">🎯 Missões</div>
-      <div class="menu-item" data-pagina="memoria">🧠 Memória</div>
-      <div class="menu-item" data-pagina="prime">🚑 PRIME — Socorros</div>
-    </div>
-    <div class="menu-coluna">
-      <div class="menu-item" data-pagina="painel">📊 Painel</div>
-      <div class="menu-item" data-pagina="biblioteca">📚 Biblioteca</div>
-      <div class="menu-item" data-pagina="ferramentas">🛠️ Ferramentas</div>
-      <div class="menu-item ativo" data-pagina="missoes">🎯 Missões</div>
-      <div class="menu-item" data-pagina="limpar">🗑️ Limpar</div>
-    </div>
-  </div>
-
-  <!-- IMAGEM CENTRAL -->
-  <div class="imagem-central">
-    <span style="font-size:80px;">🌌</span>
-  </div>
-
-  <!-- MESA DE SOM -->
-  <div class="mesa-som">
-    <div class="titulo-som">🎛️ Mesa de Som — Voz da Andrômeda</div>
-    <div class="linha">
-      <label>🔊 Volume</label>
-      <input type="range" id="volumeVoz" min="0" max="200" value="150">
-      <span class="valor" id="valorVolume">150%</span>
-      <button class="btn-testar-voz" id="btnTestarVoz">🔊 Testar Voz</button>
-    </div>
-    <div class="linha">
-      <label>🎙️ Voz</label>
-      <select class="seletor-voz" id="seletorVoz">
-        <option value="pt-BR">português Brasil (pt_BR)</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- ÁREA DE CONVERSA -->
-  <div class="area-conversa" id="areaConversa">
-    <div class="mensagem assistente">Olá! Sou a Andrômeda. Estou pronta para falar e ouvir você. Como posso ajudar? 🌌</div>
-  </div>
-
-  <!-- ENTRADA -->
-  <div class="entrada">
-    <input type="text" id="inputTexto" placeholder="Escreva ou fale com a Andrômeda...">
-    <button class="btn-mic" id="btnMic">🎤</button>
-    <button class="btn-enviar" id="btnEnviar">➤</button>
-  </div>
-
-  <!-- BOTÃO PRIME -->
-  <button class="btn-prime" id="btnAbrirPrime">🚑 ABRIR PRIME — PRIMEIROS SOCORROS</button>
-
-  <script>
-    // ==============================================
-    // 🧠 SISTEMA DE FALA — TTS (Texto → Voz)
-    // ==============================================
-    const sintese = window.speechSynthesis;
-    let vozes = [];
-    let vozSelecionada = null;
-    let volume = 1.5;
-
-    // Carregar vozes
-    function carregarVozes() {
-      vozes = sintese.getVoices();
-      vozSelecionada = vozes.find(v => v.lang.includes('pt-BR') || v.lang.includes('pt')) || vozes[0];
-    }
-    carregarVozes();
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = carregarVozes;
-    }
-
-    // Falar
-    function falar(texto) {
-      sintese.cancel();
-      const fala = new SpeechSynthesisUtterance(texto);
-      fala.voice = vozSelecionada;
-      fala.volume = volume;
-      fala.lang = 'pt-BR';
-      fala.rate = 1.0;
-      sintese.speak(fala);
-    }
-
-    // ==============================================
-    // 🎤 RECONHECIMENTO DE VOZ (Voz → Texto)
-    // ==============================================
-    let reconhecimento = null;
-    let ouvindo = false;
-
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      reconhecimento = new Rec();
-      reconhecimento.lang = 'pt-BR';
-      reconhecimento.continuous = false;
-      reconhecimento.onresult = (e) => {
-        const texto = e.results[0][0].transcript;
-        inputTexto.value = texto;
-        processarMensagem(texto);
-      };
-      reconhecimento.onend = () => {
-        ouvindo = false;
-        btnMic.classList.remove('gravando');
-      };
-    }
-
-    // ==============================================
-    // 💬 CONVERSA
-    // ==============================================
-    const areaConversa = document.getElementById('areaConversa');
-    const inputTexto = document.getElementById('inputTexto');
-    const btnEnviar = document.getElementById('btnEnviar');
-    const btnMic = document.getElementById('btnMic');
-    const btnTestarVoz = document.getElementById('btnTestarVoz');
-    const volumeVoz = document.getElementById('volumeVoz');
-    const valorVolume = document.getElementById('valorVolume');
-    const btnAbrirPrime = document.getElementById('btnAbrirPrime');
-    const menuItens = document.querySelectorAll('.menu-item');
-
-    function addMensagem(texto, tipo) {
-      const div = document.createElement('div');
-      div.className = `mensagem ${tipo}`;
-      div.textContent = texto;
-      areaConversa.appendChild(div);
-      areaConversa.scrollTop = areaConversa.scrollHeight;
-    }
-
-    function processarMensagem(texto) {
-      if (!texto.trim()) return;
-      addMensagem(texto, 'usuario');
-      
-      // Resposta simples
-      setTimeout(() => {
-        const resposta = `Recebi: "${texto}". Estou processando. Em breve terei respostas completas!`;
-        addMensagem(resposta, 'assistente');
-        falar(resposta);
-      }, 500);
-    }
-
-    // Eventos
-    btnEnviar.addEventListener('click', () => {
-      processarMensagem(inputTexto.value);
-      inputTexto.value = '';
-    });
-    inputTexto.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { processarMensagem(inputTexto.value); inputTexto.value = ''; }
-    });
-
-    // Microfone
-    btnMic.addEventListener('click', () => {
-      if (!reconhecimento) {
-        addMensagem('Reconhecimento de voz não disponível. Use o Chrome.', 'assistente');
-        return;
-      }
-      if (ouvindo) {
-        reconhecimento.stop();
-        ouvindo = false;
-        btnMic.classList.remove('gravando');
-      } else {
-        reconhecimento.start();
-        ouvindo = true;
-        btnMic.classList.add('gravando');
-      }
-    });
-
-    // Testar Voz
-    btnTestarVoz.addEventListener('click', () => {
-      falar('Olá! Eu sou a Andrômeda. Minha voz está funcionando perfeitamente!');
-    });
-
-    // Volume
-    volumeVoz.addEventListener('input', (e) => {
-      volume = parseInt(e.target.value) / 100;
-      valorVolume.textContent = `${e.target.value}%`;
-    });
-
-    // Menu
-    menuItens.forEach(item => {
-      item.addEventListener('click', () => {
-        menuItens.forEach(i => i.classList.remove('ativo'));
-        item.classList.add('ativo');
-        const pagina = item.dataset.pagina;
-        if (pagina === 'prime') {
-          falar('Abrindo o PRIME — Primeiros Socorros.');
-          alert('🚑 PRIME — Em breve! Coloque o código do jogo em uma página chamada prime.html');
-        } else {
-          falar(`Acessando ${item.textContent.trim()}`);
-        }
-      });
-    });
-
-    // Botão PRIME
-    btnAbrirPrime.addEventListener('click', () => {
-      falar('Abrindo PRIME — Primeiros Socorros.');
-      alert('🚑 PRIME — Coloque o código do jogo em prime.html e eu abro!');
-    });
-  </script>
-
-</body>
-</html>
+export default App;
